@@ -14,6 +14,11 @@ message GetHeyasHeyaIdResponse {
     Heya heya = 1;
 }
 
+// POST /heyas
+message PostHeyasRequest {
+    string title = 1;
+    string description = 2;
+}
 
 message Heya {
     string id = 1;
