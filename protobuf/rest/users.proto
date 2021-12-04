@@ -3,7 +3,6 @@ syntax = "proto3";
 package Users;
 
 import "protobuf/rest/heyas.proto";
-import "schema/pb/rest/heya.proto";
 
 option go_package = "github.com/hackathon-21winter-05/HiQidas/model/pb/rest";
 
