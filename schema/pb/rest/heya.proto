@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package heya;
+
+option go_package = "github.com/hackathon-21winter-05/HiQidas/model/pb/rest";
+
+// GET /heyas 全ヘヤの情報を取得
+message GetHeyasResponse {
+
+}
+
+message Heya {
+
+}
+
+message Heyas {
+    repeated Heya heyas = 1;
+}
