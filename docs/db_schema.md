@@ -1,6 +1,6 @@
 # HiQidasのDBスキーマ
 
-## users
+## user
 
 ユーザー情報
 
@@ -12,17 +12,17 @@
 
 IconFileIDがNULLなのは考える
 
-## histories
+## history
 
 閲覧履歴
 
 |   Field    |   Type   | Nullable | Key | Default | PARENT | 説明                   |
 |:----------:|:--------:| -------- | --- |:-------:|:------:| ---------------------- |
 |   user_id   | char(36) | false    | PRI |         | users  | UserのUUID             |
-|  sheet_id   | char(36) | false    | PRI |         | sheet  | SheetのUUID            |
+|  heya_id   | char(36) | false    | PRI |         | sheet  | SheetのUUID            |
 | last_access | datetime | true     |     |         |        | シートの最後の閲覧日時 |
 
-## sheets
+## Heya
 
 シート(仮称)情報
 
@@ -64,7 +64,7 @@ IconFileIDがNULLなのは考える
 | id    |  char(36)  | false    | PRI |         |        | ImageのUUID |
 | image | MEDIUMBLOB | false    |     |         |        |  画像本体   |
 
-## connection
+## tuna
 
 ヒキダシ同士のコネクション情報
 
