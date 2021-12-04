@@ -102,6 +102,6 @@ jobs:
         run: go test ./... -v
         # env:
         #   MARIADB_HOSTNAME: 127.0.0.1
-        #   MARIADB_DATABASE: SchMes
+        #   MARIADB_DATABASE: HiQidas
         #   MARIADB_USERNAME: root
         #   MARIADB_PASSWORD: password
