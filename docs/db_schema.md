@@ -10,6 +10,7 @@
 | name(traqid) | varchar(32) |  false   | unique |         |       |    UserのtraPID / ID |
 | icon_file_id   | char(36)    |   true   | unique | NULL    |       | userのアイコンUUID |
 
+IconFileIDがNULLなのは考える
 
 ## histories
 
@@ -33,7 +34,8 @@
 |  creator_id   | char(36) |  false   | MUL |                   | users  |      シートの作成者のUUID      |
 | last_editor_id | char(36) |   true   | MUL |                   | users  | 最後に編集をしたユーザーのUUID |
 |  created_at   | datetime |  false   |     | CURRENT_TIMESTAMP |        |        シートの作成日時        |
-|  updated_at   | datetime |   true   |     |                   |        |        シートの最終更新日時        |
+|  updated_at   | datetime |   false   |     |   CURRENT_TIMESTAMP |        |        シートの最終更新日時        |
+|  deleted_at   | datetime |   true   |     |                   |        |        シートの削除日時        |
 
 ## hiqidashi
 
@@ -50,8 +52,8 @@
 | description  | Text     | true(false?) |     |                   |           |     Hiqidashiの説明      |
 |   image_id    | char(36) | true         | MUL | NULL              |   Image   |  Hiqidashiの画像のUUID   |
 |  created_at   | datetime | false        |     | CURRENT_TIMESTAMP |           |   Hiqidashiの作成日時    |
-|  updated_at   | datetime | true         |     |                   |           |   Hiqidashiの最終更新日時    |
-
+|  updated_at   | datetime |   false   |     |   CURRENT_TIMESTAMP |           |   Hiqidashiの最終更新日時    |
+|  deleted_at   | datetime |   true   |     |                   |        |        シートの削除日時        |
 ## image
 
 
