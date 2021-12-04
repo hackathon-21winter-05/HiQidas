@@ -49,11 +49,10 @@ IconFileIDがNULLなのは考える
 | last_editor_id | char(36) | true         | MUL |                   |   users   | ヘヤの最終編集者のUUID |
 |   parent_id   | char(36) | true         | MUL |                   | Hiqidashi |    親HiqidashiのUUID     |
 |    title     | char(50) | false        |     |                   |           |   Hiqidashiのタイトル    |
-| description  | Text     | true(false?) |     |                   |           |     Hiqidashiの説明      |
+| description  | Text     | true         |     |                   |           |     Hiqidashiの説明      |
 |   image_id    | char(36) | true         | MUL | NULL              |   Image   |  Hiqidashiの画像のUUID   |
 |  created_at   | datetime | false        |     | CURRENT_TIMESTAMP |           |   Hiqidashiの作成日時    |
 |  updated_at   | datetime |   false   |     |   CURRENT_TIMESTAMP |           |   Hiqidashiの最終更新日時    |
-|  deleted_at   | datetime |   true   |     |                   |        |        ヘヤの削除日時        |
 ## image
 
 
