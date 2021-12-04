@@ -6,11 +6,22 @@ option go_package = "github.com/hackathon-21winter-05/HiQidas/model/pb/rest";
 
 // GET /heyas 全ヘヤの情報を取得
 message GetHeyasResponse {
+    Heyas heyas = 1;
+}
 
+// GET /heya/{heyaId}
+message GetHeyaIdResponse {
+    Heya heya = 1;
 }
 
 message Heya {
-
+    string id = 1;
+    string title = 2;
+    string description = 3;
+    string creator_id = 4;
+    string last_editor_id = 5;
+    string created_at = 6;
+    string updated_at = 7;
 }
 
 message Heyas {
