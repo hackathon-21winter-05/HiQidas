@@ -32,7 +32,7 @@ IconFileIDがNULLなのは考える
 |    title     | char(50) |  false   |     |                   |        |        ヘヤのタイトル        |
 | description  |   Text   |   true   |     |                   |        |          ヘヤの説明          |
 |  creator_id   | char(36) |  false   | MUL |                   | users  |      ヘヤの作成者のUUID      |
-| last_editor_id | char(36) |   true   | MUL |                   | users  | 最後に編集をしたユーザーのUUID |
+| last_editor_id | char(36) |   false   | MUL |                   | users  | 最後に編集をしたユーザーのUUID |
 |  created_at   | datetime |  false   |     | CURRENT_TIMESTAMP |        |       ヘヤの作成日時        |
 |  updated_at   | datetime |   false   |     |   CURRENT_TIMESTAMP |        |        ヘヤの最終更新日時        |
 |  deleted   | bool |   false   |     |     false              |        |        ヘヤの削除したかどうかの判定        |
@@ -46,7 +46,7 @@ IconFileIDがNULLなのは考える
 |      id      | char(36) | false        | PRI |                   |           |     HiqidashiのUUID      |
 |   heya_id    | char(36) | false        | MUL |                   |   sheet   |       ヘヤのUUID       |
 |  creator_id   | char(36) | false        | MUL |                   |   users   |   ヘヤの作成者のUUID   |
-| last_editor_id | char(36) | true         | MUL |                   |   users   | ヘヤの最終編集者のUUID |
+| last_editor_id | char(36) | false         | MUL |                   |   users   | ヘヤの最終編集者のUUID |
 |   parent_id   | char(36) | true         | MUL |                   | Hiqidashi |    親HiqidashiのUUID     |
 |    title     | char(50) | false        |     |                   |           |   Hiqidashiのタイトル    |
 | description  | Text     | true         |     |                   |           |     Hiqidashiの説明      |
