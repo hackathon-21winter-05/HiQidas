@@ -16,10 +16,10 @@ type Hiqidashi struct {
 	ImageID        uuid.UUID      `json:"image_id"       gorm:"type:char(36)"`
 	CreatedAt      time.Time      `json:"created_at"     gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
 	UpdatedAt      time.Time      `json:"updated_at"     gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
-	CreatorUser    *User          `json:"-"              gorm:"foreignKey:CreatorID"`
-	LastEditorUser *User          `json:"-"              gorm:"foreignKey:LastEditorID"`
-	Image          *Image         `json:"-"              gorm:"foreignKey:ImageID"`
-	Heya           *Heya          `json:"-"              gorm:"foreignKey:HeyaID"`
+	CreatorUser    *User          `json:"-"              gorm:"foreignKey:ID"`
+	LastEditorUser *User          `json:"-"              gorm:"foreignKey:ID"`
+	Image          *Image         `json:"-"              gorm:"foreignKey:ID"`
+	Heya           *Heya          `json:"-"              gorm:"foreignKey:ID"`
 
 	ChildrenID []uuid.UUID `gorm:"-"`
 }

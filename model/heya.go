@@ -14,6 +14,6 @@ type Heya struct {
 	CreatedAt      time.Time `json:"created_at"     gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
 	UpdatedAt      time.Time `json:"updated_at"     gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
 	Deleted        bool      `json:"deleted"        gorm:"type:boolean;default:false"`
-	CreatorUser    *User     `json:"-"              gorm:"foreignKey:CreatorID"`
-	LastEditorUser *User     `json:"-"              gorm:"foreignKey:LastEditorID"`
+	CreatorUser    *User     `json:"-"              gorm:"foreignKey:ID"`
+	LastEditorUser *User     `json:"-"              gorm:"foreignKey:ID"`
 }
