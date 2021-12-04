@@ -9,7 +9,7 @@ message GetHeyasResponse {
     Heyas heyas = 1;
 }
 
-// GET /heya/{heyaId}
+// GET /heyas/{heyaId}
 message GetHeyaIdResponse {
     Heya heya = 1;
 }
