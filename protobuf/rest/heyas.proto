@@ -36,7 +36,10 @@ message EditHeyasHeyaIdResponse {
     Status status = 1;
 }
 
-// GET /heyas/{heyaId}
+// GET /heyas/{heyaId}/users ヘヤにいるUserを返す
+message GetHeyasHeyaIdUsersResponse {
+    repeated string user_id = 1;
+}
 
 message Heya {
     string id = 1;
