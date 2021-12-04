@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package Users;
 
+import "schema/pb/rest/heya.proto";
+
 option go_package = "github.com/hackathon-21winter-05/HiQidas/model/pb/rest";
 
 // GET /Users ユーザー一覧を取得
@@ -35,6 +37,10 @@ message GetUserMeIconResponse {
     string icon_file_id = 1;
 }
 
+//GET /users/me/heyas
+message GetUserMeHyasResponse {
+    heya.Heyas hayas = 1;
+}
 
 message User {
     string id = 1;
