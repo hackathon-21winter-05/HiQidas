@@ -1,4 +1,4 @@
-FROM namely/protoc-all:1.40_0
+FROM golang:1.17.3-alpine
 WORKDIR /HiQidas
 
 RUN go install github.com/jwilder/dockerize@latest

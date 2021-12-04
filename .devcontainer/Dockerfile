@@ -1,6 +1,6 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.194.3/containers/ubuntu/.devcontainer/base.Dockerfile
 
-FROM namely/protoc-all:1.40_0
+FROM golang:1.17.3
 
 ENV TZ=Asia/Tokyo
 
