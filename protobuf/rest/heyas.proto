@@ -17,7 +17,7 @@ message PostHeyasRequest {
 
 // POST /heyasの返ってくるレスポンス
 message PostHeyasResponse {
-    Status status = 1;
+    Heyas heyas = 1;
 }
 
 // GET /heyas/{heyaId}

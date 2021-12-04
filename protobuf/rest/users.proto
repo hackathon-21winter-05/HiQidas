@@ -28,7 +28,7 @@ message EditUsersUserIdRequest {
 // GET /users/me 自分の情報を取得
 message GetUsersMeResponse {
     User me = 1;
-    repeated string favorite_hiqidashi_id = 2;
+    repeated string favorite_heya_id = 2;
 }
 
 // PUT /users/me  自分の情報を変更
@@ -37,7 +37,7 @@ message EditUsersMeRequest {
 }
 
 //GET /users/me/heyas
-message GetUserdMeHeyasResponse {
+message GetUsersMeHeyasResponse {
     heya.Heyas hayas = 1;
 }
 
