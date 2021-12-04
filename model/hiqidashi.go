@@ -2,7 +2,6 @@ package model
 
 import (
 	"github.com/gofrs/uuid"
-	"gorm.io/gorm"
 	"time"
 )
 
@@ -17,7 +16,6 @@ type Hiqidashi struct {
 	ImageID        uuid.UUID      `json:"image_id"       gorm:"type:char(36);not null"`
 	CreatedAt      time.Time      `json:"created_at"     gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
 	UpdatedAt      time.Time      `json:"updated_at"     gorm:"type:DATETIME;default:CURRENT_TIMESTAMP"`
-	DeletedAt      gorm.DeletedAt `json:"deleted_at"     gorm:"type:DATETIME;default:NULL"`
 	CreatorUser    *User          `json:"-"              gorm:"foreignKey:CreatorID"`
 	LastEditorUser *User          `json:"-"              gorm:"foreignKey:LastEditorID"`
 	Image          *Image         `json:"-"              gorm:"foreignKey:ImageID"`
