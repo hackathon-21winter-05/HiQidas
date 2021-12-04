@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package Users;
+
+option go_package = "github.com/hackathon-21winter-05/HiQidas/model/pb/rest";
+
+// GET /Users ユーザー一覧を取得
+message GetUsers {
+    repeated User users = 1;
+}
+
+// GET /users/{userId} ユーザーの詳細情報を取得
+message GetUser {
+    User user = 1;
+}
+
+//PUT /users/{userId} ユーザー情報の変更
+message PatchUser {
+    // どの情報を変更するか考える
+}
+
+// GET /users/me 自分の情報を取得
+message GetUserMe {
+    User me = 1;
+    repeated string favorite_hiqidashi_id = 2;
+}
+
+// PUT /users/me  自分の情報を変更
+message PatchUserMe {
+    //　どの情報を変更するか考える
+}
+
+//GET /users/me/icon 自分のアイコンを取得
+message GetUserMeIcon {
+    string icon_file_id = 1;
+}
+
+
+message User {
+    string id = 1;
+    string name = 2;
+    string icon_file_id = 3;
+}
