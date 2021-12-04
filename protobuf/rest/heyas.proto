@@ -9,16 +9,24 @@ message GetHeyasResponse {
     repeated string heya_id = 1;
 }
 
-// GET /heyas/{heyaId}
-message GetHeyasHeyaIdResponse {
-    Heya heya = 1;
-}
-
 // POST /heyas
 message PostHeyasRequest {
     string title = 1;
     string description = 2;
 }
+
+// GET /heyas/{heyaId}
+message GetHeyasHeyaIdResponse {
+    Heya heya = 1;
+}
+
+// PUT /heyas/{heyaId}
+message EditHeyasHeyaIdRequest {
+    string title = 1;
+    string description = 2;
+}
+
+
 
 message Heya {
     string id = 1;
