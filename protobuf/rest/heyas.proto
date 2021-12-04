@@ -15,6 +15,11 @@ message PostHeyasRequest {
     string description = 2;
 }
 
+// POST /heyasの返ってくるレスポンス
+message PostHeyasResponse {
+    Status status = 1;
+}
+
 // GET /heyas/{heyaId}
 message GetHeyasHeyaIdResponse {
     Heya heya = 1;
@@ -26,7 +31,12 @@ message EditHeyasHeyaIdRequest {
     string description = 2;
 }
 
+//PUT /heyas/{heyaId}の返ってくるレスポンス
+message EditHeyasHeyaIdResponse {
+    Status status = 1;
+}
 
+// GET /heyas/{heyaId}
 
 message Heya {
     string id = 1;
@@ -40,4 +50,9 @@ message Heya {
 
 message Heyas {
     repeated Heya heyas = 1;
+}
+
+message Status {
+    int32 status_code = 1;
+    string message = 2;
 }
