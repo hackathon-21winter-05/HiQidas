@@ -10,6 +10,10 @@ option go_package = "github.com/hackathon-21winter-05/HiQidas/model/pb/rest";
 message GetUsersResponse {
     repeated string user_id = 1;
 }
+//POST /users ユーザーの名前をPOST
+message PostUsersRequest {
+    string name = 1;
+}
 
 // GET /users/{userId} ユーザーの詳細情報を取得
 message GetUsersUserIdResponse {
