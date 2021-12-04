@@ -44,10 +44,6 @@ protobuf:
 	@protoc --doc_out=html,pb_rest.html:docs protobuf/rest/*.proto
 	@protoc --doc_out=html,pb_ws.html:docs protobuf/ws/*.proto
 
-.PHONY: protobuf-docker
-protobuf-docker:
-	@@docker exec -it -w /HiQidas $(docker ps -a | grep HiQidas_backend | awk '{print $$1}') make protobuf
-
 .PHONY: tbls
 tbls:
 	@cd docs/db_schema && tbls doc

@@ -17,6 +17,9 @@
 - [Visual Studio Code](https://azure.microsoft.com/ja-jp/products/visual-studio-code/) (VS Code)
   - [Remote Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containershttps://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) (拡張機能)
     - 識別子: ms-vscode-remote.remote-containers
+- Protoc (Protocol Compiler)
+  - protoc-gen-go
+  - protoc-gen-doc
 
 ### 開発環境の建て方
 
@@ -43,6 +46,9 @@
 
 - Docker
   - Docker Compose
+- Protoc (Protocol Compiler)
+  - protoc-gen-go
+  - protoc-gen-doc
 
 ### コマンド
 
@@ -55,5 +61,5 @@
   - `make lint`             リント
   - `make build`            ビルド
   - `make run`              実行
-  - `make protobuf-docker`  Protocol Buffers定義をコンパイル
+  - `make protobuf`         Protocol Buffers定義をコンパイル
   - `make tbls-docker`      DBドキュメントの生成
