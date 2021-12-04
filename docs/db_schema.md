@@ -64,13 +64,13 @@ hiqidashiにつく画像の情報 (オブジェクトストレージ代わり)
 | id    |  char(36)  | false    | PRI |         |        | ImageのUUID |
 | image | MEDIUMBLOB | false    |     |         |        |  画像本体   |
 
-## tuna
+## tsuna
 
 hiqidashi同士のコネクション情報
 
 | Field      | Type     | Nullable | Key | Default | PARENT    | 説明                               |
 | ---------- | -------- |:--------:|:---:|:-------:| --------- | :---------------------------------: |
-| id         | char(36) |  false   | PRI |         |           | tunaのUUID                   |
+| id         | char(36) |  false   | PRI |         |           | tsunaのUUID                   |
 | hiqidashi_one | char(36) |  false   | MUL |         | hiqidashi | 接続した片方のHiqidashiのUUID    |
 | hiqidashi_two | char(36) |  false   | MUL |         | hiqidashi | 接続したもう片方のHiqidashiのUUID |
 
