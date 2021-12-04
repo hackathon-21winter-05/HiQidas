@@ -10,4 +10,4 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install curl sudo git vim mariadb-client -y --no-install-recommends
 
 RUN go install github.com/cosmtrek/air@latest
-RUN go install github.com/k1LoW/tbls@latest
+RUN go get github.com/k1LoW/tbls
