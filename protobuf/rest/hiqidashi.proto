@@ -10,9 +10,10 @@ message Hiqidashi {
     string parent_id = 2;
     string title = 3;
     string description = 4;
-    string created_at = 5;
-    string updated_at = 6;
-    NullImage image = 7;
+    string color_id = 5;
+    string created_at = 6;
+    string updated_at = 7;
+    NullImage image = 8;
 }
 
 // 画像がNullの場合もある
