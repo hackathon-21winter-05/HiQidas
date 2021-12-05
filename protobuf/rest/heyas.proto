@@ -39,6 +39,11 @@ message PutHeyasHeyaIdResponse {
     common.Status status = 1;
 }
 
+//DELETE /heyas/{heyaId} ヘヤの削除(アーカイブがよさそう？）
+message DeleteHeyasHeyaIdRequest {
+    common.Status status = 1;
+}
+
 // GET /heyas/{heyaId}/users ヘヤにいるUserを返す
 message GetHeyasHeyaIdUsersResponse {
     repeated string user_id = 1;
