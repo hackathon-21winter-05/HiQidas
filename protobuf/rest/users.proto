@@ -10,6 +10,7 @@ option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/rest";
 message GetUsersResponse {
     repeated string user_id = 1;
 }
+
 //POST /users ユーザーの名前をPOST
 message PostUsersRequest {
     string name = 1;
@@ -28,7 +29,11 @@ message PutUsersUserIdRequest {
 // GET /users/me 自分の情報を取得
 message GetUsersMeResponse {
     User me = 1;
-    repeated string favorite_heya_id = 2;
+}
+
+// GET /users/me/favorites 自分のお気に入りシートの取得
+message GetUsersMeFavorites {
+    repeated string favorite_heya_id = 1;
 }
 
 // PUT /users/me  自分の情報を変更
