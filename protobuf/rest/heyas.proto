@@ -20,12 +20,12 @@ message PostHeyasResponse {
     Heya heya = 1;
 }
 
-// GET /heyas/{heyaId}
+// GET /heyas/{heyaId} ヘヤの情報を取得
 message GetHeyasHeyaIdResponse {
     Heya heya = 1;
 }
 
-// PUT /heyas/{heyaId}
+// PUT /heyas/{heyaId} ヘヤの情報を変更
 message PutHeyasHeyaIdRequest {
     string title = 1;
     string description = 2;
