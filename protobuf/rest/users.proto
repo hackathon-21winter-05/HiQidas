@@ -38,7 +38,7 @@ message PutUsersMeRequest {
 
 //GET /users/me/heyas
 message GetUsersMeHeyasResponse {
-    heya.Heyas hayas = 1;
+    heya.Heyas heyas = 1;
 }
 
 message User {
