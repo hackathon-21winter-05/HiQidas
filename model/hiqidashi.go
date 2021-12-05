@@ -7,7 +7,7 @@ import (
 
 type Hiqidashi struct {
 	ID             uuid.UUID      `json:"id"             gorm:"type:char(36);not null;primaryKey"`
-	HeyaID         uuid.UUID      `json:"heya_id"        gorm:"type:char(36);not null;primaryKey"`
+	HeyaID         uuid.UUID      `json:"heya_id"        gorm:"type:char(36);not null"`
 	CreatorID      uuid.UUID      `json:"creator_id"     gorm:"type:char(36);not null"`
 	LastEditorID   uuid.NullUUID  `json:"last_editor_id" gorm:"type:char(36);not null"`
 	ParentID       uuid.NullUUID  `json:"parent_id"      gorm:"type:char(36)"`
