@@ -60,6 +60,11 @@ message PostHeyasHeyaIdHiqidashiRequest {
     string description = 3;
 }
 
+//POST /heyas/{heyaId}/hiqidashiのレスポンス
+message PostHeyasHeyaIdHiqidashiResponse {
+    common.Status status = 1;
+}
+
 message Heya {
     string id = 1;
     string title = 2;
