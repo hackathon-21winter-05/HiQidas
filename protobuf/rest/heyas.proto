@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package heya;
 
+import "protobuf/rest/common.proto";
+
 option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/rest";
 
 // GET /heyas 全ヘヤの情報を取得
@@ -33,12 +35,17 @@ message PutHeyasHeyaIdRequest {
 
 //PUT /heyas/{heyaId}の返ってくるレスポンス
 message PutHeyasHeyaIdResponse {
-    Status status = 1;
+    common.Status status = 1;
 }
 
 // GET /heyas/{heyaId}/users ヘヤにいるUserを返す
 message GetHeyasHeyaIdUsersResponse {
     repeated string user_id = 1;
+}
+
+//GET /heyas/{heyaId}/hiqidashi ヘヤのhiqidashiを取得する
+message GetHeyasHeyaIdHiqidashiResponse {
+
 }
 
 message Heya {
@@ -53,9 +60,4 @@ message Heya {
 
 message Heyas {
     repeated Heya heyas = 1;
-}
-
-message Status {
-    int32 status_code = 1;
-    string message = 2;
 }
