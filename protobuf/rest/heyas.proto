@@ -3,6 +3,7 @@ syntax = "proto3";
 package heya;
 
 import "protobuf/rest/common.proto";
+import "protobuf/rest/hiqidashi.proto";
 
 option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/rest";
 
@@ -45,7 +46,11 @@ message GetHeyasHeyaIdUsersResponse {
 
 //GET /heyas/{heyaId}/hiqidashi ヘヤのhiqidashiを取得する
 message GetHeyasHeyaIdHiqidashiResponse {
-
+    string id = 1;
+    string user_id = 2;
+    string created_at = 3;
+    string updated_at = 4;
+    repeated hiqidashi.Hiqidashi hiqidashi = 5;
 }
 
 message Heya {
