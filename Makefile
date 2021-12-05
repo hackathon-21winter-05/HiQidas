@@ -46,11 +46,8 @@ protobuf:
 
 .PHONY: tbls
 tbls:
-	@cd docs/db_schema && tbls doc
-
-.PHONY: tbls-docker
-tbls-docker:
-	@docker exec -it -w /HiQidas $(docker ps -a | grep HiQidas_backend | awk '{print $$1}') make tbls
+	@rm -rf docs/db_schema
+	@cd docs && tbls doc
 
 .PHONY: chown
 chown:

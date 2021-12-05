@@ -21,7 +21,7 @@
   - protoc-gen-go
   - protoc-gen-doc
 
-### 開発環境の建て方
+### DevContainerの起動
 
 1. VSCodeでこのリポジトリを開く
 1. Remote Containers が入っていれば、`Folder contains a Dev Container configuration file. Reopen folder to develop in a container`と表示されるので、`Reopen in Container` をクリックする
@@ -62,4 +62,3 @@
   - `make build`            ビルド
   - `make run`              実行
   - `make protobuf`         Protocol Buffers定義をコンパイル
-  - `make tbls-docker`      DBドキュメントの生成
