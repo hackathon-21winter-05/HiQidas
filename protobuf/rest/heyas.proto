@@ -53,6 +53,13 @@ message GetHeyasHeyaIdHiqidashiResponse {
     repeated hiqidashi.Hiqidashi hiqidashi = 5;
 }
 
+//POST /heyas/{heyaId}/hiqidashi ヘヤにhiqidashiを作成
+message PostHeyasHeyaIdHiqidashiRequest {
+    string parent_id = 1;
+    string title = 2;
+    string description = 3;
+}
+
 message Heya {
     string id = 1;
     string title = 2;
