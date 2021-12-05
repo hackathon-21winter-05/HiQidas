@@ -2,7 +2,7 @@ FROM node:16.13.1-alpine AS builder
 WORKDIR /build
 RUN apk add git
 
-RUN git clone https://github.com/hackathon-21winter-05/HiQidas_UI
+RUN git clone https://github.com/hackathon-21winter-05/HiQidas_UI.git
 WORKDIR /build/HiQidas_UI
 RUN npm ci --unsafe-perm
 RUN npm run build

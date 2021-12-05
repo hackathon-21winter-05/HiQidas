@@ -3,7 +3,6 @@ WORKDIR /HiQidas
 
 RUN go install github.com/jwilder/dockerize@latest
 RUN go install github.com/cosmtrek/air@latest
-RUN go get github.com/k1LoW/tbls
 
 EXPOSE 7070
 
