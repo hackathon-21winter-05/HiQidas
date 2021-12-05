@@ -3,6 +3,7 @@ syntax = "proto3";
 package heya;
 
 import "protobuf/rest/common.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/rest";
 
@@ -54,8 +55,8 @@ message Heya {
     string description = 3;
     string creator_id = 4;
     string last_editor_id = 5;
-    string created_at = 6;
-    string updated_at = 7;
+    google.protobuf.timestamp created_at = 6;
+    google.protobuf.timestamp updated_at = 7;
 }
 
 message Heyas {
