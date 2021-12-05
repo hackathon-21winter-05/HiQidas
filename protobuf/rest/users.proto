@@ -21,7 +21,7 @@ message GetUsersUserIdResponse {
 }
 
 //PUT /users/{userId} ユーザー情報の変更
-message EditUsersUserIdRequest {
+message PutUsersUserIdRequest {
     // どの情報を変更するか考える
 }
 
@@ -32,7 +32,7 @@ message GetUsersMeResponse {
 }
 
 // PUT /users/me  自分の情報を変更
-message EditUsersMeRequest {
+message PutUsersMeRequest {
     //　どの情報を変更するか考える
 }
 
@@ -44,7 +44,6 @@ message GetUsersMeHeyasResponse {
 message User {
     string id = 1;
     string name = 2;
-    string icon_file_id = 3;
 }
 
 message Users {

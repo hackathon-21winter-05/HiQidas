@@ -26,13 +26,13 @@ message GetHeyasHeyaIdResponse {
 }
 
 // PUT /heyas/{heyaId}
-message EditHeyasHeyaIdRequest {
+message PutHeyasHeyaIdRequest {
     string title = 1;
     string description = 2;
 }
 
 //PUT /heyas/{heyaId}の返ってくるレスポンス
-message EditHeyasHeyaIdResponse {
+message PutHeyasHeyaIdResponse {
     Status status = 1;
 }
 
