@@ -5,4 +5,4 @@ dsn: mariadb://root:password@mariadb:3306/HiQidas
 
 # Path to generate document
 # Default is `dbdoc`
-docPath: .
+docPath: ./db_schema
