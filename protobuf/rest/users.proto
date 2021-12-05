@@ -4,7 +4,7 @@ package Users;
 
 import "protobuf/rest/heyas.proto";
 
-option go_package = "github.com/hackathon-21winter-05/HiQidas/model/pb/rest";
+option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/rest";
 
 // GET /Users ユーザー一覧を取得
 message GetUsersResponse {

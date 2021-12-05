@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package heya;
 
-option go_package = "github.com/hackathon-21winter-05/HiQidas/model/pb/rest";
+option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/rest";
 
 // GET /heyas 全ヘヤの情報を取得
 message GetHeyasResponse {
@@ -17,7 +17,7 @@ message PostHeyasRequest {
 
 // POST /heyasの返ってくるレスポンス
 message PostHeyasResponse {
-    Heyas heyas = 1;
+    Heya heya = 1;
 }
 
 // GET /heyas/{heyaId}
