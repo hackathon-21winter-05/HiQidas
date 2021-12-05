@@ -7,11 +7,12 @@ option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/rest";
 // Hiqidashiの基本的な情報
 message Hiqidashi {
     string id = 1;
-    string title = 2;
-    string description = 3;
-    string created_at = 4;
-    string updated_at = 5;
-    NullImage image = 6;
+    string parent_id = 2;
+    string title = 3;
+    string description = 4;
+    string created_at = 5;
+    string updated_at = 6;
+    NullImage image = 7;
 }
 
 // 画像がNullの場合もある
