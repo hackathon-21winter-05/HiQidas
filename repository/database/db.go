@@ -78,6 +78,7 @@ func NewDBConnect(isProduction bool) (*DB, error) {
 	}, nil
 }
 
+// GetDB DBをコンテキストから取得
 func (d *DB) GetDB(ctx context.Context) (db *gorm.DB, err error) {
 	iDB := ctx.Value(txKey)
 	if iDB == nil {
@@ -92,6 +93,7 @@ func (d *DB) GetDB(ctx context.Context) (db *gorm.DB, err error) {
 	return gormDB.WithContext(ctx), nil
 }
 
+// Do Transaction用のメソッド
 func (d *DB) Do(ctx context.Context, options *sql.TxOptions, f func(context.Context) error) error {
 	fc := func(tx *gorm.DB) error {
 		ctx = context.WithValue(ctx, txKey, tx)
