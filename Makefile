@@ -42,7 +42,7 @@ protobuf: protobuf-go protobuf-doc
 
 .PHONY: protobuf-go
 protobuf-go:
-	@rm -r server/protobuf
+	@rm -rf server/protobuf
 	@mkdir -p server/protobuf
 	@protoc -I . --go_out=server --go_opt=paths=source_relative protobuf/**/*.proto
 
