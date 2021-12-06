@@ -1,0 +1,42 @@
+name: dev_build
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  IMAGE_NAME: hiqidas
+  IMAGE_TAG: main
+  DEPLOY_REPO: dev-deploy
+  SIDE: backend
+
+jobs:
+  deploy:
+    name: Push to Deploy Repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cloning deployer Repository
+        run: |
+          git clone https://github.com/hackathon-21winter-05/HiQidas_deployer.git
+          mv HiQidas_deployer/* .
+      - name: Setup
+        run: |
+          echo "${{ secrets.DEPLOY_KEY_DEPLOYER }}" > ~/deploy_key
+          chmod 600 ~/deploy_key
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "hackathon-21winter-05"
+      - name: Make log file
+        run: |
+          mkdir -p deploy-log/${{ env.SIDE }}
+          echo "Deployment of ${{ env.SIDE }}-${{ github.sha }}" >> deploy-log/${{ env.SIDE }}/${{ github.sha }}.txt
+      - name: Commit
+        run: |
+          git add .
+          git commit -m "Requesting deployment of ${{ env.SIDE }}-${{ github.sha }}"
+      - name: Push
+        env:
+          GIT_SSH_COMMAND: ssh -i ~/deploy_key -o StrictHostKeyChecking=no -F /dev/null
+        run: |
+          git fetch --unshallow origin
+          git push -f ssh://git@git.trap.jp:2200/hackathon-21winter-05/HiQidas.git main
