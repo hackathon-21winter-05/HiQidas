@@ -2,8 +2,9 @@ package model
 
 import (
 	"database/sql"
-	"github.com/gofrs/uuid"
 	"time"
+
+	"github.com/gofrs/uuid"
 )
 
 type Heya struct {
