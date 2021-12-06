@@ -96,8 +96,8 @@ func (u *User) UpdateUserByID(ctx context.Context, user *model.User) error {
 	result := db.
 		Model(model.User{}).
 		Where("id = ?", user.ID).
-		// どのフィールドもゼロ値になることがないため構造体で渡す
-		Updates(&user)
+		//更新するものがIconのみ
+		Update("icon_file_id", &user.IconFileID)
 	err = result.Error
 	if err != nil {
 		return fmt.Errorf("failed to update user : %w", err)
