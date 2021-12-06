@@ -54,8 +54,7 @@ func NewDBConnect() (*DB, error) {
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s", user, pass, host, dbname) + "?parseTime=true&loc=Asia%2FTokyo&charset=utf8mb4"
 
-	var logLevel logger.LogLevel
-	logLevel = logger.Info
+	logLevel := logger.Info
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: logger.Default.LogMode(logLevel)})
 	if err != nil {
