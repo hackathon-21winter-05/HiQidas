@@ -55,8 +55,8 @@ message Heya {
     string description = 3;
     string creator_id = 4;
     string last_editor_id = 5;
-    google.protobuf.timestamp created_at = 6;
-    google.protobuf.timestamp updated_at = 7;
+    google.protobuf.Timestamp created_at = 6;
+    google.protobuf.Timestamp updated_at = 7;
 }
 
 message Heyas {
