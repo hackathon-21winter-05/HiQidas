@@ -9,7 +9,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func BindProtobuf(c echo.Context, i proto.Message) error {
+func bindProtobuf(c echo.Context, i proto.Message) error {
 	defer c.Request().Body.Close()
 
 	buffer := new(bytes.Buffer)

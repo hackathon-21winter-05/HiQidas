@@ -36,6 +36,7 @@ func (s *Server) addHandlers() {
 		api.Group("/oauth")
 		{
 			api.GET("/callback", s.h.GetOauthCallbackHandler)
+			api.POST("/code", s.h.PostOauthCodeHandler)
 		}
 	}
 }
