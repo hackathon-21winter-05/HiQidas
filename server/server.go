@@ -3,6 +3,7 @@ package server
 import (
 	"log"
 
+	"github.com/hackathon-21winter-05/HiQidas/config"
 	"github.com/hackathon-21winter-05/HiQidas/server/rest"
 	"github.com/labstack/echo/v4"
 )
@@ -14,10 +15,10 @@ type Server struct {
 }
 
 // 新たなサーバーを取得
-func NewServer() *Server {
+func NewServer(c *config.Config) *Server {
 	server := &Server{
 		e: newEcho(),
-		h: rest.NewRestHandlers(),
+		h: rest.NewRestHandlers(c),
 	}
 
 	server.addHandlers()

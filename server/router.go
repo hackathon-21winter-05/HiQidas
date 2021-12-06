@@ -3,6 +3,8 @@ package server
 import (
 	"net/http"
 
+	"github.com/gorilla/sessions"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
@@ -17,6 +19,9 @@ func newEcho() *echo.Echo {
 	e.Logger.SetHeader("${time_rfc3339} ${prefix} ${short_file} ${line} |")
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Format: "${time_rfc3339} method = ${method} | uri = ${uri} | status = ${status} ${error}\n"}))
 
+	// セッションの設定
+	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
+
 	return e
 }
 
@@ -27,5 +32,10 @@ func (s *Server) addHandlers() {
 		api.GET("/ping", func(c echo.Context) error {
 			return c.String(http.StatusOK, "pong")
 		})
+
+		api.Group("/oauth")
+		{
+			api.GET("/callback", s.h.GetOauthCallbackHandler)
+		}
 	}
 }
