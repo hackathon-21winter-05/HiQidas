@@ -31,7 +31,7 @@ type DB struct {
 	db *gorm.DB
 }
 
-func NewDBConnect(isProduction bool) (*DB, error) {
+func NewDBConnect() (*DB, error) {
 	user, ok := os.LookupEnv("DB_USERNAME")
 	if !ok {
 		return nil, errors.New("DB_USERNAME is not set")
@@ -55,11 +55,7 @@ func NewDBConnect(isProduction bool) (*DB, error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s", user, pass, host, dbname) + "?parseTime=true&loc=Asia%2FTokyo&charset=utf8mb4"
 
 	var logLevel logger.LogLevel
-	if isProduction {
-		logLevel = logger.Silent
-	} else {
-		logLevel = logger.Info
-	}
+	logLevel = logger.Info
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: logger.Default.LogMode(logLevel)})
 	if err != nil {
