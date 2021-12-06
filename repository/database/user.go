@@ -51,8 +51,19 @@ func (u *User) GetUserByID(ctx context.Context, id uuid.UUID) (*model.User, erro
 	return user, nil
 }
 
+// CreateUser Userを作成
 func (u *User) CreateUser(ctx context.Context, user *model.User) error {
-	panic("implement me")
+	db, err := u.db.GetDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+
+	err = db.Create(&user).Error
+	if err != nil {
+		return fmt.Errorf("failed to create user :%w", err)
+	}
+
+	return nil
 }
 
 func (u *User) DeleteUserByID(ctx context.Context, id uuid.UUID) error {
