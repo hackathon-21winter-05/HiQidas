@@ -9,6 +9,11 @@ services:
     volumes:
       - ..:/HiQidas
     restart: always
+    environment:
+      DB_USERNAME: root
+      DB_PASSWORD: password
+      DB_HOSTNAME: mariadb
+      DB_DATABASE: HiQidas
     ports:
       - "7070:7070"
     depends_on:
