@@ -14,7 +14,9 @@ HiQidas
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
-
 .idea
 .vscode
 tmp
+
+# Protobuf Auto Generated Codes
+server/protobuf

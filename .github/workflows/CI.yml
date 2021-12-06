@@ -54,10 +54,42 @@ jobs:
           key: mod-${{ hashFiles('**/go.sum') }}
       - name: Module Download
         run: go mod download
+  protobuf:
+    name: Protobuf Generation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+      - name: Set Go Tools Cache
+        id: tools-cache
+        uses: actions/cache@v2
+        with:
+          path: ~/go/bin
+          key: tools-${{ env.GO_VERSION }}
+      - name: Set Protobuf Cache
+        id: protobuf-cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: ./server/protobuf
+          key: protobuf-${{ hashFiles('**/*.proto') }}
+      - name: Setup Go
+        if: steps.tools-cache.outputs.cache-hit != 'true'
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: Install Tools
+        if: steps.tools-cache.outputs.cache-hit != 'true'
+        run: |
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+      - name: Generate code
+        if: steps.protobuf-cache.outputs.cache-hit != 'true'
+        run: make protobuf-go
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [mod]
+    needs: [mod, protobuf]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -70,6 +102,11 @@ jobs:
         with:
           path: ~/go/pkg/mod
           key: mod-${{ hashFiles('**/go.sum') }}
+      - name: Set Protobuf Cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: ./server/protobuf
+          key: protobuf-${{ hashFiles('**/*.proto') }}
       - name: Build
         run: go build -o ./HiQidas
       - uses: actions/upload-artifact@v2.2.4
@@ -79,7 +116,7 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    needs: [mod]
+    needs: [mod, protobuf]
     # services:
     #   mariadb:
     #     image: mariadb:latest
@@ -101,6 +138,11 @@ jobs:
         with:
           path: ~/go/pkg/mod
           key: mod-${{ hashFiles('**/go.sum') }}
+      - name: Set Protobuf Cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: ./server/protobuf
+          key: protobuf-${{ hashFiles('**/*.proto') }}
       - name: Run Test
         run: go test ./... -v
         # env:

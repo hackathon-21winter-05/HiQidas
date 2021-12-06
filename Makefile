@@ -38,11 +38,17 @@ prune:
 	@docker image prune -a && docker volume prune
 
 .PHONY: protobuf
-protobuf:
+protobuf: protobuf-go protobuf-doc
+
+.PHONY: protobuf-go
+protobuf-go:
 	@mkdir -p server/protobuf
-	@protoc --proto_path=protobuf --go_out=server/protobuf--go_opt=paths=source_relative protobuf/**/*.proto
-	@protoc --doc_out=html,pb_rest.html:docs protobuf/rest/*.proto
-	@protoc --doc_out=html,pb_ws.html:docs protobuf/ws/*.proto
+	@protoc -I . --go_out=server --go_opt=paths=source_relative protobuf/**/*.proto
+
+.PHONY: protobuf-doc
+protobuf-doc:
+	@protoc --doc_out=html,rest.html:docs/protobuf_schema protobuf/rest/*.proto
+	@protoc --doc_out=html,ws.html:docs/protobuf_schema protobuf/ws/*.proto
 
 .PHONY: tbls
 tbls:
