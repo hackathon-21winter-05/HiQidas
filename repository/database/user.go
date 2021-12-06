@@ -86,6 +86,25 @@ func (u *User) DeleteUserByID(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
+// UpdateUserByID ユーザーの情報を更新
 func (u *User) UpdateUserByID(ctx context.Context, user *model.User) error {
-	panic("implement me")
+	db, err := u.db.GetDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+
+	result := db.
+		Model(model.User{}).
+		Where("id = ?", user.ID).
+		// どのフィールドもゼロ値になることがないため構造体で渡す
+		Updates(&user)
+	err = result.Error
+	if err != nil {
+		return fmt.Errorf("failed to update user : %w", err)
+	}
+	if result.RowsAffected == 0 {
+		return ErrNoRecordUpdated
+	}
+
+	return nil
 }
