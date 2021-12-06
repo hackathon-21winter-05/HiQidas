@@ -1,6 +1,8 @@
 package database
 
 import (
+	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 	"github.com/hackathon-21winter-05/HiQidas/model"
@@ -18,6 +20,12 @@ var allTables = []interface{}{
 	model.Drawing{},
 	model.Tsuna{},
 }
+
+type ctxKey string
+
+const (
+	txKey ctxKey = "transaction"
+)
 
 type DB struct {
 	db *gorm.DB
@@ -68,4 +76,45 @@ func NewDBConnect(isProduction bool) (*DB, error) {
 	return &DB{
 		db: db,
 	}, nil
+}
+
+func (d *DB) GetDB(ctx context.Context) (db *gorm.DB, err error) {
+	iDB := ctx.Value(txKey)
+	if iDB == nil {
+		return d.db.WithContext(ctx), nil
+	}
+
+	gormDB, ok := iDB.(*gorm.DB)
+	if !ok {
+		return nil, errors.New("failed to get gorm.DB")
+	}
+
+	return gormDB.WithContext(ctx), nil
+}
+
+func (d *DB) Do(ctx context.Context, options *sql.TxOptions, f func(context.Context) error) error {
+	fc := func(tx *gorm.DB) error {
+		ctx = context.WithValue(ctx, txKey, tx)
+
+		err := f(ctx)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	if options == nil {
+		err := d.db.Transaction(fc)
+		if err != nil {
+			return fmt.Errorf("failed to get transaciton:%w", err)
+		}
+	} else {
+		err := d.db.Transaction(fc, options)
+		if err != nil {
+			return fmt.Errorf("failed to get transaciton:%w", err)
+		}
+	}
+
+	return nil
 }

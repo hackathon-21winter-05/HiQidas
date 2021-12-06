@@ -3,9 +3,10 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"gorm.io/gorm"
 )
 
 type DB interface {
-	GetDB() (db *sql.DB, err error)
+	GetDB(ctx context.Context) (db *gorm.DB, err error)
 	Do(context.Context, *sql.TxOptions, func(context.Context) error) error
 }
