@@ -38,5 +38,4 @@ jobs:
         env:
           GIT_SSH_COMMAND: ssh -i ~/deploy_key -o StrictHostKeyChecking=no -F /dev/null
         run: |
-          git fetch --unshallow origin
           git push -f ssh://git@git.trap.jp:2200/hackathon-21winter-05/HiQidas.git main
