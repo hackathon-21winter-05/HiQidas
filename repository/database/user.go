@@ -67,7 +67,23 @@ func (u *User) CreateUser(ctx context.Context, user *model.User) error {
 }
 
 func (u *User) DeleteUserByID(ctx context.Context, id uuid.UUID) error {
-	panic("implement me")
+	db, err := u.db.GetDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+
+	result := db.
+		Where("id = ?", id).
+		Delete(&model.User{})
+	err = result.Error
+	if err != nil {
+		return fmt.Errorf("failed to delete user :%w", err)
+	}
+	if result.RowsAffected == 0 {
+		return ErrNoRecordDeleted
+	}
+
+	return nil
 }
 
 func (u *User) UpdateUserByID(ctx context.Context, user *model.User) error {
