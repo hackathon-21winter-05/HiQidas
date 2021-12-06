@@ -1,0 +1,55 @@
+version: "3"
+
+services:
+  backend:
+    container_name: HiQidas_backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/HiQidas
+    restart: always
+    ports:
+      - "7070:7070"
+    depends_on:
+      - mariadb
+
+  frontend:
+    container_name: HiQidas_frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - ./frontend/Caddyfile:/etc/caddy/Caddyfile:ro
+    ports:
+      - "7071:80"
+    depends_on:
+      - backend
+
+  mariadb:
+    container_name: HiQidas_mariadb
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: HiQidas
+    volumes:
+      - db:/var/lib/mysql
+
+  phpmyadmin:
+    container_name: HiQidas_phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mariadb
+      - PMA_USER=root
+      - PMA_PASSWORD=password
+    ports:
+      - "7072:80"
+    depends_on:
+      - mariadb
+
+volumes:
+  db: null
