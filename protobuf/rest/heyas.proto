@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package heya;
+
+import "protobuf/rest/common.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/rest";
+
+// GET /heyas 全ヘヤの情報を取得
+message GetHeyasResponse {
+    repeated string heya_id = 1;
+}
+
+// POST /heyas
+message PostHeyasRequest {
+    string title = 1;
+    string description = 2;
+}
+
+// POST /heyasの返ってくるレスポンス
+message PostHeyasResponse {
+    Heya heya = 1;
+}
+
+// GET /heyas/{heyaId} ヘヤの情報を取得
+message GetHeyasHeyaIdResponse {
+    Heya heya = 1;
+}
+
+// PUT /heyas/{heyaId} ヘヤの情報を変更
+message PutHeyasHeyaIdRequest {
+    string title = 1;
+    string description = 2;
+}
+
+//PUT /heyas/{heyaId}の返ってくるレスポンス
+message PutHeyasHeyaIdResponse {
+    common.Status status = 1;
+}
+
+//DELETE /heyas/{heyaId} ヘヤの削除(アーカイブがよさそう？）
+message DeleteHeyasHeyaIdRequest {
+    common.Status status = 1;
+}
+
+// GET /heyas/{heyaId}/users ヘヤにいるUserを返す
+message GetHeyasHeyaIdUsersResponse {
+    repeated string user_id = 1;
+}
+
+message Heya {
+    string id = 1;
+    string title = 2;
+    string description = 3;
+    string creator_id = 4;
+    string last_editor_id = 5;
+    google.protobuf.Timestamp created_at = 6;
+    google.protobuf.Timestamp updated_at = 7;
+}
+
+message Heyas {
+    repeated Heya heyas = 1;
+}
