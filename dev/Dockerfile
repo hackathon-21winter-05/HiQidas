@@ -1,4 +1,4 @@
-FROM golang:1.17.3-alpine
+FROM golang:1.17.4-alpine
 WORKDIR /HiQidas
 
 RUN go install github.com/jwilder/dockerize@latest
