@@ -6,12 +6,8 @@ import "protobuf/rest/common.proto";
 
 option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/rest";
 
-//POST /oauth/code　OAuthのCodeをリクエストする
-message PostOauthCodeRequest {
-    string code = 1;
-}
+// POST /oauth/code　OAuthのCodeをリクエストする
+message PostOauthCodeRequest { string code = 1; }
 
-//GET /oauth/callback OauthのCallbackのステータス
-message OauthCallbackResponse {
-    common.Status status = 1;
-}
+// GET /oauth/callback OauthのCallbackのステータス
+message OauthCallbackResponse { common.Status status = 1; }

@@ -5,6 +5,6 @@ package common;
 option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/rest";
 
 message Status {
-    int32 status_code = 1;
-    string message = 2;
+  int32 status_code = 1;
+  string message = 2;
 }
