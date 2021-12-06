@@ -32,8 +32,23 @@ func (u *User) GetUsers(ctx context.Context) ([]*model.User, error) {
 	return users, nil
 }
 
+// GetUserByID IDからUserを取得する
 func (u *User) GetUserByID(ctx context.Context, id uuid.UUID) (*model.User, error) {
-	panic("implement me")
+	db, err := u.db.GetDB(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get db: %w", err)
+	}
+
+	var user *model.User
+
+	err = db.
+		Where("id = ?", id).
+		First(&user).Error
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user by id : %w", err)
+	}
+
+	return user, nil
 }
 
 func (u *User) CreateUser(ctx context.Context, user *model.User) error {
