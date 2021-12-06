@@ -19,7 +19,7 @@ jobs:
       - name: Cloning deployer Repository
         run: |
           git clone https://github.com/hackathon-21winter-05/HiQidas_deployer.git
-          mv HiQidas_deployer/* .
+          mv HiQidas_deployer/* HiQidas_deployer/.[^\.]* .
       - name: Setup
         run: |
           echo "${{ secrets.DEPLOY_KEY_DEPLOYER }}" > ~/deploy_key
