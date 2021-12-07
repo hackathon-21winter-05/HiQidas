@@ -91,7 +91,7 @@ func (repo *GormRepository) UpdateUserByID(ctx context.Context, user *model.User
 		Model(model.User{}).
 		Where("id = ?", user.ID).
 		//更新するものがIconのみ
-		Update("icon_file_id", &user.IconFileID)
+		Update("icon_file_id", user.IconFileID)
 	err = result.Error
 	if err != nil {
 		return fmt.Errorf("failed to update user : %w", err)
