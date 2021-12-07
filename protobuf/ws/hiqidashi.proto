@@ -15,10 +15,10 @@ message WsCreateHiqidashi {
 
 message WsEditHiqidashi {
   string id = 1;
-  string title = 2;
-  string description = 3;
+  google.protobuf.StringValue title = 2;
+  google.protobuf.StringValue description = 3;
   google.protobuf.StringValue drawing = 5;
-  string color_id = 6;
+  google.protobuf.StringValue color_id = 6;
 }
 
 message WsDeleteHiqidashi { string id = 1; }
