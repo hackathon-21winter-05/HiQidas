@@ -8,17 +8,17 @@ import (
 )
 
 type Config struct {
-	Client_ID        string `json:"client_id,omitempty"`        // 本番環境向けのクライアントID (default: "")
-	Client_ID_Dev    string `json:"client_id_dev,omitempty"`    // ローカル開発環境向けのクライアントID (default: "")
-	MariaDB_Hostname string `json:"mariadb_hostname,omitempty"` // DB のホスト (default: "mariadb")
-	MariaDB_Database string `json:"mariadb_database,omitempty"` // DB の DB 名 (default: "HiQidas")
-	MariaDB_Username string `json:"mariadb_username,omitempty"` // DB のユーザー名 (default: "root")
-	MariaDB_Password string `json:"mariadb_password,omitempty"` // DB のパスワード (default: "password")
+	ClientID        string `mapstructure:"client_id" json:"client_id,omitempty"`               // 本番環境向けのクライアントID (default: "")
+	DevClientID     string `mapstructure:"dev_client_id" json:"dev_client_id,omitempty"`       // ローカル開発環境向けのクライアントID (default: "")
+	MariaDBHostname string `mapstructure:"mariadb_hostname" json:"mariadb_hostname,omitempty"` // DB のホスト (default: "mariadb")
+	MariaDBDatabase string `mapstructure:"mariadb_database" json:"mariadb_database,omitempty"` // DB の DB 名 (default: "HiQidas")
+	MariaDBUsername string `mapstructure:"mariadb_username" json:"mariadb_username,omitempty"` // DB のユーザー名 (default: "root")
+	MariaDBPassword string `mapstructure:"mariadb_password" json:"mariadb_password,omitempty"` // DB のパスワード (default: "password")
 }
 
 func GetConfig() (*Config, error) {
 	viper.SetDefault("Client_ID", "")
-	viper.SetDefault("Client_ID_Dev", "")
+	viper.SetDefault("Dev_Client_ID", "")
 	viper.SetDefault("MariaDB_Hostname", "mariadb")
 	viper.SetDefault("MariaDB_Database", "HiQidas")
 	viper.SetDefault("MariaDB_Username", "root")

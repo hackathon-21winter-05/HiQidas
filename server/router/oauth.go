@@ -43,9 +43,9 @@ func (r *Router) GetOauthCallbackHandler(c echo.Context) error {
 
 	var clientID string
 	if strings.Contains(c.Request().Header.Get("referer"), "localhost") {
-		clientID = r.c.Client_ID_Dev
+		clientID = r.c.DevClientID
 	} else {
-		clientID = r.c.Client_ID
+		clientID = r.c.ClientID
 	}
 
 	uri := fmt.Sprintf("%s?response_type=code&client_id=%s&code_challenge=%s&code_challenge_method=S256", oauthCodeRedirect, clientID, challenge)
@@ -71,9 +71,9 @@ func (r *Router) PostOauthCodeHandler(c echo.Context) error {
 
 	var clientID string
 	if strings.Contains(c.Request().Header.Get("referer"), "localhost") {
-		clientID = r.c.Client_ID_Dev
+		clientID = r.c.DevClientID
 	} else {
-		clientID = r.c.Client_ID
+		clientID = r.c.ClientID
 	}
 
 	verifier := sess.Values["verifier"].(string)
