@@ -1,4 +1,4 @@
-package rest
+package router
 
 import (
 	"context"
@@ -17,14 +17,9 @@ import (
 	"github.com/thanhpk/randstr"
 )
 
-type oauthHandlers interface {
-	GetOauthCallbackHandler(c echo.Context) error
-	PostOauthCodeHandler(c echo.Context) error
-}
-
 const oauthCodeRedirect = "https://q.trap.jp/api/v3/oauth2/authorize"
 
-func (r *restHandlersImpl) GetOauthCallbackHandler(c echo.Context) error {
+func (r *Router) GetOauthCallbackHandler(c echo.Context) error {
 	verifier := randstr.String(64)
 	hash := sha256.Sum256([]byte(verifier))
 	challenge := base64.RawURLEncoding.EncodeToString(hash[:])
@@ -60,7 +55,7 @@ func (r *restHandlersImpl) GetOauthCallbackHandler(c echo.Context) error {
 	return sendProtobuf(c, http.StatusOK, redirectData)
 }
 
-func (r *restHandlersImpl) PostOauthCodeHandler(c echo.Context) error {
+func (r *Router) PostOauthCodeHandler(c echo.Context) error {
 	sess, err := session.Get("session", c)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
