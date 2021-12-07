@@ -4,20 +4,20 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+
 	"gorm.io/gorm"
 )
 
+type ctxKey string
 
-const (
-	txKey string = "transaction"
-)
+const txKey ctxKey = "transaction"
 
 // Do Transaction用のメソッド
-func (tx *GormRepository) Do(ctx context.Context, options *sql.TxOptions, f func(context.Context) error) error {
+func (repo *GormRepository) Do(ctx context.Context, options *sql.TxOptions, callBack func(context.Context) error) error {
 	fc := func(tx *gorm.DB) error {
 		ctx = context.WithValue(ctx, txKey, tx)
 
-		err := f(ctx)
+		err := callBack(ctx)
 		if err != nil {
 			return err
 		}
@@ -26,14 +26,14 @@ func (tx *GormRepository) Do(ctx context.Context, options *sql.TxOptions, f func
 	}
 
 	if options == nil {
-		err := tx.db.Transaction(fc)
+		err := repo.db.Transaction(fc)
 		if err != nil {
-			return fmt.Errorf("failed to get transaciton:%w", err)
+			return fmt.Errorf("failed to get transaction:%w", err)
 		}
 	} else {
-		err := tx.db.Transaction(fc, options)
+		err := repo.db.Transaction(fc, options)
 		if err != nil {
-			return fmt.Errorf("failed to get transaciton:%w", err)
+			return fmt.Errorf("failed to get transaction:%w", err)
 		}
 	}
 

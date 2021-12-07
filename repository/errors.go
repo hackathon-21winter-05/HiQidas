@@ -8,5 +8,3 @@ var (
 	// ErrNoRecordUpdated 更新するレコードがありませんでした
 	ErrNoRecordUpdated = errors.New("no record updated")
 )
-
-

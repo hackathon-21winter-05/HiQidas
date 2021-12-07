@@ -3,18 +3,19 @@ package repository
 import (
 	"context"
 	"fmt"
+
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
 )
 
 // GetUsersID GetUsers 全てのUserIDを取得
-func (u *GormRepository) GetUsersID(ctx context.Context) ([]uuid.UUID, error) {
-	db, err := u.getDB(ctx)
+func (repo *GormRepository) GetUsersID(ctx context.Context) ([]uuid.UUID, error) {
+	db, err := repo.getDB(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get db: %w", err)
 	}
-	usersID := make([]uuid.UUID, 0)
 
+	var usersID []uuid.UUID
 	err = db.
 		Model(&model.User{}).
 		Pluck("id", &usersID).Error
@@ -26,14 +27,13 @@ func (u *GormRepository) GetUsersID(ctx context.Context) ([]uuid.UUID, error) {
 }
 
 // GetUserByID IDからUserを取得する
-func (u *GormRepository) GetUserByID(ctx context.Context, id uuid.UUID) (*model.User, error) {
-	db, err := u.getDB(ctx)
+func (repo *GormRepository) GetUserByID(ctx context.Context, id uuid.UUID) (*model.User, error) {
+	db, err := repo.getDB(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get db: %w", err)
 	}
 
 	var user *model.User
-
 	err = db.
 		Where("id = ?", id).
 		First(&user).Error
@@ -45,8 +45,8 @@ func (u *GormRepository) GetUserByID(ctx context.Context, id uuid.UUID) (*model.
 }
 
 // CreateUser Userを作成
-func (u *GormRepository) CreateUser(ctx context.Context, user *model.User) error {
-	db, err := u.getDB(ctx)
+func (repo *GormRepository) CreateUser(ctx context.Context, user *model.User) error {
+	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
 	}
@@ -60,8 +60,8 @@ func (u *GormRepository) CreateUser(ctx context.Context, user *model.User) error
 }
 
 // DeleteUserByID Userを削除する
-func (u *GormRepository) DeleteUserByID(ctx context.Context, id uuid.UUID) error {
-	db, err := u.getDB(ctx)
+func (repo *GormRepository) DeleteUserByID(ctx context.Context, id uuid.UUID) error {
+	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
 	}
@@ -81,8 +81,8 @@ func (u *GormRepository) DeleteUserByID(ctx context.Context, id uuid.UUID) error
 }
 
 // UpdateUserByID ユーザーの情報を更新
-func (u *GormRepository) UpdateUserByID(ctx context.Context, user *model.User) error {
-	db, err := u.getDB(ctx)
+func (repo *GormRepository) UpdateUserByID(ctx context.Context, user *model.User) error {
+	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
 	}
