@@ -14,8 +14,8 @@ type Hiqidashi struct {
 	LastEditorID uuid.UUID      `gorm:"type:char(36);not null"`
 	ParentID     uuid.NullUUID  `gorm:"type:char(36)"`
 	Title        string         `gorm:"type:char(50);not null"`
-	Description  sql.NullString `gorm:"type:text"`
-	ImageID      uuid.UUID      `gorm:"type:char(36)"`
+	Description  string         `gorm:"type:text;not null"`
+	Drawing      sql.NullString `gorm:"type:text"`
 	ColorID      int            `gorm:"type:TINYINT UNSIGNED;not null"`
 	CreatedAt    time.Time      `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP;index:idx_hiqidashi_heya_id,priority:2,index:idx_hiqidashi_creator_id,priority:2"`
 	UpdatedAt    time.Time      `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
