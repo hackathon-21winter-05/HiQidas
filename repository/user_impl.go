@@ -7,21 +7,22 @@ import (
 	"github.com/hackathon-21winter-05/HiQidas/model"
 )
 
-// GetUsers 全てのUserを取得
-func (u *GormRepository) GetUsers(ctx context.Context) ([]*model.User, error) {
+// GetUsersID GetUsers 全てのUserIDを取得
+func (u *GormRepository) GetUsersID(ctx context.Context) ([]uuid.UUID, error) {
 	db, err := u.getDB(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get db: %w", err)
 	}
-	users := make([]*model.User, 0)
+	usersID := make([]uuid.UUID, 0)
 
 	err = db.
-		Find(&users).Error
+		Model(&model.User{}).
+		Pluck("id", &usersID).Error
 	if err != nil {
 		return nil, fmt.Errorf("failed to get users : %w", err)
 	}
 
-	return users, nil
+	return usersID, nil
 }
 
 // GetUserByID IDからUserを取得する
