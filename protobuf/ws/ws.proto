@@ -9,8 +9,9 @@ option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/ws";
 message WsCommunicationData {
   oneof payload {
     WsGetHiqidashi get_hiqidashi = 1;
-    WsCreateHiqidashi create_hiqidashi = 2;
-    WsEditHiqidashi edit_hiqidashi = 3;
-    WsDeleteHiqidashi delete_hiqidashi = 4;
+    WsGetHiqidashis get_hiqidashis = 2;
+    WsCreateHiqidashi create_hiqidashi = 3;
+    WsEditHiqidashi edit_hiqidashi = 4;
+    WsDeleteHiqidashi delete_hiqidashi = 5;
   }
 }
