@@ -1,4 +1,4 @@
-package database
+package repository
 
 import (
 	"context"
@@ -7,16 +7,10 @@ import (
 	"github.com/hackathon-21winter-05/HiQidas/model"
 )
 
-type User struct {
-	db *DB
-}
 
-func NewUser(db *DB) *User {
-	return &User{db: db}
-}
 
 // GetUsers 全てのUserを取得
-func (u *User) GetUsers(ctx context.Context) ([]*model.User, error) {
+func (u *GormRepository) GetUsers(ctx context.Context) ([]*model.User, error) {
 	db, err := u.db.GetDB(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get db: %w", err)
@@ -33,7 +27,7 @@ func (u *User) GetUsers(ctx context.Context) ([]*model.User, error) {
 }
 
 // GetUserByID IDからUserを取得する
-func (u *User) GetUserByID(ctx context.Context, id uuid.UUID) (*model.User, error) {
+func (u *GormRepository) GetUserByID(ctx context.Context, id uuid.UUID) (*model.User, error) {
 	db, err := u.db.GetDB(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get db: %w", err)
@@ -52,7 +46,7 @@ func (u *User) GetUserByID(ctx context.Context, id uuid.UUID) (*model.User, erro
 }
 
 // CreateUser Userを作成
-func (u *User) CreateUser(ctx context.Context, user *model.User) error {
+func (u *GormRepository) CreateUser(ctx context.Context, user *model.User) error {
 	db, err := u.db.GetDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
@@ -66,7 +60,7 @@ func (u *User) CreateUser(ctx context.Context, user *model.User) error {
 	return nil
 }
 
-func (u *User) DeleteUserByID(ctx context.Context, id uuid.UUID) error {
+func (u *GormRepository) DeleteUserByID(ctx context.Context, id uuid.UUID) error {
 	db, err := u.db.GetDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
@@ -87,7 +81,7 @@ func (u *User) DeleteUserByID(ctx context.Context, id uuid.UUID) error {
 }
 
 // UpdateUserByID ユーザーの情報を更新
-func (u *User) UpdateUserByID(ctx context.Context, user *model.User) error {
+func (u *GormRepository) UpdateUserByID(ctx context.Context, user *model.User) error {
 	db, err := u.db.GetDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
