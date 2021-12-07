@@ -20,3 +20,6 @@ tmp
 
 # Protobuf Auto Generated Codes
 server/protobuf
+
+# Config file
+config.json
