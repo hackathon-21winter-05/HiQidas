@@ -8,7 +8,6 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"os"
 )
 
 var allTables = []interface{}{
@@ -24,8 +23,9 @@ type GormRepository struct {
 	db *gorm.DB
 }
 
-func NewGormRepository(db *gorm.DB) *GormRepository {
-	return &GormRepository{db: db}
+func NewGormRepository(c config.Config) (*GormRepository, error) {
+	db, err := NewDBConnect(c)
+	return &GormRepository{db: db}, err
 }
 
 // GetDB DBをコンテキストから取得
@@ -43,28 +43,8 @@ func (gr *GormRepository) getDB(ctx context.Context) (db *gorm.DB, err error) {
 	return gormDB.WithContext(ctx), nil
 }
 
-func NewDBConnect() (*gorm.DB, error) {
-	user, ok := os.LookupEnv("DB_USERNAME")
-	if !ok {
-		return nil, errors.New("DB_USERNAME is not set")
-	}
-
-	pass, ok := os.LookupEnv("DB_PASSWORD")
-	if !ok {
-		return nil, errors.New("DB_PASSWORD is not set")
-	}
-
-	host, ok := os.LookupEnv("DB_HOSTNAME")
-	if !ok {
-		return nil, errors.New("DB_HOSTNAME is not set")
-	}
-
-	dbname, ok := os.LookupEnv("DB_DATABASE")
-	if !ok {
-		return nil, errors.New("DB_DATABASE is not set")
-	}
-
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s", user, pass, host, dbname) + "?parseTime=true&loc=Asia%2FTokyo&charset=utf8mb4"
+func NewDBConnect(c config.Config) (*gorm.DB, error) {
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s", c.MariaDBUsername, c.MariaDBPassword, c.MariaDBHostname, c.MariaDBDatabase) + "?parseTime=true&loc=Asia%2FTokyo&charset=utf8mb4"
 
 	logLevel := logger.Info
 
