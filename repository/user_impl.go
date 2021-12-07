@@ -58,6 +58,7 @@ func (u *GormRepository) CreateUser(ctx context.Context, user *model.User) error
 	return nil
 }
 
+// DeleteUserByID Userを削除する
 func (u *GormRepository) DeleteUserByID(ctx context.Context, id uuid.UUID) error {
 	db, err := u.getDB(ctx)
 	if err != nil {
