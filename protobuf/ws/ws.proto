@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package hiqidashi;
+
+import "protobuf/ws/hiqidashi.proto";
+
+option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/ws";
+
+message WsCommunicationData {
+  oneof payload {
+    WsGetHiqidashi get_hiqidashi = 1;
+    WsCreateHiqidashi create_hiqidashi = 2;
+    WsEditHiqidashi edit_hiqidashi = 3;
+    WsDeleteHiqidashi delete_hiqidashi = 4;
+  }
+}
