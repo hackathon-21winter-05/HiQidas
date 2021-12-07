@@ -3,15 +3,15 @@ lint:
 	@golangci-lint run
 
 .PHONY: build
-build:
+build: protobuf-go
 	@go build -o HiQidas ./*.go
 
 .PHONY: run
-run:
+run: protobuf-go
 	@go run ./*.go
 
 .PHONY: up
-up:
+up: protobuf-go
 	@cd dev && COMPOSE_PROJECT_NAME=hiqidas_hot_reload docker-compose up -d --build
 
 .PHONY: down
