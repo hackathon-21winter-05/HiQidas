@@ -24,9 +24,12 @@ type GormRepository struct {
 	db *gorm.DB
 }
 
-func NewGormRepository(c config.Config) (*GormRepository, error) {
+func NewGormRepository(c *config.Config) (Repository, error) {
 	db, err := NewDBConnect(c)
-	return &GormRepository{db: db}, err
+	if err != nil {
+		return nil, fmt.Errorf("failed to connect to db :%w",err)
+	}
+	return &GormRepository{db: db}, nil
 }
 
 // GetDB DBをコンテキストから取得
@@ -44,7 +47,7 @@ func (gr *GormRepository) getDB(ctx context.Context) (db *gorm.DB, err error) {
 	return gormDB.WithContext(ctx), nil
 }
 
-func NewDBConnect(c config.Config) (*gorm.DB, error) {
+func NewDBConnect(c *config.Config) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s", c.MariaDBUsername, c.MariaDBPassword, c.MariaDBHostname, c.MariaDBDatabase) + "?parseTime=true&loc=Asia%2FTokyo&charset=utf8mb4"
 
 	logLevel := logger.Info

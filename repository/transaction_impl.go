@@ -7,10 +7,9 @@ import (
 	"gorm.io/gorm"
 )
 
-type ctxKey string
 
 const (
-	txKey ctxKey = "transaction"
+	txKey string = "transaction"
 )
 
 // Do Transaction用のメソッド

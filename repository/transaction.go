@@ -5,6 +5,6 @@ import (
 	"database/sql"
 )
 
-type TransactionRepository interface {
+type Transaction interface {
 	Do(context.Context, *sql.TxOptions, func(context.Context) error) error
 }
