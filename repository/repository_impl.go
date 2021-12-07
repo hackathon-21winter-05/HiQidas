@@ -17,7 +17,6 @@ var allTables = []interface{}{
 	model.Heya{},
 	model.History{},
 	model.Hiqidashi{},
-	model.Drawing{},
 	model.Tsuna{},
 }
 
