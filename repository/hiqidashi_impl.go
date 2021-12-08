@@ -26,6 +26,7 @@ func (repo *GormRepository) GetHiqidashisByHeyaID(ctx context.Context, heyaID uu
 	return hiqidashis, nil
 }
 
+// GetHiqidashisByParentID　親ヒキダシに対する子供のヒキダシを取得
 func (repo *GormRepository) GetHiqidashisByParentID(ctx context.Context, parentID uuid.UUID) ([]*model.Hiqidashi, error) {
 	db, err := repo.getDB(ctx)
 	if err != nil {
@@ -44,6 +45,7 @@ func (repo *GormRepository) GetHiqidashisByParentID(ctx context.Context, parentI
 	return hiqidashis, nil
 }
 
+// CreateHiqidashi  ヒキダシを作成
 func (repo *GormRepository) CreateHiqidashi(ctx context.Context, hiqidashi *model.Hiqidashi) error {
 	db, err := repo.getDB(ctx)
 	if err != nil {
@@ -58,6 +60,7 @@ func (repo *GormRepository) CreateHiqidashi(ctx context.Context, hiqidashi *mode
 	return nil
 }
 
+// DeleteHiqidashi ヒキダシを削除
 func (repo *GormRepository) DeleteHiqidashi(ctx context.Context, id uuid.UUID) error {
 	db, err := repo.getDB(ctx)
 	if err != nil {
@@ -78,6 +81,7 @@ func (repo *GormRepository) DeleteHiqidashi(ctx context.Context, id uuid.UUID) e
 	return nil
 }
 
+// UpdateHiqidashi ヒキダシを更新
 func (repo *GormRepository) UpdateHiqidashi(ctx context.Context, hiqidashi *model.Hiqidashi) error {
 	db, err := repo.getDB(ctx)
 	if err != nil {
