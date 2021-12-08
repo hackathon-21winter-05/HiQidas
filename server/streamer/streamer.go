@@ -28,5 +28,5 @@ func (s *Streamer) listen() {
 }
 
 func (s *Streamer) Run() {
-	s.listen()
+	go s.listen()
 }
