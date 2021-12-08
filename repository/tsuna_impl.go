@@ -42,8 +42,25 @@ func (repo *GormRepository) CreateTsuna(ctx context.Context, tsuna *model.Tsuna)
 	return nil
 }
 
+// DeleteTsuna ツナを削除する
 func (repo *GormRepository) DeleteTsuna(ctx context.Context, id uuid.UUID) error {
-	panic("implement me")
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+
+	result := db.
+		Where("id = ?", id).
+		Delete(&model.Tsuna{})
+	err = result.Error
+	if err != nil {
+		return fmt.Errorf("failed to delete tsuna :%w", err)
+	}
+	if result.RowsAffected == 0 {
+		return ErrNoRecordDeleted
+	}
+
+	return nil
 }
 
 func (repo *GormRepository) UpdateTsuna(Ctx context.Context, tsuna *model.Tsuna) error {
