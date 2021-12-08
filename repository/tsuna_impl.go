@@ -63,6 +63,22 @@ func (repo *GormRepository) DeleteTsuna(ctx context.Context, id uuid.UUID) error
 	return nil
 }
 
-func (repo *GormRepository) UpdateTsuna(Ctx context.Context, tsuna *model.Tsuna) error {
-	panic("implement me")
+// UpdateTsuna ツナを更新する
+func (repo *GormRepository) UpdateTsuna(ctx context.Context, tsuna *model.Tsuna) error {
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+
+	//ゼロ値であるフィールドがないので構造体のまま渡す
+	result := db.Updates(&tsuna)
+	err = result.Error
+	if err != nil {
+		return fmt.Errorf("failed to update tsuna :%w", err)
+	}
+	if result.RowsAffected == 0 {
+		return ErrNoRecordUpdated
+	}
+
+	return nil
 }
