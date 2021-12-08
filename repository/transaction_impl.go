@@ -14,7 +14,7 @@ const txKey ctxKey = "transaction"
 
 // Do Transaction用のメソッド
 func (repo *GormRepository) Do(ctx context.Context, options *sql.TxOptions, callBack func(context.Context) error) error {
-	fc := func(tx *gorm.DB) error {
+	txFunc := func(tx *gorm.DB) error {
 		ctx = context.WithValue(ctx, txKey, tx)
 
 		err := callBack(ctx)
@@ -26,12 +26,12 @@ func (repo *GormRepository) Do(ctx context.Context, options *sql.TxOptions, call
 	}
 
 	if options == nil {
-		err := repo.db.Transaction(fc)
+		err := repo.db.Transaction(txFunc)
 		if err != nil {
 			return fmt.Errorf("failed to get transaction:%w", err)
 		}
 	} else {
-		err := repo.db.Transaction(fc, options)
+		err := repo.db.Transaction(txFunc, options)
 		if err != nil {
 			return fmt.Errorf("failed to get transaction:%w", err)
 		}
