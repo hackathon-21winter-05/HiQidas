@@ -66,12 +66,12 @@ jobs:
         if: steps.protobuf-cache.outputs.cache-hit != 'true'
         uses: arduino/setup-protoc@v1
       - name: Setup Go
-        if: steps.tools-cache.outputs.cache-hit != 'true'
+        if: steps.protobuf-cache.outputs.cache-hit != 'true' && steps.tools-cache.outputs.cache-hit != 'true'
         uses: actions/setup-go@v2
         with:
           go-version: ${{ env.GO_VERSION }}
       - name: Install Tools
-        if: steps.tools-cache.outputs.cache-hit != 'true'
+        if: steps.protobuf-cache.outputs.cache-hit != 'true' && steps.tools-cache.outputs.cache-hit != 'true'
         run: |
           go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
       - name: Generate code
