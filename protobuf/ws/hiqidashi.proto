@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package hiqidashi;
+
+import "google/protobuf/wrappers.proto";
+
+option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/ws";
+
+message WsGetHiqidashi { Hiqidashi hiqidashi = 1; }
+
+message WsGetHiqidashis { repeated Hiqidashi hiqidashi = 1; }
+
+message WsCreateHiqidashi {
+  string parent_id = 1;
+  string title = 2;
+  string description = 3;
+}
+
+message WsEditHiqidashi {
+  string id = 1;
+  google.protobuf.StringValue title = 2;
+  google.protobuf.StringValue description = 3;
+  google.protobuf.StringValue drawing = 4;
+  google.protobuf.StringValue color_id = 5;
+}
+
+message WsDeleteHiqidashi { string id = 1; }
+
+// Hiqidashiの基本的な情報
+message Hiqidashi {
+  string id = 1;
+  string parent_id = 2;
+  string title = 3;
+  string description = 4;
+  google.protobuf.StringValue drawing = 5;
+  string color_id = 6;
+  string created_at = 7;
+  string updated_at = 8;
+}
