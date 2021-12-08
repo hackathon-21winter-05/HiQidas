@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/hackathon-21winter-05/HiQidas/server/protobuf/rest"
+	"github.com/hackathon-21winter-05/HiQidas/server/router/utils"
 	"github.com/labstack/echo/v4"
 )
 
@@ -13,11 +14,11 @@ func (r *Router) GetUsersHandler(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	userStringIDs := uuidsToStrings(userIDs)
+	userStringIDs := utils.UuidsToStrings(userIDs)
 
 	res := &rest.GetUsersResponse{
 		UserId: userStringIDs,
 	}
 
-	return sendProtobuf(c, http.StatusOK, res)
+	return utils.SendProtobuf(c, http.StatusOK, res)
 }

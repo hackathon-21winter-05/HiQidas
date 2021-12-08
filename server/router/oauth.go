@@ -11,6 +11,7 @@ import (
 	"github.com/antihax/optional"
 	"github.com/gorilla/sessions"
 	"github.com/hackathon-21winter-05/HiQidas/server/protobuf/rest"
+	"github.com/hackathon-21winter-05/HiQidas/server/router/utils"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/sapphi-red/go-traq"
@@ -53,7 +54,7 @@ func (r *Router) GetOauthCallbackHandler(c echo.Context) error {
 		Uri: uri,
 	}
 
-	return sendProtobuf(c, http.StatusOK, redirectData)
+	return utils.SendProtobuf(c, http.StatusOK, redirectData)
 }
 
 // POST /oauth/code ハンドラ
@@ -64,7 +65,7 @@ func (r *Router) PostOauthCodeHandler(c echo.Context) error {
 	}
 
 	codeData := &rest.PostOauthCodeRequest{}
-	err = bindProtobuf(c, codeData)
+	err = utils.BindProtobuf(c, codeData)
 	if err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
