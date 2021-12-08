@@ -7,3 +7,5 @@ type User struct {
 	Name       string    `gorm:"type:varchar(32);not null;unique"`
 	IconFileID uuid.UUID `gorm:"type:char(36);not null"`
 }
+
+type UserIDs []uuid.UUID
