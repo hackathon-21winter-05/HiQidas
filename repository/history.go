@@ -6,6 +6,6 @@ import (
 )
 
 type HistoryRepository interface {
-	GetHistoriesUserID(ctx context.Context)(*[]model.User,error)
-	GetHistoriesHeyaID()
+	GetHistoriesByUserID(ctx context.Context) ([]*model.History, error)
+	DeleteHistory(ctx context.Context, heyaId context.Context) error
 }
