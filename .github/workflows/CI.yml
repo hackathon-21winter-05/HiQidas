@@ -46,20 +46,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Install Protoc
-        uses: arduino/setup-protoc@v1
-      - name: Set Go Tools Cache
-        id: tools-cache
-        uses: actions/cache@v2
-        with:
-          path: ~/go/bin
-          key: tools-${{ env.GO_VERSION }}
       - name: Set Protobuf Cache
         id: protobuf-cache
         uses: actions/cache@v2.1.6
         with:
           path: ./server/protobuf
           key: protobuf-${{ hashFiles('**/*.proto') }}
+      - name: Set Go Tools Cache
+        id: tools-cache
+        if: steps.protobuf-cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v2
+        with:
+          path: ~/go/bin
+          key: tools-${{ env.GO_VERSION }}
+      - name: Install Protoc
+        if: steps.protobuf-cache.outputs.cache-hit != 'true'
+        uses: arduino/setup-protoc@v1
       - name: Setup Go
         if: steps.tools-cache.outputs.cache-hit != 'true'
         uses: actions/setup-go@v2
