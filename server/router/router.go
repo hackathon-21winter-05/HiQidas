@@ -23,11 +23,12 @@ type Router struct {
 }
 
 // 新しいルーターを生成
-func NewRouter(c *config.Config, s *streamer.Streamer) *Router {
+func NewRouter(c *config.Config, s *streamer.Streamer, ser *service.Service) *Router {
 	r := &Router{
 		e:   newEcho(),
 		c:   c,
 		cli: traq.NewAPIClient(traq.NewConfiguration()),
+		ser: ser,
 	}
 
 	r.setHandlers(s)
