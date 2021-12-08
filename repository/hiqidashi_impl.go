@@ -59,7 +59,23 @@ func (repo *GormRepository) CreateHiqidashi(ctx context.Context, hiqidashi *mode
 }
 
 func (repo *GormRepository) DeleteHiqidashi(ctx context.Context, id uuid.UUID) error {
-	panic("implement me")
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+
+	result := db.
+		Where("id = ?", id).
+		Delete(&model.Hiqidashi{})
+	err = result.Error
+	if err != nil {
+		return fmt.Errorf("failed to deleted hiqidashi :%w", err)
+	}
+	if result.RowsAffected == 0 {
+		return ErrNoRecordDeleted
+	}
+
+	return nil
 }
 
 func (repo *GormRepository) UpdateHiqidashi(ctx context.Context, hiqidashi *model.Hiqidashi) error {
