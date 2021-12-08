@@ -1,0 +1,16 @@
+package repository
+
+import (
+	"context"
+	"github.com/gofrs/uuid"
+	"github.com/hackathon-21winter-05/HiQidas/model"
+)
+
+type HiqidashiRepository interface {
+	GetHiqidashisByHeyaID(ctx context.Context, heyaID uuid.UUID) ([]*model.Hiqidashi, error)
+	GetHiqidashisByParentID(ctx context.Context, parentID uuid.UUID) ([]*model.Hiqidashi, error)
+	CreateHiqidashi(ctx context.Context, hiqidashi *model.Hiqidashi) error
+	//子を持つ親が消えた場合子も消える？
+	DeleteHiqidashi(ctx context.Context, id uuid.UUID) error
+	UpdateHiqidashi(ctx context.Context, hiqidashi *model.Hiqidashi) error
+}
