@@ -45,7 +45,17 @@ func (repo *GormRepository) GetHiqidashisByParentID(ctx context.Context, parentI
 }
 
 func (repo *GormRepository) CreateHiqidashi(ctx context.Context, hiqidashi *model.Hiqidashi) error {
-	panic("implement me")
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+
+	err = db.Create(&hiqidashi).Error
+	if err != nil {
+		return fmt.Errorf("failed to create hiqidashi :%w", err)
+	}
+
+	return nil
 }
 
 func (repo *GormRepository) DeleteHiqidashi(ctx context.Context, id uuid.UUID) error {
