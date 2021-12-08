@@ -27,7 +27,21 @@ func (repo *GormRepository) GetHiqidashisByHeyaID(ctx context.Context, heyaID uu
 }
 
 func (repo *GormRepository) GetHiqidashisByParentID(ctx context.Context, parentID uuid.UUID) ([]*model.Hiqidashi, error) {
-	panic("implement me")
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get db: %w", err)
+	}
+
+	hiqidashis := make([]*model.Hiqidashi, 0)
+
+	err = db.
+		Where("parent_id = ?", parentID).
+		Find(&hiqidashis).Error
+	if err != nil {
+		return nil, fmt.Errorf("failed to get hiqidashi by parentID :%w", err)
+	}
+
+	return hiqidashis, nil
 }
 
 func (repo *GormRepository) CreateHiqidashi(ctx context.Context, hiqidashi *model.Hiqidashi) error {
