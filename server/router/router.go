@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/hackathon-21winter-05/HiQidas/config"
 	"github.com/hackathon-21winter-05/HiQidas/server/streamer"
+	"github.com/hackathon-21winter-05/HiQidas/service"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -18,6 +19,7 @@ type Router struct {
 	e   *echo.Echo
 	c   *config.Config
 	cli *traq.APIClient
+	ser *service.Service
 }
 
 // 新しいルーターを生成
@@ -65,6 +67,11 @@ func (r *Router) setHandlers(s *streamer.Streamer) {
 		wsApi := api.Group("/ws")
 		{
 			wsApi.GET("/room/:heyaid", s.ConnectWs)
+		}
+
+		userApi := api.Group("/users")
+		{
+			userApi.GET("/", r.GetUsersHandler)
 		}
 	}
 }

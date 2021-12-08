@@ -5,9 +5,20 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/gofrs/uuid"
 	"github.com/labstack/echo/v4"
 	"google.golang.org/protobuf/proto"
 )
+
+func uuidsToStrings(IDs []uuid.UUID) []string {
+	var res []string
+
+	for _, ID := range IDs {
+		res = append(res, ID.String())
+	}
+
+	return res
+}
 
 func bindProtobuf(c echo.Context, i proto.Message) error {
 	defer c.Request().Body.Close()
