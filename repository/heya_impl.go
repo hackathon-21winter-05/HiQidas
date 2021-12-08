@@ -28,7 +28,21 @@ func (repo *GormRepository) GetHeyasID(ctx context.Context) ([]uuid.UUID, error)
 }
 
 func (repo *GormRepository) GetHeyaByID(ctx context.Context, id uuid.UUID) (*model.Heya, error) {
-	panic("implement me")
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get db: %w", err)
+	}
+
+	var heya *model.Heya
+
+	err = db.
+		Where("db = ?", id).
+		First(&heya).Error
+	if err != nil {
+		return nil, fmt.Errorf("failed to get heya :%w", err)
+	}
+
+	return heya, nil
 }
 
 func (repo *GormRepository) CreateHeya(ctx context.Context, title string, description sql.NullString) (*model.Heya, error) {
