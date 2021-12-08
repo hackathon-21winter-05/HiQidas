@@ -9,5 +9,5 @@ import (
 type HistoryRepository interface {
 	GetHistoriesByUserID(ctx context.Context, userID uuid.UUID) ([]*model.History, error)
 	CreateHistory(ctx context.Context, history *model.History) error
-	DeleteHistory(ctx context.Context, history *model.History) error
+	DeleteHistory(ctx context.Context, heyaID uuid.UUID) error
 }
