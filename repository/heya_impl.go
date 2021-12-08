@@ -88,5 +88,21 @@ func (repo *GormRepository) UpdateHeya(ctx context.Context, heya *model.Heya) er
 }
 
 func (repo *GormRepository) DeleteHeya(ctx context.Context, id uuid.UUID) error {
-	panic("implement me")
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+
+	result := db.
+		Where("id = ?", id).
+		Delete(&model.Heya{})
+	err = result.Error
+	if err != nil {
+		return fmt.Errorf("failed to deleted heya :%w", err)
+	}
+	if result.RowsAffected == 0 {
+		return ErrNoRecordDeleted
+	}
+
+	return nil
 }
