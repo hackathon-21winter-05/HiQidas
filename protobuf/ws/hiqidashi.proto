@@ -10,7 +10,11 @@ message WsGetHiqidashi { Hiqidashi hiqidashi = 1; }
 
 message WsGetHiqidashis { repeated Hiqidashi hiqidashi = 1; }
 
-message WsCreateHiqidashi { string parent_id = 1; }
+message WsCreateHiqidashi {
+  string parent_id = 1;
+  string title = 2;
+  string description = 3;
+}
 
 message WsEditHiqidashi {
   string id = 1;
