@@ -27,8 +27,19 @@ func (repo *GormRepository) GetTsunasByHeyaID(ctx context.Context, heyaID uuid.U
 	return tsunas, nil
 }
 
+// CreateTsuna ツナを作成
 func (repo *GormRepository) CreateTsuna(ctx context.Context, tsuna *model.Tsuna) error {
-	panic("implement me")
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+
+	err = db.Create(&tsuna).Error
+	if err != nil {
+		return fmt.Errorf("failed to create tsuna :%w", err)
+	}
+
+	return nil
 }
 
 func (repo *GormRepository) DeleteTsuna(ctx context.Context, id uuid.UUID) error {
