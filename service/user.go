@@ -12,11 +12,15 @@ type UserService interface {
 }
 
 type UserServiceImpl struct {
-	ur repository.UserRepository
+	repo repository.Repository
+}
+
+func newUserService(repo repository.Repository) UserService {
+	return &UserServiceImpl{repo: repo}
 }
 
 func (us *UserServiceImpl) GetUsersID() (model.UserIDs, error) {
-	userIDs, err := us.ur.GetUsersID(context.Background())
+	userIDs, err := us.repo.GetUsersID(context.Background())
 	if err != nil {
 		return nil, err
 	}
