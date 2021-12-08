@@ -79,5 +79,31 @@ func (repo *GormRepository) DeleteHiqidashi(ctx context.Context, id uuid.UUID) e
 }
 
 func (repo *GormRepository) UpdateHiqidashi(ctx context.Context, hiqidashi *model.Hiqidashi) error {
-	panic("implement me")
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+	hiqidashiMap := map[string]interface{}{
+		"id":             hiqidashi.ID,
+		"heya_id":        hiqidashi.HeyaID,
+		"creator_id":     hiqidashi.CreatorID,
+		"last_editor_id": hiqidashi.LastEditorID,
+		"parent_id":      hiqidashi.ParentID,
+		"title":          hiqidashi.Title,
+		"description":    hiqidashi.Description,
+		"drawing":        hiqidashi.Drawing,
+		"colorID":        hiqidashi.ColorID,
+		"created_at":     hiqidashi.CreatedAt,
+		"updated_at":     hiqidashi.UpdatedAt,
+	}
+	result := db.Updates(&hiqidashiMap)
+	err = result.Error
+	if err != nil {
+		return fmt.Errorf("failed to update hiqidashi :%w", err)
+	}
+	if result.RowsAffected == 0 {
+		return ErrNoRecordUpdated
+	}
+
+	return nil
 }
