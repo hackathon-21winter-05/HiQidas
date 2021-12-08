@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
@@ -45,12 +44,22 @@ func (repo *GormRepository) GetHeyaByID(ctx context.Context, id uuid.UUID) (*mod
 	return heya, nil
 }
 
-func (repo *GormRepository) CreateHeya(ctx context.Context, title string, description sql.NullString) (*model.Heya, error) {
-	panic("implement me")
+func (repo *GormRepository) CreateHeya(ctx context.Context, heya *model.Heya) error {
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+
+	err = db.Create(&heya).Error
+	if err != nil {
+		return fmt.Errorf("failed to create : %w", err)
+	}
+
+	return nil
 }
 
 func (repo *GormRepository) UpdateHeya(ctx context.Context, heya *model.Heya) error {
-	panic("implement me")
+
 }
 
 func (repo *GormRepository) DeleteHeya(ctx context.Context, id uuid.UUID) error {
