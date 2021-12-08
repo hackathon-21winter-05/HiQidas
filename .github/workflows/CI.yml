@@ -95,7 +95,7 @@ jobs:
           key: protobuf-${{ hashFiles('**/*.proto') }}
       - name: Build
         run: go build -o ./HiQidas
-      - uses: actions/upload-artifact@v2.2.4
+      - uses: actions/upload-artifact@v2.3.0
         with:
           name: HiQidas
           path: ./HiQidas
