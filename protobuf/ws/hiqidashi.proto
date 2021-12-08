@@ -20,8 +20,8 @@ message WsEditHiqidashi {
   string id = 1;
   google.protobuf.StringValue title = 2;
   google.protobuf.StringValue description = 3;
-  google.protobuf.StringValue drawing = 5;
-  google.protobuf.StringValue color_id = 6;
+  google.protobuf.StringValue drawing = 4;
+  google.protobuf.StringValue color_id = 5;
 }
 
 message WsDeleteHiqidashi { string id = 1; }
