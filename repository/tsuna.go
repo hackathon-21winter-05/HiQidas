@@ -6,7 +6,7 @@ import (
 	"github.com/hackathon-21winter-05/HiQidas/model"
 )
 
-type tsunaRepository interface {
+type TsunaRepository interface {
 	GetTsunas(ctx context.Context, heyaID uuid.UUID) ([]*model.Tsuna, error)
 	CreateTsuna(ctx context.Context, tsuna *model.Tsuna) error
 	DeleteTsuna(ctx context.Context, id uuid.UUID) error
