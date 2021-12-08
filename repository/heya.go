@@ -10,8 +10,7 @@ import (
 type HeyaRepository interface {
 	GetHeyasID(ctx context.Context) ([]uuid.UUID, error)
 	GetHeyaByID(ctx context.Context, id uuid.UUID) (*model.Heya, error)
-	GetHeyaByIDUsers(ctx context.Context, heyaID uuid.UUID) (*model.User, error)
-	InsertHeya(ctx context.Context, title string, description sql.NullString) (*model.Heya, error)
+	CreateHeya(ctx context.Context, title string, description sql.NullString) (*model.Heya, error)
 	UpdateHeyaTitle(ctx context.Context, title string) error
 	UpdateHeyaDescription(ctx context.Context, description string) error
 	DeleteHeya(ctx context.Context, id uuid.UUID) error
