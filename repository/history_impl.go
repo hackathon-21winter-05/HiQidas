@@ -28,7 +28,17 @@ func (repo *GormRepository) GetHistoriesByUserID(ctx context.Context, userID uui
 }
 
 func (repo *GormRepository) CreateHistory(ctx context.Context, history *model.History) error {
-	panic("implement me")
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+
+	err = db.Create(&history).Error
+	if err != nil {
+		return fmt.Errorf("failed to create history :%w", err)
+	}
+
+	return nil
 }
 
 func (repo *GormRepository) DeleteHistory(ctx context.Context, history *model.History) error {
