@@ -42,8 +42,8 @@ func (repo *GormRepository) CreateHistory(ctx context.Context, history *model.Hi
 	return nil
 }
 
-// DeleteHistory ヘヤが削除されたときに削除する履歴
-func (repo *GormRepository) DeleteHistory(ctx context.Context, heyaID uuid.UUID) error {
+// DeleteHistoryByHeyaID DeleteHistory ヘヤが削除されたときに削除する履歴
+func (repo *GormRepository) DeleteHistoryByHeyaID(ctx context.Context, heyaID uuid.UUID) error {
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
