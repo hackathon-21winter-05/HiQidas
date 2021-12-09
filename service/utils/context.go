@@ -5,6 +5,6 @@ import (
 	"time"
 )
 
-func createTxContext() (context.Context, context.CancelFunc) {
+func CreateTxContext() (context.Context, context.CancelFunc) {
 	return context.WithTimeout(context.Background(), 3*time.Second)
 }
