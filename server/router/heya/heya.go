@@ -15,4 +15,9 @@ func NewHeyaHandleGroup(hs heya.HeyaService) *HeyaHandleGroup {
 
 func (h *HeyaHandleGroup) Setup(heyasApi *echo.Group) {
 	heyasApi.GET("",h.GetHeyasHandler)
+	heyasApi.GET("/:heyaID",h.GetHeyasByIDHandler)
+	heyasApi.GET("/:heyaID/users",h.GetUsersByHeyaIDHandler)
+	heyasApi.POST("",h.PostHeyasHandler)
+	heyasApi.PUT("/:heyaID",h.PutHeyasByIDHandler)
+	heyasApi.DELETE("/:heyaID",h.DeleteHeyasByIDHandler)
 }

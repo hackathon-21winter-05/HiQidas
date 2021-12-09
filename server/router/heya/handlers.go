@@ -10,7 +10,7 @@ func (h *HeyaHandleGroup) GetHeyasByIDHandler(c echo.Context) error {
 	return nil
 }
 
-func (h *HeyaHandleGroup) GetHeyasHeyaIDUsersHandler(c echo.Context) error {
+func (h *HeyaHandleGroup) GetUsersByHeyaIDHandler(c echo.Context) error {
 	return nil
 }
 
