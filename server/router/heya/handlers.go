@@ -1,7 +1,9 @@
 package heya
 
 import (
+	"errors"
 	"github.com/gofrs/uuid"
+	"github.com/hackathon-21winter-05/HiQidas/model"
 	"github.com/hackathon-21winter-05/HiQidas/server/protobuf/rest"
 	"github.com/hackathon-21winter-05/HiQidas/server/router/utils"
 	"github.com/labstack/echo/v4"
@@ -21,7 +23,23 @@ func (h *HeyaHandleGroup) GetUsersByHeyaIDHandler(c echo.Context) error {
 }
 
 func (h *HeyaHandleGroup) DeleteHeyasByIDHandler(c echo.Context) error {
-	return nil
+	heyaID := c.Param("heyaID")
+	heyaUUID, err := uuid.FromString(heyaID)
+	if err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusBadRequest, err)
+	}
+
+	if err = h.hs.DeleteHeya(heyaUUID); err != nil {
+		if errors.Is(err, model.ErrNoRecordDeleted) {
+			c.Logger().Info(err)
+			return echo.NewHTTPError(http.StatusBadRequest, err)
+		}
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+
+	return c.NoContent(http.StatusOK)
 }
 
 func (h *HeyaHandleGroup) PostHeyasHandler(c echo.Context) error {
