@@ -12,6 +12,8 @@ message GetUsersResponse { repeated string user_id = 1; }
 // POST /users ユーザーの名前をPOST
 message PostUsersRequest { string name = 1; }
 
+message PostUsersResponse { User user = 1;}
+
 // GET /users/{userId} ユーザーの詳細情報を取得
 message GetUsersUserIdResponse { User user = 1; }
 

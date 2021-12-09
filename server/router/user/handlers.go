@@ -9,7 +9,7 @@ import (
 )
 
 func (uh *UserHandlerGroup) GetUsersHandler(c echo.Context) error {
-	userIDs, err := uh.us.GetUsersID()
+	userIDs, err := uh.ser.GetUsersID()
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
@@ -21,4 +21,26 @@ func (uh *UserHandlerGroup) GetUsersHandler(c echo.Context) error {
 	}
 
 	return utils.SendProtobuf(c, http.StatusOK, res)
+}
+
+func (uh *UserHandlerGroup) PostUsersHandler(c echo.Context) error {
+	usersData := &rest.PostUsersRequest{}
+	err := utils.BindProtobuf(c, usersData)
+	if err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	created, err := uh.ser.CreateUser(usersData.Name)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	res := &rest.PostUsersResponse{
+		User: &rest.User{
+			Id:   created.ID.String(),
+			Name: created.Name,
+		},
+	}
+
+	return utils.SendProtobuf(c, http.StatusCreated, res)
 }
