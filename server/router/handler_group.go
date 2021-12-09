@@ -15,21 +15,16 @@ import (
 
 type HandlerGroup interface {
 	Setup(*echo.Group)
+	Path() string
 }
 
-type HandlerGroups struct {
-	userHG  HandlerGroup
-	oauthHG HandlerGroup
-	wsHG    HandlerGroup
-}
-
-func newHandlerGroups(c *config.Config, ser *service.Service, s *streamer.Streamer) *HandlerGroups {
+func newHandlerGroups(c *config.Config, ser *service.Service, s *streamer.Streamer) []HandlerGroup {
 	cli := traq.NewAPIClient(traq.NewConfiguration())
 
-	hgs := &HandlerGroups{
-		userHG:  user.NewUserHandlerGroup(ser),
-		oauthHG: oauth.NewOauthHandlerGroup(c, cli),
-		wsHG:    ws.NewWSHandlerGroup(s),
+	hgs := []HandlerGroup{
+		user.NewUserHandlerGroup(ser),
+		oauth.NewOauthHandlerGroup(c, cli),
+		ws.NewWSHandlerGroup(s),
 	}
 
 	return hgs
@@ -42,12 +37,8 @@ func (r *Router) setHandlers() {
 		return c.String(http.StatusOK, "pong")
 	})
 
-	userApi := api.Group("/user")
-	r.hgs.userHG.Setup(userApi)
-
-	oauthApi := api.Group("/oauth")
-	r.hgs.oauthHG.Setup(oauthApi)
-
-	wsApi := api.Group("/ws")
-	r.hgs.wsHG.Setup(wsApi)
+	for _, hg := range r.hgs {
+		group := api.Group(hg.Path())
+		hg.Setup(group)
+	}
 }

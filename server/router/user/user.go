@@ -15,6 +15,10 @@ func NewUserHandlerGroup(us service.UserService) *UserHandlerGroup {
 	}
 }
 
+func (uh *UserHandlerGroup) Path() string {
+	return "/users"
+}
+
 func (uh *UserHandlerGroup) Setup(usersApi *echo.Group) {
 	usersApi.GET("/", uh.GetUsersHandler)
 }

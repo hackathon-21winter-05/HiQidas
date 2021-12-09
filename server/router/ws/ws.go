@@ -15,6 +15,10 @@ func NewWSHandlerGroup(s *streamer.Streamer) *WSHandlerGroup {
 	}
 }
 
+func (wh *WSHandlerGroup) Path() string {
+	return "/ws"
+}
+
 func (wh *WSHandlerGroup) Setup(wsApi *echo.Group) {
 	wsApi.GET("/heya/:heyaid", wh.ConnectHeyaWS)
 }

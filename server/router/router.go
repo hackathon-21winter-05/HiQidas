@@ -14,7 +14,7 @@ import (
 // ルーター
 type Router struct {
 	e   *echo.Echo
-	hgs *HandlerGroups
+	hgs []HandlerGroup
 }
 
 // 新しいルーターを生成
