@@ -95,7 +95,7 @@ func (repo *GormRepository) UpdateHeyaByID(ctx context.Context, heya *model.Null
 		Updates(&heyaMap)
 	err = result.Error
 	if err != nil {
-		return fmt.Errorf("failed to update heya :%w", err)
+		return fmt.Errorf("failed to update heya:%w", err)
 	}
 	if result.RowsAffected == 0 {
 		return ErrNoRecordUpdated
