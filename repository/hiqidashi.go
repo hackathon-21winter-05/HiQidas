@@ -10,7 +10,7 @@ type HiqidashiRepository interface {
 	GetHiqidashisByHeyaID(ctx context.Context, heyaID uuid.UUID) ([]*model.Hiqidashi, error)
 	GetHiqidashisByParentID(ctx context.Context, parentID uuid.UUID) ([]*model.Hiqidashi, error)
 	CreateHiqidashiByID(ctx context.Context, hiqidashi *model.Hiqidashi) error
-	DeleteHiqidashiByID(ctx context.Context, id uuid.UUID) error
+	DeleteHiqidashi(ctx context.Context, id uuid.UUID) error
 	UpdateHiqidashiByID(ctx context.Context, hiqidashi *model.NullHiqidashi) error
 	DeleteHiqidashiDrawing(ctx context.Context, hiqidashi *model.Hiqidashi) error
 }

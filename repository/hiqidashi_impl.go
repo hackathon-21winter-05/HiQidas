@@ -68,8 +68,8 @@ func (repo *GormRepository) CreateHiqidashiByID(ctx context.Context, hiqidashi *
 	return nil
 }
 
-// DeleteHiqidashiByID DeleteHiqidashi ヒキダシを削除
-func (repo *GormRepository) DeleteHiqidashiByID(ctx context.Context, id uuid.UUID) error {
+// DeleteHiqidashi  ヒキダシを削除
+func (repo *GormRepository) DeleteHiqidashi(ctx context.Context, id uuid.UUID) error {
 	if id == uuid.Nil {
 		return ErrNillUUID
 	}
