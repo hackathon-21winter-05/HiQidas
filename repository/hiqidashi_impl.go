@@ -49,8 +49,8 @@ func (repo *GormRepository) GetHiqidashisByParentID(ctx context.Context, parentI
 	return hiqidashis, nil
 }
 
-// CreateHiqidashi  ヒキダシを作成
-func (repo *GormRepository) CreateHiqidashi(ctx context.Context, hiqidashi *model.Hiqidashi) error {
+// CreateHiqidashiByID CreateHiqidashi  ヒキダシを作成
+func (repo *GormRepository) CreateHiqidashiByID(ctx context.Context, hiqidashi *model.Hiqidashi) error {
 	if hiqidashi.ID == uuid.Nil {
 		return ErrNillUUID
 	}
@@ -68,8 +68,8 @@ func (repo *GormRepository) CreateHiqidashi(ctx context.Context, hiqidashi *mode
 	return nil
 }
 
-// DeleteHiqidashi ヒキダシを削除
-func (repo *GormRepository) DeleteHiqidashi(ctx context.Context, id uuid.UUID) error {
+// DeleteHiqidashiByID DeleteHiqidashi ヒキダシを削除
+func (repo *GormRepository) DeleteHiqidashiByID(ctx context.Context, id uuid.UUID) error {
 	if id == uuid.Nil {
 		return ErrNillUUID
 	}
