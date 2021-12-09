@@ -32,9 +32,7 @@ func (us *UserServiceImpl) CreateUser(name string) (*model.User, error) {
 	ctx, cancel := utils.CreateTxContext()
 	defer cancel()
 
-	err = us.repo.Do(ctx, nil, func(ctx context.Context) error {
-		return us.repo.CreateUser(ctx, user)
-	})
+	err = us.repo.CreateUser(ctx, user)
 	if err != nil {
 		return nil, err
 	}
