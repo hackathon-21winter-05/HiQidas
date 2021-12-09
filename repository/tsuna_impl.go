@@ -68,9 +68,13 @@ func (repo *GormRepository) DeleteTsunaByID(ctx context.Context, id uuid.UUID) e
 }
 
 // UpdateTsunaByID UpdateTsuna ツナを更新する
-func (repo *GormRepository) UpdateTsunaByID(ctx context.Context, tsuna *model.Tsuna) error {
-	if tsuna.ID == uuid.Nil {
+func (repo *GormRepository) UpdateTsunaByID(ctx context.Context, tsuna *model.NullTsuna) error {
+	if tsuna.ID == uuid.Nil || tsuna.HiqidashiTwo == uuid.Nil {
 		return ErrNillUUID
+	}
+	tsunaMap := map[string]interface{}{
+		"id":            tsuna.ID,
+		"hiqidashi_two": tsuna.HiqidashiTwo,
 	}
 
 	db, err := repo.getDB(ctx)
@@ -78,8 +82,9 @@ func (repo *GormRepository) UpdateTsunaByID(ctx context.Context, tsuna *model.Ts
 		return fmt.Errorf("failed to get db: %w", err)
 	}
 
-	//ゼロ値であるフィールドがないので構造体のまま渡す
-	result := db.Updates(&tsuna)
+	result := db.
+		Model(model.Tsuna{}).
+		Updates(&tsunaMap)
 	err = result.Error
 	if err != nil {
 		return fmt.Errorf("failed to update tsuna :%w", err)
