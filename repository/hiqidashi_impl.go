@@ -11,7 +11,7 @@ import (
 // GetHiqidashisByHeyaID ヘヤのすべてのヒキダシを取得
 func (repo *GormRepository) GetHiqidashisByHeyaID(ctx context.Context, heyaID uuid.UUID) ([]*model.Hiqidashi, error) {
 	if heyaID == uuid.Nil {
-		return nil, ErrNillUUID
+		return nil, model.ErrNillUUID
 	}
 	db, err := repo.getDB(ctx)
 	if err != nil {
@@ -52,7 +52,7 @@ func (repo *GormRepository) GetHiqidashisByParentID(ctx context.Context, parentI
 // CreateHiqidashi  ヒキダシを作成
 func (repo *GormRepository) CreateHiqidashi(ctx context.Context, hiqidashi *model.Hiqidashi) error {
 	if hiqidashi.ID == uuid.Nil {
-		return ErrNillUUID
+		return model.ErrNillUUID
 	}
 
 	db, err := repo.getDB(ctx)
@@ -71,7 +71,7 @@ func (repo *GormRepository) CreateHiqidashi(ctx context.Context, hiqidashi *mode
 // DeleteHiqidashiByID  ヒキダシを削除
 func (repo *GormRepository) DeleteHiqidashiByID(ctx context.Context, id uuid.UUID) error {
 	if id == uuid.Nil {
-		return ErrNillUUID
+		return model.ErrNillUUID
 	}
 
 	db, err := repo.getDB(ctx)
@@ -87,7 +87,7 @@ func (repo *GormRepository) DeleteHiqidashiByID(ctx context.Context, id uuid.UUI
 		return fmt.Errorf("failed to deleted hiqidashi :%w", err)
 	}
 	if result.RowsAffected == 0 {
-		return ErrNoRecordDeleted
+		return model.ErrNoRecordDeleted
 	}
 
 	return nil
@@ -96,7 +96,7 @@ func (repo *GormRepository) DeleteHiqidashiByID(ctx context.Context, id uuid.UUI
 // UpdateHiqidashiByID UpdateHiqidashi ヒキダシを更新
 func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *model.NullHiqidashi) error {
 	if hiqidashi.ID == uuid.Nil || hiqidashi.LastEditorID == uuid.Nil {
-		return ErrNillUUID
+		return model.ErrNillUUID
 	}
 
 	db, err := repo.getDB(ctx)
@@ -131,7 +131,7 @@ func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *
 		return fmt.Errorf("failed to update hiqidashi :%w", err)
 	}
 	if result.RowsAffected == 0 {
-		return ErrNoRecordUpdated
+		return model.ErrNoRecordUpdated
 	}
 
 	return nil
@@ -139,7 +139,7 @@ func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *
 
 func (repo *GormRepository) DeleteHiqidashiDrawing(ctx context.Context, hiqidashi *model.Hiqidashi) error {
 	if hiqidashi.ID == uuid.Nil {
-		return ErrNillUUID
+		return model.ErrNillUUID
 	}
 	if hiqidashi.Drawing.Valid {
 		return nil
@@ -163,7 +163,7 @@ func (repo *GormRepository) DeleteHiqidashiDrawing(ctx context.Context, hiqidash
 
 func (repo *GormRepository) DeleteHiqidashiByHeyaID(ctx context.Context, heyaID uuid.UUID) error {
 	if heyaID == uuid.Nil {
-		return ErrNillUUID
+		return model.ErrNillUUID
 	}
 
 	db, err := repo.getDB(ctx)
@@ -179,7 +179,7 @@ func (repo *GormRepository) DeleteHiqidashiByHeyaID(ctx context.Context, heyaID 
 		return fmt.Errorf("failed to delete hiqidashi by heyaID :%w", err)
 	}
 	if result.RowsAffected == 0 {
-		return ErrNoRecordDeleted
+		return model.ErrNoRecordDeleted
 	}
 
 	return nil

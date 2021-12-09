@@ -30,7 +30,7 @@ func (repo *GormRepository) GetHistoriesByUserID(ctx context.Context, userID uui
 // CreateHistory 履歴の作成
 func (repo *GormRepository) CreateHistory(ctx context.Context, history *model.History) error {
 	if history.UserID == uuid.Nil || history.HeyaID == uuid.Nil {
-		return ErrNillUUID
+		return model.ErrNillUUID
 	}
 
 	db, err := repo.getDB(ctx)
@@ -49,7 +49,7 @@ func (repo *GormRepository) CreateHistory(ctx context.Context, history *model.Hi
 // DeleteHistoryByHeyaID DeleteHistory ヘヤが削除されたときに削除する履歴
 func (repo *GormRepository) DeleteHistoryByHeyaID(ctx context.Context, heyaID uuid.UUID) error {
 	if heyaID == uuid.Nil {
-		return ErrNillUUID
+		return model.ErrNillUUID
 	}
 
 	db, err := repo.getDB(ctx)
@@ -67,7 +67,7 @@ func (repo *GormRepository) DeleteHistoryByHeyaID(ctx context.Context, heyaID uu
 		return fmt.Errorf("failed to delete history :%w", err)
 	}
 	if result.RowsAffected == 0 {
-		return ErrNoRecordDeleted
+		return model.ErrNoRecordDeleted
 	}
 
 	return nil
