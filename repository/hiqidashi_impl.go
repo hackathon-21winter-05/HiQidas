@@ -142,5 +142,25 @@ func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *
 }
 
 func (repo *GormRepository) DeleteHiqidashiDrawing(ctx context.Context, hiqidashi *model.Hiqidashi) error {
+	if hiqidashi.ID == uuid.Nil {
+		return ErrNillUUID
+	}
+	if hiqidashi.Drawing.Valid {
+		return nil
+	}
 
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+
+	err = db.
+		Where("id = ?", hiqidashi.ID).
+		Update("drawing", gorm.Expr("NULL")).Error
+
+	if err != nil {
+		return fmt.Errorf("failed to drawing nil :%w", err)
+	}
+
+	return nil
 }
