@@ -20,5 +20,5 @@ func (uh *UserHandlerGroup) Path() string {
 }
 
 func (uh *UserHandlerGroup) Setup(usersApi *echo.Group) {
-	usersApi.GET("/", uh.GetUsersHandler)
+	usersApi.GET("", uh.GetUsersHandler)
 }
