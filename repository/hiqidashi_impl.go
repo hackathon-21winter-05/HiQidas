@@ -87,20 +87,31 @@ func (repo *GormRepository) UpdateHiqidashi(ctx context.Context, hiqidashi *mode
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
 	}
-	hiqidashiMap := map[string]interface{}{
+
+	hiqidashiMap := map[string]interface{}{}
+
+	if hiqidashi.ParentID.Valid {
+		hiqidashiMap["parent_id"] = hiqidashi.ParentID
+	}
+	if hiqidashi.Drawing.Valid {
+		hiqidashiMap["drawing"] = hiqidashi.Drawing
+	}
+
+	hiqidashiMap = map[string]interface{}{
 		"id":             hiqidashi.ID,
 		"heya_id":        hiqidashi.HeyaID,
 		"creator_id":     hiqidashi.CreatorID,
 		"last_editor_id": hiqidashi.LastEditorID,
-		"parent_id":      hiqidashi.ParentID,
 		"title":          hiqidashi.Title,
 		"description":    hiqidashi.Description,
-		"drawing":        hiqidashi.Drawing,
 		"colorID":        hiqidashi.ColorID,
 		"created_at":     hiqidashi.CreatedAt,
 		"updated_at":     hiqidashi.UpdatedAt,
 	}
-	result := db.Updates(&hiqidashiMap)
+
+	result := db.
+		Model(&hiqidashi).
+		Updates(&hiqidashiMap)
 	err = result.Error
 	if err != nil {
 		return fmt.Errorf("failed to update hiqidashi :%w", err)
