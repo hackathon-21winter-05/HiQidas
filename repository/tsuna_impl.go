@@ -42,8 +42,8 @@ func (repo *GormRepository) CreateTsuna(ctx context.Context, tsuna *model.Tsuna)
 	return nil
 }
 
-// DeleteTsuna ツナを削除する
-func (repo *GormRepository) DeleteTsuna(ctx context.Context, id uuid.UUID) error {
+// DeleteTsunaByID DeleteTsuna ツナを削除する
+func (repo *GormRepository) DeleteTsunaByID(ctx context.Context, id uuid.UUID) error {
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
@@ -63,8 +63,8 @@ func (repo *GormRepository) DeleteTsuna(ctx context.Context, id uuid.UUID) error
 	return nil
 }
 
-// UpdateTsuna ツナを更新する
-func (repo *GormRepository) UpdateTsuna(ctx context.Context, tsuna *model.Tsuna) error {
+// UpdateTsunaByID UpdateTsuna ツナを更新する
+func (repo *GormRepository) UpdateTsunaByID(ctx context.Context, tsuna *model.Tsuna) error {
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
