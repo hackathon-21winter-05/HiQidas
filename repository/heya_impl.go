@@ -66,8 +66,8 @@ func (repo *GormRepository) CreateHeya(ctx context.Context, heya *model.Heya) er
 	return nil
 }
 
-func (repo *GormRepository) UpdateHeyaByID(ctx context.Context, heya *model.Heya) error {
-	if heya.ID == uuid.Nil {
+func (repo *GormRepository) UpdateHeyaByID(ctx context.Context, heya *model.NullHeya) error {
+	if heya.ID == uuid.Nil || heya.LastEditorID == uuid.Nil {
 		return ErrNillUUID
 	}
 
@@ -76,15 +76,18 @@ func (repo *GormRepository) UpdateHeyaByID(ctx context.Context, heya *model.Heya
 		return fmt.Errorf("failed to get db: %w", err)
 	}
 
-	heyaMap := map[string]interface{}{
-		"id":             heya.ID,
-		"title":          heya.Title,
-		"description":    heya.Description,
-		"creator_id":     heya.CreatorID,
-		"last_editor_id": heya.LastEditorID,
-		"created_at":     heya.CreatedAt,
-		"updated_at":     heya.UpdatedAt,
-		"deleted":        heya.Deleted,
+	heyaMap := map[string]interface{}{}
+
+	heyaMap["id"] = heya.ID
+	heyaMap["last_editor_id"] = heya.LastEditorID
+	if heya.Title.Valid {
+		heyaMap["title"] = heya.Title.String
+	}
+	if heya.Description.Valid {
+		heyaMap["description"] = heya.Description.String
+	}
+	if heya.UpdatedAt.Valid {
+		heyaMap["updated_at"] = heya.UpdatedAt
 	}
 
 	result := db.
