@@ -58,15 +58,26 @@ func (repo *GormRepository) CreateHeya(ctx context.Context, heya *model.Heya) er
 	return nil
 }
 
-func (repo *GormRepository) UpdateHeya(ctx context.Context, heya *model.Heya) error {
+func (repo *GormRepository) UpdateHeyaByID(ctx context.Context, heya *model.Heya) error {
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
 	}
 
-	//ヘヤカラムはすべてnot nullなので構造体で渡す
-	result := db.Model(&model.Heya{}).
-		Updates(&heya)
+	heyaMap := map[string]interface{}{
+		"id":             heya.ID,
+		"title":          heya.Title,
+		"description":    heya.Description,
+		"creator_id":     heya.CreatorID,
+		"last_editor_id": heya.LastEditorID,
+		"created_at":     heya.CreatedAt,
+		"updated_at":     heya.UpdatedAt,
+		"deleted":        heya.Deleted,
+	}
+
+	result := db.
+		Model(&model.Heya{}).
+		Updates(&heyaMap)
 	err = result.Error
 	if err != nil {
 		return fmt.Errorf("failed to update heya :%w", err)
