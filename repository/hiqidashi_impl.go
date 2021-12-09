@@ -160,3 +160,27 @@ func (repo *GormRepository) DeleteHiqidashiDrawing(ctx context.Context, hiqidash
 
 	return nil
 }
+
+func (repo *GormRepository) DeleteHiqidashiByHeyaID(ctx context.Context, heyaID uuid.UUID) error {
+	if heyaID == uuid.Nil {
+		return ErrNillUUID
+	}
+
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+
+	result := db.
+		Where("heya_id = ?", heyaID).
+		Delete(&model.Hiqidashi{})
+	err = result.Error
+	if err != nil {
+		return fmt.Errorf("failed to delete hiqidashi by heyaID :%w", err)
+	}
+	if result.RowsAffected == 0 {
+		return ErrNoRecordDeleted
+	}
+
+	return nil
+}
