@@ -6,12 +6,12 @@ import (
 )
 
 type UserHandlerGroup struct {
-	us service.UserService
+	ser *service.Service
 }
 
-func NewUserHandlerGroup(us service.UserService) *UserHandlerGroup {
+func NewUserHandlerGroup(ser *service.Service) *UserHandlerGroup {
 	return &UserHandlerGroup{
-		us: us,
+		ser: ser,
 	}
 }
 

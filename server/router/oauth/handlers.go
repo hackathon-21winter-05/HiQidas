@@ -50,11 +50,11 @@ func (oh *OauthHandlerGroup) GetOauthCallbackHandler(c echo.Context) error {
 	}
 
 	uri := fmt.Sprintf("%s?response_type=code&client_id=%s&code_challenge=%s&code_challenge_method=S256", oauthCodeRedirect, clientID, challenge)
-	redirectData := &rest.GetOauthCallbackResponse{
+	oauthRedirectData := &rest.GetOauthCallbackResponse{
 		Uri: uri,
 	}
 
-	return utils.SendProtobuf(c, http.StatusOK, redirectData)
+	return utils.SendProtobuf(c, http.StatusOK, oauthRedirectData)
 }
 
 // POST /oauth/code ハンドラ
@@ -64,8 +64,8 @@ func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	codeData := &rest.PostOauthCodeRequest{}
-	err = utils.BindProtobuf(c, codeData)
+	oauthCodeData := &rest.PostOauthCodeRequest{}
+	err = utils.BindProtobuf(c, oauthCodeData)
 	if err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
@@ -79,7 +79,7 @@ func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 
 	verifier := sess.Values["verifier"].(string)
 	opts := &traq.Oauth2ApiPostOAuth2TokenOpts{
-		Code:         optional.NewString(codeData.GetCode()),
+		Code:         optional.NewString(oauthCodeData.GetCode()),
 		ClientId:     optional.NewString(clientID),
 		CodeVerifier: optional.NewString(verifier),
 	}
