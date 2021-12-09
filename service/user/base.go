@@ -5,6 +5,7 @@ import (
 
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
+	"github.com/hackathon-21winter-05/HiQidas/service/utils"
 )
 
 func (us *UserServiceImpl) GetUsersID() (model.UserIDs, error) {
@@ -28,7 +29,10 @@ func (us *UserServiceImpl) CreateUser(name string) (*model.User, error) {
 		IconFileID: uuid.Nil,
 	}
 
-	err = us.repo.Do(context.Background(), nil, func(ctx context.Context) error {
+	ctx, cancel := utils.CreateTxContext()
+	defer cancel()
+
+	err = us.repo.Do(ctx, nil, func(ctx context.Context) error {
 		return us.repo.CreateUser(ctx, user)
 	})
 	if err != nil {
