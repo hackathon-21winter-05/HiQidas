@@ -34,7 +34,7 @@ func NewGormRepository(c *config.Config) (Repository, error) {
 }
 
 func newDBConnection(c *config.Config) (*gorm.DB, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s", c.MariaDBUsername, c.MariaDBPassword, c.MariaDBHostname, c.MariaDBDatabase) + "?parseTime=true&loc=Asia%2FTokyo&charset=utf8mb4"
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s", c.MariaDBUsername, c.MariaDBPassword, c.MariaDBHostname, c.MariaDBDatabase) + "?parseTime=true&loc=Local&charset=utf8mb4"
 	logLevel := logger.Info
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: logger.Default.LogMode(logLevel)})
