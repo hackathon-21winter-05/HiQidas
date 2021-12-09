@@ -1,4 +1,4 @@
-package router
+package oauth
 
 import (
 	"context"
@@ -11,6 +11,7 @@ import (
 	"github.com/antihax/optional"
 	"github.com/gorilla/sessions"
 	"github.com/hackathon-21winter-05/HiQidas/server/protobuf/rest"
+	"github.com/hackathon-21winter-05/HiQidas/server/router/utils"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/sapphi-red/go-traq"
@@ -20,7 +21,7 @@ import (
 const oauthCodeRedirect = "https://q.trap.jp/api/v3/oauth2/authorize"
 
 // GET /oauth/callback ハンドラ
-func (r *Router) GetOauthCallbackHandler(c echo.Context) error {
+func (oh *OauthHandlerGroup) GetOauthCallbackHandler(c echo.Context) error {
 	verifier := randstr.String(64)
 	hash := sha256.Sum256([]byte(verifier))
 	challenge := base64.RawURLEncoding.EncodeToString(hash[:])
@@ -43,9 +44,9 @@ func (r *Router) GetOauthCallbackHandler(c echo.Context) error {
 
 	var clientID string
 	if strings.Contains(c.Request().Header.Get("referer"), "localhost") {
-		clientID = r.c.DevClientID
+		clientID = oh.c.DevClientID
 	} else {
-		clientID = r.c.ClientID
+		clientID = oh.c.ClientID
 	}
 
 	uri := fmt.Sprintf("%s?response_type=code&client_id=%s&code_challenge=%s&code_challenge_method=S256", oauthCodeRedirect, clientID, challenge)
@@ -53,18 +54,18 @@ func (r *Router) GetOauthCallbackHandler(c echo.Context) error {
 		Uri: uri,
 	}
 
-	return sendProtobuf(c, http.StatusOK, redirectData)
+	return utils.SendProtobuf(c, http.StatusOK, redirectData)
 }
 
 // POST /oauth/code ハンドラ
-func (r *Router) PostOauthCodeHandler(c echo.Context) error {
+func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 	sess, err := session.Get("session", c)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
 	codeData := &rest.PostOauthCodeRequest{}
-	err = bindProtobuf(c, codeData)
+	err = utils.BindProtobuf(c, codeData)
 	if err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}

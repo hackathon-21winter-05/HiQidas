@@ -1,4 +1,4 @@
-package router
+package utils
 
 import (
 	"bytes"
@@ -9,7 +9,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func bindProtobuf(c echo.Context, i proto.Message) error {
+func BindProtobuf(c echo.Context, i proto.Message) error {
 	defer c.Request().Body.Close()
 
 	buffer := new(bytes.Buffer)
@@ -26,7 +26,7 @@ func bindProtobuf(c echo.Context, i proto.Message) error {
 	return nil
 }
 
-func sendProtobuf(c echo.Context, status int, i proto.Message) error {
+func SendProtobuf(c echo.Context, status int, i proto.Message) error {
 	buffer, err := proto.Marshal(i)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())

@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *Streamer) ConnectWs(c echo.Context) error {
+func (s *Streamer) ConnectHeyaWS(c echo.Context) error {
 	roomIDString := c.Param("roomid")
 	roomID, err := uuid.FromString(roomIDString)
 	if err != nil {
