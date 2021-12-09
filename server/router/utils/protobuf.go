@@ -2,8 +2,10 @@ package utils
 
 import (
 	"bytes"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"io"
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"google.golang.org/protobuf/proto"
@@ -33,4 +35,9 @@ func SendProtobuf(c echo.Context, status int, i proto.Message) error {
 	}
 
 	return c.Blob(status, "application/octet-stream", buffer)
+}
+
+// TimeStampToTIme タイムスタンプ型をtime.timeに変換
+func TimeStampToTIme(time time.Time) *timestamppb.Timestamp {
+	return timestamppb.New(time)
 }
