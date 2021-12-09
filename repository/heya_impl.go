@@ -27,6 +27,10 @@ func (repo *GormRepository) GetHeyasID(ctx context.Context) ([]uuid.UUID, error)
 }
 
 func (repo *GormRepository) GetHeyaByID(ctx context.Context, id uuid.UUID) (*model.Heya, error) {
+	if id == uuid.Nil {
+		return nil, ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get db: %w", err)
@@ -45,6 +49,10 @@ func (repo *GormRepository) GetHeyaByID(ctx context.Context, id uuid.UUID) (*mod
 }
 
 func (repo *GormRepository) CreateHeya(ctx context.Context, heya *model.Heya) error {
+	if heya.ID == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
@@ -58,21 +66,28 @@ func (repo *GormRepository) CreateHeya(ctx context.Context, heya *model.Heya) er
 	return nil
 }
 
-func (repo *GormRepository) UpdateHeyaByID(ctx context.Context, heya *model.Heya) error {
+func (repo *GormRepository) UpdateHeyaByID(ctx context.Context, heya *model.NullHeya) error {
+	if heya.ID == uuid.Nil || heya.LastEditorID == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
 	}
 
-	heyaMap := map[string]interface{}{
-		"id":             heya.ID,
-		"title":          heya.Title,
-		"description":    heya.Description,
-		"creator_id":     heya.CreatorID,
-		"last_editor_id": heya.LastEditorID,
-		"created_at":     heya.CreatedAt,
-		"updated_at":     heya.UpdatedAt,
-		"deleted":        heya.Deleted,
+	heyaMap := map[string]interface{}{}
+
+	heyaMap["id"] = heya.ID
+	heyaMap["last_editor_id"] = heya.LastEditorID
+	if heya.Title.Valid {
+		heyaMap["title"] = heya.Title.String
+	}
+	if heya.Description.Valid {
+		heyaMap["description"] = heya.Description.String
+	}
+	if heya.UpdatedAt.Valid {
+		heyaMap["updated_at"] = heya.UpdatedAt
 	}
 
 	result := db.
@@ -80,7 +95,7 @@ func (repo *GormRepository) UpdateHeyaByID(ctx context.Context, heya *model.Heya
 		Updates(&heyaMap)
 	err = result.Error
 	if err != nil {
-		return fmt.Errorf("failed to update heya :%w", err)
+		return fmt.Errorf("failed to update heya:%w", err)
 	}
 	if result.RowsAffected == 0 {
 		return ErrNoRecordUpdated
@@ -90,6 +105,10 @@ func (repo *GormRepository) UpdateHeyaByID(ctx context.Context, heya *model.Heya
 }
 
 func (repo *GormRepository) DeleteHeyaByID(ctx context.Context, id uuid.UUID) error {
+	if id == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)

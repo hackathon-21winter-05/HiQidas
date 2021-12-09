@@ -16,9 +16,20 @@ type Hiqidashi struct {
 	Title        string         `gorm:"type:char(50);not null"`
 	Description  string         `gorm:"type:text;not null"`
 	Drawing      sql.NullString `gorm:"type:text"`
-	ColorID      int            `gorm:"type:TINYINT UNSIGNED;not null"`
+	ColorCode    string         `gorm:"type:char(7);default:#9E7A7A;not null"`
 	CreatedAt    time.Time      `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP;index:idx_hiqidashi_heya_id,priority:2,index:idx_hiqidashi_creator_id,priority:2"`
 	UpdatedAt    time.Time      `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
 
 	ChildrenID []uuid.UUID `gorm:"-"`
+}
+
+type NullHiqidashi struct {
+	ID           uuid.UUID
+	LastEditorID uuid.UUID
+	ParentID     uuid.NullUUID
+	Title        sql.NullString
+	Description  sql.NullString
+	Drawing      sql.NullString
+	ColorID      sql.NullString
+	UpdatedAt    sql.NullTime
 }

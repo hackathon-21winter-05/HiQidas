@@ -8,3 +8,9 @@ type Tsuna struct {
 	HiqidashiOne uuid.UUID `gorm:"type:char(36);not null"`
 	HiqidashiTwo uuid.UUID `gorm:"type:char(36);not null"`
 }
+
+// NullTsuna Oneを変えずにtwoをUpdateする
+type NullTsuna struct {
+	ID           uuid.UUID
+	HiqidashiTwo uuid.UUID
+}

@@ -10,6 +10,9 @@ import (
 
 // GetHiqidashisByHeyaID ヘヤのすべてのヒキダシを取得
 func (repo *GormRepository) GetHiqidashisByHeyaID(ctx context.Context, heyaID uuid.UUID) ([]*model.Hiqidashi, error) {
+	if heyaID == uuid.Nil {
+		return nil, ErrNillUUID
+	}
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get db: %w", err)
@@ -48,6 +51,10 @@ func (repo *GormRepository) GetHiqidashisByParentID(ctx context.Context, parentI
 
 // CreateHiqidashi  ヒキダシを作成
 func (repo *GormRepository) CreateHiqidashi(ctx context.Context, hiqidashi *model.Hiqidashi) error {
+	if hiqidashi.ID == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
@@ -61,8 +68,12 @@ func (repo *GormRepository) CreateHiqidashi(ctx context.Context, hiqidashi *mode
 	return nil
 }
 
-// DeleteHiqidashi ヒキダシを削除
-func (repo *GormRepository) DeleteHiqidashi(ctx context.Context, id uuid.UUID) error {
+// DeleteHiqidashiByID  ヒキダシを削除
+func (repo *GormRepository) DeleteHiqidashiByID(ctx context.Context, id uuid.UUID) error {
+	if id == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
@@ -83,35 +94,33 @@ func (repo *GormRepository) DeleteHiqidashi(ctx context.Context, id uuid.UUID) e
 }
 
 // UpdateHiqidashiByID UpdateHiqidashi ヒキダシを更新
-func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *model.Hiqidashi) error {
+func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *model.NullHiqidashi) error {
+	if hiqidashi.ID == uuid.Nil || hiqidashi.LastEditorID == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
 	}
 
 	hiqidashiMap := map[string]interface{}{}
-
+	hiqidashiMap["id"] = hiqidashi.ID
+	hiqidashiMap["last_editor_id"] = hiqidashi.LastEditorID
 	if hiqidashi.ParentID.Valid {
 		hiqidashiMap["parent_id"] = hiqidashi.ParentID
-	} else {
-		hiqidashiMap["parent_id"] = gorm.Expr("NULL")
 	}
 	if hiqidashi.Drawing.Valid {
 		hiqidashiMap["drawing"] = hiqidashi.Drawing
-	} else {
-		hiqidashiMap["drawing"] = gorm.Expr("NULL")
 	}
-
-	hiqidashiMap = map[string]interface{}{
-		"id":             hiqidashi.ID,
-		"heya_id":        hiqidashi.HeyaID,
-		"creator_id":     hiqidashi.CreatorID,
-		"last_editor_id": hiqidashi.LastEditorID,
-		"title":          hiqidashi.Title,
-		"description":    hiqidashi.Description,
-		"colorID":        hiqidashi.ColorID,
-		"created_at":     hiqidashi.CreatedAt,
-		"updated_at":     hiqidashi.UpdatedAt,
+	if hiqidashi.Title.Valid {
+		hiqidashiMap["title"] = hiqidashi.Title
+	}
+	if hiqidashi.Description.Valid {
+		hiqidashiMap["description"] = hiqidashi.Description
+	}
+	if hiqidashi.UpdatedAt.Valid {
+		hiqidashiMap["updated_at"] = hiqidashi.UpdatedAt
 	}
 
 	result := db.
@@ -123,6 +132,30 @@ func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *
 	}
 	if result.RowsAffected == 0 {
 		return ErrNoRecordUpdated
+	}
+
+	return nil
+}
+
+func (repo *GormRepository) DeleteHiqidashiDrawing(ctx context.Context, hiqidashi *model.Hiqidashi) error {
+	if hiqidashi.ID == uuid.Nil {
+		return ErrNillUUID
+	}
+	if hiqidashi.Drawing.Valid {
+		return nil
+	}
+
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+
+	err = db.
+		Where("id = ?", hiqidashi.ID).
+		Update("drawing", gorm.Expr("NULL")).Error
+
+	if err != nil {
+		return fmt.Errorf("failed to drawing nil :%w", err)
 	}
 
 	return nil
