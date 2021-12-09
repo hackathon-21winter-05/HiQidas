@@ -41,4 +41,8 @@ func (r *Router) setHandlers() {
 		group := api.Group(hg.Path())
 		hg.Setup(group)
 	}
+
+	api.GET("*", func(c echo.Context) error {
+		return c.String(http.StatusNotImplemented, "Not Implemented")
+	})
 }
