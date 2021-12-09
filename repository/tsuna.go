@@ -9,6 +9,6 @@ import (
 type TsunaRepository interface {
 	GetTsunasByHeyaID(ctx context.Context, heyaID uuid.UUID) ([]*model.Tsuna, error)
 	CreateTsuna(ctx context.Context, tsuna *model.Tsuna) error
-	DeleteTsuna(ctx context.Context, id uuid.UUID) error
-	UpdateTsuna(ctx context.Context, tsuna *model.Tsuna) error
+	DeleteTsunaByID(ctx context.Context, id uuid.UUID) error
+	UpdateTsunaByID(ctx context.Context, tsuna *model.Tsuna) error
 }
