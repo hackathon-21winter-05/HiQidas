@@ -2,26 +2,63 @@ package heya
 
 import (
 	"context"
+	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
 	"github.com/hackathon-21winter-05/HiQidas/repository"
 	"github.com/hackathon-21winter-05/HiQidas/service/utils"
+	"time"
 )
 
 type HeyaService interface {
-	SaveHeya(title, description string) (*model.Heya, error)
+	CreateHeya(userID uuid.UUID, title, description string) (*model.Heya, error)
 }
 
 type HeyaServiceImpl struct {
 	repo repository.Repository
 }
 
-func (h *HeyaServiceImpl) SaveHeya(title, description string) (*model.Heya, error) {
+func (h *HeyaServiceImpl) CreateHeya(userID uuid.UUID, title, description string) (*model.Heya, error) {
 	ctx, cancel := utils.CreateTxContext()
 	defer cancel()
 
-	err := h.repo.Do(ctx, nil, func(c context.Context) error {
-			h.repo.
+	now := time.Now()
+	heyaID := utils.GetUUID()
+	heya := &model.Heya{
+		ID:           heyaID,
+		Title:        title,
+		Description:  description,
+		CreatorID:    userID,
+		LastEditorID: userID,
+		CreatedAt:    now,
+		UpdatedAt:    now,
+	}
+
+	hiqidashi := &model.Hiqidashi{
+		ID:           utils.GetUUID(),
+		HeyaID:       heyaID,
+		CreatorID:    userID,
+		LastEditorID: userID,
+		Title:        title,
+		Description:  description,
+		CreatedAt:    now,
+		UpdatedAt:    now,
+	}
+
+	err := h.repo.Do(ctx, nil, func(ctx context.Context) error {
+		if err := h.repo.CreateHeya(ctx, heya); err != nil {
+			return err
+		}
+
+		if err := h.repo.CreateHiqidashi(ctx, hiqidashi); err != nil {
+			return err
+		}
+		return nil
 	})
+	if err != nil {
+		return nil, err
+	}
+
+	return heya, nil
 }
 
 func NewHeyaServiceImpl(repo repository.Repository) *HeyaServiceImpl {
