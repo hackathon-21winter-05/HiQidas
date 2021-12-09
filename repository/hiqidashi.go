@@ -12,4 +12,5 @@ type HiqidashiRepository interface {
 	CreateHiqidashi(ctx context.Context, hiqidashi *model.Hiqidashi) error
 	DeleteHiqidashiByID(ctx context.Context, id uuid.UUID) error
 	UpdateHiqidashiByID(ctx context.Context, hiqidashi *model.Hiqidashi) error
+	DeleteHiqidashiDrawing(ctx context.Context, hiqidashi *model.Hiqidashi) error
 }

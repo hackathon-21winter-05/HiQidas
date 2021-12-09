@@ -142,3 +142,7 @@ func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *
 
 	return nil
 }
+
+func (repo *GormRepository) DeleteHiqidashiDrawing(ctx context.Context, hiqidashi *model.Hiqidashi) error  {
+
+}
