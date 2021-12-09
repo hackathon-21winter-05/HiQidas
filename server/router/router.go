@@ -1,8 +1,6 @@
 package router
 
 import (
-	"net/http"
-
 	"github.com/gorilla/sessions"
 	"github.com/hackathon-21winter-05/HiQidas/config"
 	"github.com/hackathon-21winter-05/HiQidas/server/streamer"
@@ -11,27 +9,22 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
-	"github.com/sapphi-red/go-traq"
 )
 
 // ルーター
 type Router struct {
 	e   *echo.Echo
-	c   *config.Config
-	cli *traq.APIClient
-	ser *service.Service
+	hgs *HandlerGroups
 }
 
 // 新しいルーターを生成
 func NewRouter(c *config.Config, s *streamer.Streamer, ser *service.Service) *Router {
 	r := &Router{
 		e:   newEcho(),
-		c:   c,
-		cli: traq.NewAPIClient(traq.NewConfiguration()),
-		ser: ser,
+		hgs: newHandlerGroups(c, ser, s),
 	}
 
-	r.setHandlers(s)
+	r.setHandlers()
 
 	return r
 }
@@ -49,32 +42,6 @@ func newEcho() *echo.Echo {
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
 
 	return e
-}
-
-// ルーターのハンドラを設定
-func (r *Router) setHandlers(s *streamer.Streamer) {
-	api := r.e.Group("/api")
-	{
-		api.GET("/ping", func(c echo.Context) error {
-			return c.String(http.StatusOK, "pong")
-		})
-
-		oauthApi := api.Group("/oauth")
-		{
-			oauthApi.GET("/callback", r.GetOauthCallbackHandler)
-			oauthApi.POST("/code", r.PostOauthCodeHandler)
-		}
-
-		wsApi := api.Group("/ws")
-		{
-			wsApi.GET("/heya/:heyaid", s.ConnectWs)
-		}
-
-		userApi := api.Group("/users")
-		{
-			userApi.GET("/", r.GetUsersHandler)
-		}
-	}
 }
 
 // ルーターを起動

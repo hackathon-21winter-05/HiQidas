@@ -1,4 +1,4 @@
-package router
+package oauth
 
 import (
 	"context"
@@ -21,7 +21,7 @@ import (
 const oauthCodeRedirect = "https://q.trap.jp/api/v3/oauth2/authorize"
 
 // GET /oauth/callback ハンドラ
-func (r *Router) GetOauthCallbackHandler(c echo.Context) error {
+func (oh *OauthHandlerGroup) GetOauthCallbackHandler(c echo.Context) error {
 	verifier := randstr.String(64)
 	hash := sha256.Sum256([]byte(verifier))
 	challenge := base64.RawURLEncoding.EncodeToString(hash[:])
@@ -44,9 +44,9 @@ func (r *Router) GetOauthCallbackHandler(c echo.Context) error {
 
 	var clientID string
 	if strings.Contains(c.Request().Header.Get("referer"), "localhost") {
-		clientID = r.c.DevClientID
+		clientID = oh.c.DevClientID
 	} else {
-		clientID = r.c.ClientID
+		clientID = oh.c.ClientID
 	}
 
 	uri := fmt.Sprintf("%s?response_type=code&client_id=%s&code_challenge=%s&code_challenge_method=S256", oauthCodeRedirect, clientID, challenge)
@@ -58,7 +58,7 @@ func (r *Router) GetOauthCallbackHandler(c echo.Context) error {
 }
 
 // POST /oauth/code ハンドラ
-func (r *Router) PostOauthCodeHandler(c echo.Context) error {
+func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 	sess, err := session.Get("session", c)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())

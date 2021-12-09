@@ -1,4 +1,4 @@
-package router
+package user
 
 import (
 	"net/http"
@@ -8,8 +8,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (r *Router) GetUsersHandler(c echo.Context) error {
-	userIDs, err := r.ser.GetUsersID()
+func (uh *UserHandlerGroup) GetUsersHandler(c echo.Context) error {
+	userIDs, err := uh.us.GetUsersID()
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
