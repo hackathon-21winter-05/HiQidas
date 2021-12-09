@@ -94,8 +94,8 @@ func (repo *GormRepository) DeleteHiqidashi(ctx context.Context, id uuid.UUID) e
 }
 
 // UpdateHiqidashiByID UpdateHiqidashi ヒキダシを更新
-func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *model.Hiqidashi) error {
-	if hiqidashi.ID == uuid.Nil {
+func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *model.NullHiqidashi) error {
+	if hiqidashi.ID == uuid.Nil || hiqidashi.LastEditorID == uuid.Nil {
 		return ErrNillUUID
 	}
 
@@ -105,7 +105,8 @@ func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *
 	}
 
 	hiqidashiMap := map[string]interface{}{}
-
+	hiqidashiMap["id"] = hiqidashi.ID
+	hiqidashiMap["last_editor_id"] = hiqidashi.LastEditorID
 	if hiqidashi.ParentID.Valid {
 		hiqidashiMap["parent_id"] = hiqidashi.ParentID
 	} else {
@@ -116,17 +117,14 @@ func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *
 	} else {
 		hiqidashiMap["drawing"] = gorm.Expr("NULL")
 	}
-
-	hiqidashiMap = map[string]interface{}{
-		"id":             hiqidashi.ID,
-		"heya_id":        hiqidashi.HeyaID,
-		"creator_id":     hiqidashi.CreatorID,
-		"last_editor_id": hiqidashi.LastEditorID,
-		"title":          hiqidashi.Title,
-		"description":    hiqidashi.Description,
-		"colorID":        hiqidashi.ColorID,
-		"created_at":     hiqidashi.CreatedAt,
-		"updated_at":     hiqidashi.UpdatedAt,
+	if hiqidashi.Title.Valid {
+		hiqidashiMap["title"] = hiqidashi.Title
+	}
+	if hiqidashi.Description.Valid {
+		hiqidashiMap["description"] = hiqidashi.Description
+	}
+	if hiqidashi.UpdatedAt.Valid {
+		hiqidashiMap["updated_at"] = hiqidashi.UpdatedAt
 	}
 
 	result := db.
@@ -143,6 +141,6 @@ func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *
 	return nil
 }
 
-func (repo *GormRepository) DeleteHiqidashiDrawing(ctx context.Context, hiqidashi *model.Hiqidashi) error  {
+func (repo *GormRepository) DeleteHiqidashiDrawing(ctx context.Context, hiqidashi *model.Hiqidashi) error {
 
 }

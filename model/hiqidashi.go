@@ -31,5 +31,5 @@ type NullHiqidashi struct {
 	Description  sql.NullString
 	Drawing      sql.NullString
 	ColorID      sql.NullString
-	UpdatedAt    time.Time
+	UpdatedAt    sql.NullTime
 }
