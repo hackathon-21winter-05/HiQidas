@@ -12,7 +12,7 @@ run: protobuf-go
 
 .PHONY: up
 up: protobuf-go
-	@cd dev && COMPOSE_PROJECT_NAME=hiqidas_hot_reload docker-compose up -d --build
+	@cd dev && COMPOSE_PROJECT_NAME=hiqidas_hot_reload docker-compose up  --build
 
 .PHONY: down
 down:
