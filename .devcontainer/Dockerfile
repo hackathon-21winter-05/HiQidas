@@ -1,6 +1,12 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.194.3/containers/ubuntu/.devcontainer/base.Dockerfile
 
-FROM logica0419/protoc-go:1.0.1
+FROM logica0419/protoc-go:1.0.1 AS builder
+
+RUN go install github.com/cosmtrek/air@latest
+RUN go install github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@latest
+RUN go get github.com/k1LoW/tbls
+
+FROM logica0419/protoc-go:1.0.1 AS devContainer
 
 ENV TZ=Asia/Tokyo
 
@@ -9,5 +15,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install curl sudo git vim mariadb-client -y --no-install-recommends
 
-RUN go install github.com/cosmtrek/air@latest
-RUN go get github.com/k1LoW/tbls
+COPY --from=builder /go/bin/air /usr/local/bin/
+COPY --from=builder /go/bin/protoc-gen-doc /usr/local/bin/
+COPY --from=builder /go/bin/tbls /usr/local/bin/

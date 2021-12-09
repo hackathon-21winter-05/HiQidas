@@ -1,8 +1,13 @@
-FROM golang:1.17.4-alpine
-WORKDIR /HiQidas
+FROM golang:1.17.4-alpine AS builder
 
 RUN go install github.com/jwilder/dockerize@latest
 RUN go install github.com/cosmtrek/air@latest
+
+FROM golang:1.17.4-alpine AS hotReload
+WORKDIR /HiQidas
+
+COPY --from=builder /go/bin/dockerize /usr/local/bin/
+COPY --from=builder /go/bin/air /usr/local/bin/
 
 EXPOSE 7070
 
