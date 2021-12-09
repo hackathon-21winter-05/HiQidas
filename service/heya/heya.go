@@ -2,8 +2,6 @@ package heya
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
 	"github.com/hackathon-21winter-05/HiQidas/repository"
@@ -37,9 +35,6 @@ func (h *HeyaServiceImpl) DeleteHeya(heyaID uuid.UUID) error {
 		return nil
 	})
 	if err != nil {
-		if errors.Is(err, repository.ErrNoRecordDeleted) {
-			return fmt.Errorf("failed to delete no record")
-		}
 		return err
 	}
 
