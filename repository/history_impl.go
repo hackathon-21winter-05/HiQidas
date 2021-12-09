@@ -29,6 +29,10 @@ func (repo *GormRepository) GetHistoriesByUserID(ctx context.Context, userID uui
 
 // CreateHistory 履歴の作成
 func (repo *GormRepository) CreateHistory(ctx context.Context, history *model.History) error {
+	if history.UserID == uuid.Nil || history.HeyaID == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
@@ -44,6 +48,10 @@ func (repo *GormRepository) CreateHistory(ctx context.Context, history *model.Hi
 
 // DeleteHistoryByHeyaID DeleteHistory ヘヤが削除されたときに削除する履歴
 func (repo *GormRepository) DeleteHistoryByHeyaID(ctx context.Context, heyaID uuid.UUID) error {
+	if heyaID == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)

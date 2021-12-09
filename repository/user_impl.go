@@ -46,6 +46,10 @@ func (repo *GormRepository) GetUserByID(ctx context.Context, id uuid.UUID) (*mod
 
 // CreateUser Userを作成
 func (repo *GormRepository) CreateUser(ctx context.Context, user *model.User) error {
+	if user.ID == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
@@ -61,6 +65,10 @@ func (repo *GormRepository) CreateUser(ctx context.Context, user *model.User) er
 
 // DeleteUserByID Userを削除する
 func (repo *GormRepository) DeleteUserByID(ctx context.Context, id uuid.UUID) error {
+	if id == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
@@ -82,6 +90,10 @@ func (repo *GormRepository) DeleteUserByID(ctx context.Context, id uuid.UUID) er
 
 // UpdateUserByID ユーザーの情報を更新
 func (repo *GormRepository) UpdateUserByID(ctx context.Context, user *model.User) error {
+	if user.ID == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)

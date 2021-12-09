@@ -10,6 +10,9 @@ import (
 
 // GetHiqidashisByHeyaID ヘヤのすべてのヒキダシを取得
 func (repo *GormRepository) GetHiqidashisByHeyaID(ctx context.Context, heyaID uuid.UUID) ([]*model.Hiqidashi, error) {
+	if heyaID == uuid.Nil {
+		return nil, ErrNillUUID
+	}
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get db: %w", err)
@@ -48,6 +51,10 @@ func (repo *GormRepository) GetHiqidashisByParentID(ctx context.Context, parentI
 
 // CreateHiqidashi  ヒキダシを作成
 func (repo *GormRepository) CreateHiqidashi(ctx context.Context, hiqidashi *model.Hiqidashi) error {
+	if hiqidashi.ID == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
@@ -63,6 +70,10 @@ func (repo *GormRepository) CreateHiqidashi(ctx context.Context, hiqidashi *mode
 
 // DeleteHiqidashi ヒキダシを削除
 func (repo *GormRepository) DeleteHiqidashi(ctx context.Context, id uuid.UUID) error {
+	if id == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
@@ -84,6 +95,10 @@ func (repo *GormRepository) DeleteHiqidashi(ctx context.Context, id uuid.UUID) e
 
 // UpdateHiqidashiByID UpdateHiqidashi ヒキダシを更新
 func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *model.Hiqidashi) error {
+	if hiqidashi.ID == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)

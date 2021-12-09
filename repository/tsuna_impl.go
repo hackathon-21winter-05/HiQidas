@@ -29,6 +29,10 @@ func (repo *GormRepository) GetTsunasByHeyaID(ctx context.Context, heyaID uuid.U
 
 // CreateTsuna ツナを作成
 func (repo *GormRepository) CreateTsuna(ctx context.Context, tsuna *model.Tsuna) error {
+	if tsuna.ID == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
@@ -65,6 +69,10 @@ func (repo *GormRepository) DeleteTsunaByID(ctx context.Context, id uuid.UUID) e
 
 // UpdateTsunaByID UpdateTsuna ツナを更新する
 func (repo *GormRepository) UpdateTsunaByID(ctx context.Context, tsuna *model.Tsuna) error {
+	if tsuna.ID == uuid.Nil {
+		return ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
