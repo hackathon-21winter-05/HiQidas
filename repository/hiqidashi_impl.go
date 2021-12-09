@@ -109,13 +109,9 @@ func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *
 	hiqidashiMap["last_editor_id"] = hiqidashi.LastEditorID
 	if hiqidashi.ParentID.Valid {
 		hiqidashiMap["parent_id"] = hiqidashi.ParentID
-	} else {
-		hiqidashiMap["parent_id"] = gorm.Expr("NULL")
 	}
 	if hiqidashi.Drawing.Valid {
 		hiqidashiMap["drawing"] = hiqidashi.Drawing
-	} else {
-		hiqidashiMap["drawing"] = gorm.Expr("NULL")
 	}
 	if hiqidashi.Title.Valid {
 		hiqidashiMap["title"] = hiqidashi.Title
