@@ -81,8 +81,8 @@ func (repo *GormRepository) DeleteHiqidashi(ctx context.Context, id uuid.UUID) e
 	return nil
 }
 
-// UpdateHiqidashi ヒキダシを更新
-func (repo *GormRepository) UpdateHiqidashi(ctx context.Context, hiqidashi *model.Hiqidashi) error {
+// UpdateHiqidashiByID UpdateHiqidashi ヒキダシを更新
+func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *model.Hiqidashi) error {
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
