@@ -11,5 +11,5 @@ type HeyaRepository interface {
 	GetHeyaByID(ctx context.Context, id uuid.UUID) (*model.Heya, error)
 	CreateHeya(ctx context.Context, heya *model.Heya) error
 	UpdateHeya(ctx context.Context, heya *model.Heya) error
-	DeleteHeya(ctx context.Context, id uuid.UUID) error
+	DeleteHeyaByID(ctx context.Context, id uuid.UUID) error
 }

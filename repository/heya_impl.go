@@ -87,7 +87,7 @@ func (repo *GormRepository) UpdateHeya(ctx context.Context, heya *model.Heya) er
 	return nil
 }
 
-func (repo *GormRepository) DeleteHeya(ctx context.Context, id uuid.UUID) error {
+func (repo *GormRepository) DeleteHeyaByID(ctx context.Context, id uuid.UUID) error {
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get db: %w", err)
