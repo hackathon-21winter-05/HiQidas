@@ -64,7 +64,7 @@ func (r *Router) setHandlers(s *streamer.Streamer) {
 
 		wsApi := api.Group("/ws")
 		{
-			wsApi.GET("/room/:heyaid", s.ConnectWs)
+			wsApi.GET("/heya/:heyaid", s.ConnectWs)
 		}
 	}
 }
