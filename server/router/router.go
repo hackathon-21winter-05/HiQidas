@@ -74,11 +74,6 @@ func (r *Router) setHandlers(s *streamer.Streamer) {
 		{
 			userApi.GET("/", r.GetUsersHandler)
 		}
-
-		userApi := api.Group("/users")
-		{
-			userApi.GET("/", r.GetUsersHandler)
-		}
 	}
 }
 
