@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
+	"gorm.io/gorm"
 )
 
 // GetHiqidashisByHeyaID ヘヤのすべてのヒキダシを取得
@@ -92,21 +93,35 @@ func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *
 
 	if hiqidashi.ParentID.Valid {
 		hiqidashiMap["parent_id"] = hiqidashi.ParentID
+	} else {
+		hiqidashiMap = map[string]interface{}{
+			"id":             hiqidashi.ID,
+			"heya_id":        hiqidashi.HeyaID,
+			"creator_id":     hiqidashi.CreatorID,
+			"last_editor_id": hiqidashi.LastEditorID,
+			"parent_id":      gorm.Expr("NULL"),
+			"title":          hiqidashi.Title,
+			"description":    hiqidashi.Description,
+			"colorID":        hiqidashi.ColorID,
+			"created_at":     hiqidashi.CreatedAt,
+			"updated_at":     hiqidashi.UpdatedAt,
+		}
 	}
 	if hiqidashi.Drawing.Valid {
 		hiqidashiMap["drawing"] = hiqidashi.Drawing
-	}
-
-	hiqidashiMap = map[string]interface{}{
-		"id":             hiqidashi.ID,
-		"heya_id":        hiqidashi.HeyaID,
-		"creator_id":     hiqidashi.CreatorID,
-		"last_editor_id": hiqidashi.LastEditorID,
-		"title":          hiqidashi.Title,
-		"description":    hiqidashi.Description,
-		"colorID":        hiqidashi.ColorID,
-		"created_at":     hiqidashi.CreatedAt,
-		"updated_at":     hiqidashi.UpdatedAt,
+	} else {
+		hiqidashiMap = map[string]interface{}{
+			"id":             hiqidashi.ID,
+			"heya_id":        hiqidashi.HeyaID,
+			"creator_id":     hiqidashi.CreatorID,
+			"last_editor_id": hiqidashi.LastEditorID,
+			"title":          hiqidashi.Title,
+			"description":    hiqidashi.Description,
+			"drawing":        gorm.Expr("NULL"),
+			"colorID":        hiqidashi.ColorID,
+			"created_at":     hiqidashi.CreatedAt,
+			"updated_at":     hiqidashi.UpdatedAt,
+		}
 	}
 
 	result := db.
