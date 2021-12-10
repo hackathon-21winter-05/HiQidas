@@ -1,16 +1,23 @@
-package streamer
+package heya
 
 import (
 	"net/http"
 
 	"github.com/gofrs/uuid"
 	"github.com/gorilla/websocket"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
 
-func (s *Streamer) ConnectHeyaWS(c echo.Context) error {
-	roomIDString := c.Param("roomid")
-	roomID, err := uuid.FromString(roomIDString)
+func (hs *HeyaStreamer) ConnectHeyaWS(c echo.Context) error {
+	sess, err := session.Get("session", c)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+	userID := sess.Values["user_id"].(uuid.UUID)
+
+	heyaIDString := c.Param("roomid")
+	heyaID, err := uuid.FromString(heyaIDString)
 	if err != nil {
 		return c.String(http.StatusBadRequest, "Invalid room ID")
 	}
@@ -27,11 +34,14 @@ func (s *Streamer) ConnectHeyaWS(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	cli := &client{
+	hs.ser.AddHeyaClient(heyaID, clientID)
+
+	cli := &heyaClient{
 		id:       clientID,
-		roomID:   roomID,
+		userID:   userID,
+		heyaID:   heyaID,
 		conn:     conn,
-		receiver: &s.receiveBuffer,
+		receiver: &hs.receiveBuffer,
 		sender:   make(chan []byte),
 		closer:   make(chan bool),
 	}
@@ -39,11 +49,13 @@ func (s *Streamer) ConnectHeyaWS(c echo.Context) error {
 	go cli.serve()
 	go cli.listen()
 
-	s.clients[clientID] = cli
+	hs.heyaClients[clientID] = cli
 
 	<-cli.closer
 
-	delete(s.clients, clientID)
+	hs.ser.DeleteHeyaClient(heyaID, clientID)
+
+	delete(hs.heyaClients, clientID)
 
 	return nil
 }

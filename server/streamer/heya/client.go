@@ -1,27 +1,27 @@
-package streamer
+package heya
 
 import (
 	"github.com/gofrs/uuid"
 	"github.com/gorilla/websocket"
 )
 
-type client struct {
+type heyaClient struct {
 	id       uuid.UUID
 	userID   uuid.UUID
-	roomID   uuid.UUID
+	heyaID   uuid.UUID
 	conn     *websocket.Conn
-	receiver *chan *cliMessage
+	receiver *chan *heyaCliMessage
 	sender   chan []byte
 	closer   chan bool
 }
 
-type cliMessage struct {
+type heyaCliMessage struct {
 	userID uuid.UUID
-	roomid uuid.UUID
+	heyaid uuid.UUID
 	body   []byte
 }
 
-func (cli *client) listen() {
+func (cli *heyaClient) listen() {
 	for {
 		_, message, err := cli.conn.ReadMessage()
 		if err != nil {
@@ -29,15 +29,15 @@ func (cli *client) listen() {
 			break
 		}
 
-		*cli.receiver <- &cliMessage{
+		*cli.receiver <- &heyaCliMessage{
 			userID: cli.userID,
-			roomid: cli.roomID,
+			heyaid: cli.heyaID,
 			body:   message,
 		}
 	}
 }
 
-func (cli *client) serve() {
+func (cli *heyaClient) serve() {
 	for {
 		mes := <-cli.sender
 
