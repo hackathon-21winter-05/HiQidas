@@ -31,7 +31,7 @@ func (hs *HeyaStreamer) createHiqidashiHandler(userID, heyaID uuid.UUID, body *w
 		Hiqidashi: &ws.Hiqidashi{
 			Id:          created.ID.String(),
 			CreatorId:   created.CreatorID.String(),
-			ParentId:    created.ParentID.UUID.String(),
+			ParentId:    &wrapperspb.StringValue{Value: created.ParentID.UUID.String()},
 			Title:       created.Title,
 			Description: created.Description,
 			Drawing:     drawing,
