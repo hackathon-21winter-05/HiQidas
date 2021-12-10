@@ -64,10 +64,31 @@ func (hs *HiqidashiServiceImpl) UpdateHiqidashiByID(c context.Context, hiqidashi
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
 
-	err := hs.repo.Do(ctx, nil, func(ctx context.Context) error {
+	tempHiqidashi, err := hs.repo.GetHiqidashisByID(ctx, hiqidashi.ID)
+	if err != nil {
+		return err
+	}
+	rootHiqidashi := false
+	if !tempHiqidashi.ParentID.Valid {
+		rootHiqidashi = true
+	}
+
+	err = hs.repo.Do(ctx, nil, func(ctx context.Context) error {
 		err := hs.repo.UpdateHiqidashiByID(ctx, hiqidashi)
 		if err != nil {
 			return err
+		}
+
+		if rootHiqidashi {
+			err = hs.repo.UpdateHeyaByID(ctx, &model.NullHeya{
+				ID:           tempHiqidashi.HeyaID,
+				Title:        hiqidashi.Title,
+				Description:  hiqidashi.Description,
+				LastEditorID: hiqidashi.LastEditorID,
+			})
+			if err != nil {
+				return err
+			}
 		}
 
 		return nil
