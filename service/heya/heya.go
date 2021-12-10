@@ -10,15 +10,26 @@ import (
 )
 
 type HeyaService interface {
-	CreateHeya(c context.Context,userID uuid.UUID, title, description string) (*model.Heya, error)
-	DeleteHeya(c context.Context,heyaID uuid.UUID) error
+	CreateHeya(c context.Context, userID uuid.UUID, title, description string) (*model.Heya, error)
+	DeleteHeya(c context.Context, heyaID uuid.UUID) error
+	GetHeyas(c context.Context) ([]uuid.UUID, error)
 }
 
 type HeyaServiceImpl struct {
 	repo repository.Repository
 }
 
-func (h *HeyaServiceImpl) DeleteHeya(c context.Context,heyaID uuid.UUID) error {
+func (h *HeyaServiceImpl) GetHeyas(c context.Context) ([]uuid.UUID, error) {
+	ctx, cancel := utils.CreateTxContext(c)
+	defer cancel()
+	heyasID, err := h.repo.GetHeyasID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return heyasID, nil
+}
+func (h *HeyaServiceImpl) DeleteHeya(c context.Context, heyaID uuid.UUID) error {
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
 
@@ -41,7 +52,7 @@ func (h *HeyaServiceImpl) DeleteHeya(c context.Context,heyaID uuid.UUID) error {
 	return nil
 }
 
-func (h *HeyaServiceImpl) CreateHeya(c context.Context,userID uuid.UUID, title, description string) (*model.Heya, error) {
+func (h *HeyaServiceImpl) CreateHeya(c context.Context, userID uuid.UUID, title, description string) (*model.Heya, error) {
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
 
