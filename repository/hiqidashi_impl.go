@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"fmt"
+
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
 	"gorm.io/gorm"
@@ -119,9 +120,7 @@ func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *
 	if hiqidashi.Description.Valid {
 		hiqidashiMap["description"] = hiqidashi.Description
 	}
-	if hiqidashi.UpdatedAt.Valid {
-		hiqidashiMap["updated_at"] = hiqidashi.UpdatedAt
-	}
+	hiqidashiMap["updated_at"] = hiqidashi.UpdatedAt
 
 	result := db.
 		Model(&hiqidashi).

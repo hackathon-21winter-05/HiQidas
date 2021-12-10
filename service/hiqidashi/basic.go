@@ -59,3 +59,22 @@ func (hs *HiqidashiServiceImpl) CreateHiqidashi(c context.Context, createrID, he
 
 	return hiqidashi, nil
 }
+
+func (hs *HiqidashiServiceImpl) UpdateHiqidashiByID(c context.Context, hiqidashi *model.NullHiqidashi) error {
+	ctx, cancel := utils.CreateTxContext(c)
+	defer cancel()
+
+	err := hs.repo.Do(ctx, nil, func(ctx context.Context) error {
+		err := hs.repo.UpdateHiqidashiByID(ctx, hiqidashi)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

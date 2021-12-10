@@ -6,9 +6,6 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-type HeyaHandler struct {
-}
-
 func (hs *HeyaStreamer) heyaWSHandler(mes *heyaCliMessage) error {
 	var WsHeyaData *ws.WsHeyaData
 
@@ -24,6 +21,14 @@ func (hs *HeyaStreamer) heyaWSHandler(mes *heyaCliMessage) error {
 			_ = hs.sendErrorMes(mes.clientID, err.Error())
 		}
 		return nil
+
+	case *ws.WsHeyaData_EditHiqidashi:
+		err := hs.editHiqidashiHandler(mes.userID, mes.heyaid, WsHeyaData.GetEditHiqidashi())
+		if err != nil {
+			_ = hs.sendErrorMes(mes.clientID, err.Error())
+		}
+		return nil
+
 	default:
 		return nil
 	}
