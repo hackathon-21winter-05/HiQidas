@@ -161,7 +161,7 @@ func (repo *GormRepository) DeleteHiqidashiDrawing(ctx context.Context, hiqidash
 	return nil
 }
 
-func (repo *GormRepository) DeleteHiqidashiByHeyaID(ctx context.Context, heyaID uuid.UUID) error {
+func (repo *GormRepository) DeleteHiqidashisByHeyaID(ctx context.Context, heyaID uuid.UUID) error {
 	if heyaID == uuid.Nil {
 		return ErrNillUUID
 	}
