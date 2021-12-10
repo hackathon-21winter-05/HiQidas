@@ -7,19 +7,19 @@ import (
 )
 
 type Streamer struct {
-	*heya.HeyaStreamer
+	hs *heya.HeyaStreamer
 }
 
 func NewStreamer(ser *service.Service) *Streamer {
 	return &Streamer{
-		HeyaStreamer: heya.NewHeyaStreamer(ser),
+		hs: heya.NewHeyaStreamer(ser),
 	}
 }
 
 func (s *Streamer) Run() {
-	s.HeyaStreamer.Listen()
+	s.hs.Listen()
 }
 
 func (s *Streamer) ConnectHeyaWS(c echo.Context) error {
-	return s.HeyaStreamer.ConnectHeyaWS(c)
+	return s.hs.ConnectHeyaWS(c)
 }
