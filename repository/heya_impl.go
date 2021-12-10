@@ -28,7 +28,7 @@ func (repo *GormRepository) GetHeyasID(ctx context.Context) ([]uuid.UUID, error)
 
 func (repo *GormRepository) GetHeyaByID(ctx context.Context, id uuid.UUID) (*model.Heya, error) {
 	if id == uuid.Nil {
-		return nil, model.ErrNillUUID
+		return nil, ErrNillUUID
 	}
 
 	db, err := repo.getDB(ctx)
@@ -50,7 +50,7 @@ func (repo *GormRepository) GetHeyaByID(ctx context.Context, id uuid.UUID) (*mod
 
 func (repo *GormRepository) CreateHeya(ctx context.Context, heya *model.Heya) error {
 	if heya.ID == uuid.Nil {
-		return model.ErrNillUUID
+		return ErrNillUUID
 	}
 
 	db, err := repo.getDB(ctx)
@@ -68,7 +68,7 @@ func (repo *GormRepository) CreateHeya(ctx context.Context, heya *model.Heya) er
 
 func (repo *GormRepository) UpdateHeyaByID(ctx context.Context, heya *model.NullHeya) error {
 	if heya.ID == uuid.Nil || heya.LastEditorID == uuid.Nil {
-		return model.ErrNillUUID
+		return ErrNillUUID
 	}
 
 	db, err := repo.getDB(ctx)
@@ -98,7 +98,7 @@ func (repo *GormRepository) UpdateHeyaByID(ctx context.Context, heya *model.Null
 		return fmt.Errorf("failed to update heya:%w", err)
 	}
 	if result.RowsAffected == 0 {
-		return model.ErrNoRecordUpdated
+		return ErrNoRecordUpdated
 	}
 
 	return nil
@@ -106,7 +106,7 @@ func (repo *GormRepository) UpdateHeyaByID(ctx context.Context, heya *model.Null
 
 func (repo *GormRepository) DeleteHeyaByID(ctx context.Context, id uuid.UUID) error {
 	if id == uuid.Nil {
-		return model.ErrNillUUID
+		return ErrNillUUID
 	}
 
 	db, err := repo.getDB(ctx)
@@ -122,7 +122,7 @@ func (repo *GormRepository) DeleteHeyaByID(ctx context.Context, id uuid.UUID) er
 		return fmt.Errorf("failed to deleted heya :%w", err)
 	}
 	if result.RowsAffected == 0 {
-		return model.ErrNoRecordDeleted
+		return ErrNoRecordDeleted
 	}
 
 	return nil

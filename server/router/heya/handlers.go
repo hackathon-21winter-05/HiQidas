@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
+	"github.com/hackathon-21winter-05/HiQidas/repository"
 	"github.com/hackathon-21winter-05/HiQidas/server/protobuf/rest"
 	"github.com/hackathon-21winter-05/HiQidas/server/router/utils"
 	"github.com/labstack/echo/v4"
@@ -78,7 +79,7 @@ func (h *HeyaHandleGroup) DeleteHeyasByIDHandler(c echo.Context) error {
 	}
 
 	if err = h.hs.DeleteHeya(c.Request().Context(), heyaUUID); err != nil {
-		if errors.Is(err, model.ErrNoRecordDeleted) {
+		if errors.Is(err, repository.ErrNoRecordDeleted) {
 			c.Logger().Info(err)
 			return echo.NewHTTPError(http.StatusBadRequest, err)
 		}
@@ -139,7 +140,7 @@ func (h *HeyaHandleGroup) PutHeyasByIDHandler(c echo.Context) error {
 
 	//TODO:セッションor MiddlewareからUserIDをもってこれるようにする
 	if err = h.hs.PutHeyaByID(c.Request().Context(),&heya, heyaUUID,uuid.Nil); err != nil {
-		if errors.Is(err, model.ErrNoRecordUpdated) {
+		if errors.Is(err, repository.ErrNoRecordUpdated) {
 			c.Logger().Info(err)
 			return echo.NewHTTPError(http.StatusBadRequest, err)
 		}

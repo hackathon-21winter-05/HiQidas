@@ -47,7 +47,7 @@ func (repo *GormRepository) GetUserByID(ctx context.Context, id uuid.UUID) (*mod
 // CreateUser Userを作成
 func (repo *GormRepository) CreateUser(ctx context.Context, user *model.User) error {
 	if user.ID == uuid.Nil {
-		return model.ErrNillUUID
+		return ErrNillUUID
 	}
 
 	db, err := repo.getDB(ctx)
@@ -66,7 +66,7 @@ func (repo *GormRepository) CreateUser(ctx context.Context, user *model.User) er
 // DeleteUserByID Userを削除する
 func (repo *GormRepository) DeleteUserByID(ctx context.Context, id uuid.UUID) error {
 	if id == uuid.Nil {
-		return model.ErrNillUUID
+		return ErrNillUUID
 	}
 
 	db, err := repo.getDB(ctx)
@@ -82,7 +82,7 @@ func (repo *GormRepository) DeleteUserByID(ctx context.Context, id uuid.UUID) er
 		return fmt.Errorf("failed to delete user :%w", err)
 	}
 	if result.RowsAffected == 0 {
-		return model.ErrNoRecordDeleted
+		return ErrNoRecordDeleted
 	}
 
 	return nil
@@ -91,7 +91,7 @@ func (repo *GormRepository) DeleteUserByID(ctx context.Context, id uuid.UUID) er
 // UpdateUserByID ユーザーの情報を更新
 func (repo *GormRepository) UpdateUserByID(ctx context.Context, user *model.User) error {
 	if user.ID == uuid.Nil || user.IconFileID == uuid.Nil {
-		return model.ErrNillUUID
+		return ErrNillUUID
 	}
 
 	db, err := repo.getDB(ctx)
@@ -109,7 +109,7 @@ func (repo *GormRepository) UpdateUserByID(ctx context.Context, user *model.User
 		return fmt.Errorf("failed to update user : %w", err)
 	}
 	if result.RowsAffected == 0 {
-		return model.ErrNoRecordUpdated
+		return ErrNoRecordUpdated
 	}
 
 	return nil

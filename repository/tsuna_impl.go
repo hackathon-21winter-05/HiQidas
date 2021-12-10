@@ -30,7 +30,7 @@ func (repo *GormRepository) GetTsunasByHeyaID(ctx context.Context, heyaID uuid.U
 // CreateTsuna ツナを作成
 func (repo *GormRepository) CreateTsuna(ctx context.Context, tsuna *model.Tsuna) error {
 	if tsuna.ID == uuid.Nil {
-		return model.ErrNillUUID
+		return ErrNillUUID
 	}
 
 	db, err := repo.getDB(ctx)
@@ -61,7 +61,7 @@ func (repo *GormRepository) DeleteTsunaByID(ctx context.Context, id uuid.UUID) e
 		return fmt.Errorf("failed to delete tsuna :%w", err)
 	}
 	if result.RowsAffected == 0 {
-		return model.ErrNoRecordDeleted
+		return ErrNoRecordDeleted
 	}
 
 	return nil
@@ -70,7 +70,7 @@ func (repo *GormRepository) DeleteTsunaByID(ctx context.Context, id uuid.UUID) e
 // UpdateTsunaByID UpdateTsuna ツナを更新する
 func (repo *GormRepository) UpdateTsunaByID(ctx context.Context, tsuna *model.NullTsuna) error {
 	if tsuna.ID == uuid.Nil || tsuna.HiqidashiTwo == uuid.Nil {
-		return model.ErrNillUUID
+		return ErrNillUUID
 	}
 	tsunaMap := map[string]interface{}{
 		"id":            tsuna.ID,
@@ -90,7 +90,7 @@ func (repo *GormRepository) UpdateTsunaByID(ctx context.Context, tsuna *model.Nu
 		return fmt.Errorf("failed to update tsuna :%w", err)
 	}
 	if result.RowsAffected == 0 {
-		return model.ErrNoRecordUpdated
+		return ErrNoRecordUpdated
 	}
 
 	return nil
