@@ -34,7 +34,7 @@ var SuperSet = wire.NewSet(
 	NewServer,
 )
 
-func InjectStream(c *config.Config) (*Server, error) {
+func InjectServer(c *config.Config) (*Server, error) {
 	wire.Build(SuperSet)
 	return nil, nil
 }
