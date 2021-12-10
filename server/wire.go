@@ -18,7 +18,7 @@ import (
 )
 
 
-var SuperSet = wire.NewSet(
+var superSet = wire.NewSet(
 	repository.NewGormRepository,
 	wire.Struct(new(repository.GormRepository),"*"),
 
@@ -37,7 +37,7 @@ var SuperSet = wire.NewSet(
 	middleware.NewMiddleware,
 	)
 
-func injectAPIHandlers(c *config.Config) (*router.APIHandlers,error) {
+func InjectAPIHandlers(c *config.Config) (*router.APIHandlers,error) {
 	wire.Build(SuperSet)
 
 	return nil,nil
