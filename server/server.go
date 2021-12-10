@@ -12,13 +12,13 @@ import (
 // サーバー
 type Server struct {
 	r *router.Router
-	s   *streamer.Streamer
+	s *streamer.Streamer
 }
 
 // 新たなサーバーを取得
 func NewServer(c *config.Config) *Server {
 	e := echo.New()
-	server ,err := injectServer(c)
+	server, err := injectServer(c)
 	if err != nil {
 		log.Panic(err)
 	}
@@ -38,8 +38,8 @@ func NewServer(c *config.Config) *Server {
 			heyaApi.GET("", server.r.Api.GetHeyasHandler)
 			heyaApi.GET("/:heyaID", server.r.Api.GetHeyaHandler)
 			heyaApi.GET("/:heyaID/users", server.r.Api.GetUsersByHeyaIDHandler)
-			heyaApi.POST("/",server.r.Api.PostHeyasHandler)
-			heyaApi.DELETE("/:heyaID",server.r.Api.DeleteHeyasByIDHandler)
+			heyaApi.POST("/", server.r.Api.PostHeyasHandler)
+			heyaApi.DELETE("/:heyaID", server.r.Api.DeleteHeyasByIDHandler)
 			heyaApi.PUT("/:heyaID", server.r.Api.PutHeyasByIDHandler)
 		}
 
@@ -60,5 +60,8 @@ func NewServer(c *config.Config) *Server {
 // サーバーを起動
 func (s *Server) Run() {
 	s.s.Run()
-	s.r.Run()
+	err := s.r.Run()
+	if err != nil {
+		log.Panic(err)
+	}
 }

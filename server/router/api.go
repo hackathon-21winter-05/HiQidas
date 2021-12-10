@@ -8,7 +8,7 @@ import (
 	"github.com/hackathon-21winter-05/HiQidas/server/router/ws"
 )
 
-type APIHandlers struct {
+type APIHandler struct {
 	*middleware.Middleware
 	*heya.HeyaHandleGroup
 	*user.UserHandlerGroup
@@ -16,7 +16,7 @@ type APIHandlers struct {
 	*ws.WSHandlerGroup
 }
 
-func NewAPI(middleware *middleware.Middleware, heyaHandleGroup *heya.HeyaHandleGroup, userHandlerGroup *user.UserHandlerGroup, oauthHandlerGroup *oauth.OauthHandlerGroup, WSHandlerGroup *ws.WSHandlerGroup) *APIHandlers {
-	return &APIHandlers{Middleware: middleware, HeyaHandleGroup: heyaHandleGroup, UserHandlerGroup: userHandlerGroup, OauthHandlerGroup: oauthHandlerGroup, WSHandlerGroup: WSHandlerGroup}
+func NewAPIHandler(middleware *middleware.Middleware, heyaHandleGroup *heya.HeyaHandleGroup, userHandlerGroup *user.UserHandlerGroup, oauthHandlerGroup *oauth.OauthHandlerGroup, WSHandlerGroup *ws.WSHandlerGroup) *APIHandler {
+	return &APIHandler{Middleware: middleware, HeyaHandleGroup: heyaHandleGroup, UserHandlerGroup: userHandlerGroup, OauthHandlerGroup: oauthHandlerGroup, WSHandlerGroup: WSHandlerGroup}
 }
 

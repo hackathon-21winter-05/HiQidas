@@ -24,25 +24,11 @@ import (
 
 // Injectors from wire.go:
 
-func injectAPIHandlers(c *config.Config) (*router.APIHandlers, error) {
-	middlewareMiddleware := middleware.NewMiddleware()
-	repositoryRepository, err := repository.NewGormRepository(c)
-	if err != nil {
-		return nil, err
-	}
-	heyaServiceImpl := heya.NewHeyaServiceImpl(repositoryRepository)
-	heyaHandleGroup := heya2.NewHeyaHandleGroup(heyaServiceImpl)
-	userServiceImpl := service.NewUserServiceImpl(repositoryRepository)
-	userHandlerGroup := user.NewUserHandlerGroup(userServiceImpl)
-	configuration := traq.NewConfiguration()
-	apiClient := traq.NewAPIClient(configuration)
-	oauthHandlerGroup := oauth.NewOauthHandlerGroup(c, apiClient)
-	streamerStreamer := streamer.NewStreamer()
-	wsHandlerGroup := ws.NewWSHandlerGroup(streamerStreamer)
-	apiHandlers := router.NewAPI(middlewareMiddleware, heyaHandleGroup, userHandlerGroup, oauthHandlerGroup, wsHandlerGroup)
-	return apiHandlers, nil
+func injectServer(c *config.Config) (*Server, error) {
+	server := NewServer(c)
+	return server, nil
 }
 
 // wire.go:
 
-var SuperSet = wire.NewSet(repository.NewGormRepository, wire.Struct(new(repository.GormRepository), "*"), heya.NewHeyaServiceImpl, wire.Bind(new(heya.HeyaService), new(*heya.HeyaServiceImpl)), service.NewUserServiceImpl, wire.Bind(new(service.UserService), new(*service.UserServiceImpl)), router.NewAPI, heya2.NewHeyaHandleGroup, user.NewUserHandlerGroup, ws.NewWSHandlerGroup, oauth.NewOauthHandlerGroup, wire.NewSet(traq.NewAPIClient, traq.NewConfiguration), streamer.NewStreamer, middleware.NewMiddleware)
+var SuperSet = wire.NewSet(repository.NewGormRepository, wire.Struct(new(repository.GormRepository), "*"), heya.NewHeyaServiceImpl, wire.Bind(new(heya.HeyaService), new(*heya.HeyaServiceImpl)), service.NewUserServiceImpl, wire.Bind(new(service.UserService), new(*service.UserServiceImpl)), NewServer, router.NewAPIHandler, heya2.NewHeyaHandleGroup, user.NewUserHandlerGroup, ws.NewWSHandlerGroup, oauth.NewOauthHandlerGroup, wire.NewSet(traq.NewAPIClient, traq.NewConfiguration), streamer.NewStreamer, middleware.NewMiddleware)
