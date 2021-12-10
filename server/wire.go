@@ -1,4 +1,5 @@
-//+build wireinject
+//go:build wireinject
+// +build wireinject
 
 package server
 
@@ -23,16 +24,11 @@ var SuperSet = wire.NewSet(
 	service.NewService,
 
 	user.NewUserHandlerGroup,
-	wire.Bind(new(user.UserHandler),new(*user.UserHandlerGroup)),
 	heya.NewHeyaHandleGroup,
-	wire.Bind(new(heya.HeyaHandler),new(*heya.HeyaHandleGroup)),
 	oauth.NewOauthHandlerGroup,
-	wire.Bind(new(oauth.OauthHandler),new(*oauth.OauthHandlerGroup)),
 	wire.NewSet(traq.NewAPIClient, traq.NewConfiguration),
 	middleware.NewMiddleware,
-	wire.Bind(new(middleware.IMiddleware),new(*middleware.Middleware)),
 	ws.NewWSHandlerGroup,
-	wire.Bind(new(ws.WSHandler),new(*ws.WSHandlerGroup)),
 	streamer.NewStreamer,
 	router.NewAPIHandler,
 	router.NewRouter,

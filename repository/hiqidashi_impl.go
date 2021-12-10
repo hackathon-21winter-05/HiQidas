@@ -4,10 +4,32 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
 	"gorm.io/gorm"
 )
+
+func (repo *GormRepository) GetHiqidashiByID(ctx context.Context, id uuid.UUID) (*model.Hiqidashi, error) {
+	if id == uuid.Nil {
+		return nil, ErrNillUUID
+	}
+
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get db: %w", err)
+	}
+
+	hiqidashi := &model.Hiqidashi{}
+	err = db.
+		Where("id = ?", id).
+		First(&hiqidashi).Error
+	if err != nil {
+		return nil, fmt.Errorf("failed to get	hiqidashi :%w", err)
+	}
+
+	return hiqidashi, nil
+}
 
 // GetHiqidashisByHeyaID ヘヤのすべてのヒキダシを取得
 func (repo *GormRepository) GetHiqidashisByHeyaID(ctx context.Context, heyaID uuid.UUID) ([]*model.Hiqidashi, error) {
@@ -120,9 +142,7 @@ func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *
 	if hiqidashi.Description.Valid {
 		hiqidashiMap["description"] = hiqidashi.Description
 	}
-	if hiqidashi.UpdatedAt.Valid {
-		hiqidashiMap["updated_at"] = hiqidashi.UpdatedAt
-	}
+	hiqidashiMap["updated_at"] = hiqidashi.UpdatedAt
 
 	result := db.
 		Model(&hiqidashi).

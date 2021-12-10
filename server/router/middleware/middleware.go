@@ -2,15 +2,12 @@ package middleware
 
 import (
 	"errors"
+
 	"github.com/labstack/echo/v4"
 )
 
-type Middleware struct {
-}
-type IMiddleware interface {
-	SettraPUserIDMiddleware(next echo.HandlerFunc) echo.HandlerFunc
-	GetUserID(c echo.Context) (string, error)
-}
+type Middleware struct{}
+
 func NewMiddleware() *Middleware {
 	return &Middleware{}
 }

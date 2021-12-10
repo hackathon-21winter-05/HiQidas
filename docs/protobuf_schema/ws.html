@@ -195,11 +195,11 @@
                 </li>
               
                 <li>
-                  <a href="#hiqidashi.WsGetHiqidashi"><span class="badge">M</span>WsGetHiqidashi</a>
+                  <a href="#hiqidashi.WsSendHiqidashi"><span class="badge">M</span>WsSendHiqidashi</a>
                 </li>
               
                 <li>
-                  <a href="#hiqidashi.WsGetHiqidashis"><span class="badge">M</span>WsGetHiqidashis</a>
+                  <a href="#hiqidashi.WsSendHiqidashis"><span class="badge">M</span>WsSendHiqidashis</a>
                 </li>
               
               
@@ -214,7 +214,11 @@
             <ul>
               
                 <li>
-                  <a href="#hiqidashi.WsCommunicationData"><span class="badge">M</span>WsCommunicationData</a>
+                  <a href="#hiqidashi.WsError"><span class="badge">M</span>WsError</a>
+                </li>
+              
+                <li>
+                  <a href="#hiqidashi.WsHeyaData"><span class="badge">M</span>WsHeyaData</a>
                 </li>
               
               
@@ -253,8 +257,15 @@
                 </tr>
               
                 <tr>
-                  <td>parent_id</td>
+                  <td>creator_id</td>
                   <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>parent_id</td>
+                  <td><a href="#google.protobuf.StringValue">google.protobuf.StringValue</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -281,21 +292,7 @@
                 </tr>
               
                 <tr>
-                  <td>color_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>created_at</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>updated_at</td>
+                  <td>color_code</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -320,20 +317,6 @@
               
                 <tr>
                   <td>parent_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>title</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>description</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -395,13 +378,6 @@
                 </tr>
               
                 <tr>
-                  <td>description</td>
-                  <td><a href="#google.protobuf.StringValue">google.protobuf.StringValue</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
                   <td>drawing</td>
                   <td><a href="#google.protobuf.StringValue">google.protobuf.StringValue</a></td>
                   <td></td>
@@ -409,7 +385,7 @@
                 </tr>
               
                 <tr>
-                  <td>color_id</td>
+                  <td>color_code</td>
                   <td><a href="#google.protobuf.StringValue">google.protobuf.StringValue</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -422,7 +398,7 @@
 
         
       
-        <h3 id="hiqidashi.WsGetHiqidashi">WsGetHiqidashi</h3>
+        <h3 id="hiqidashi.WsSendHiqidashi">WsSendHiqidashi</h3>
         <p></p>
 
         
@@ -446,7 +422,7 @@
 
         
       
-        <h3 id="hiqidashi.WsGetHiqidashis">WsGetHiqidashis</h3>
+        <h3 id="hiqidashi.WsSendHiqidashis">WsSendHiqidashis</h3>
         <p></p>
 
         
@@ -457,7 +433,7 @@
             <tbody>
               
                 <tr>
-                  <td>hiqidashi</td>
+                  <td>hiqidashis</td>
                   <td><a href="#hiqidashi.Hiqidashi">Hiqidashi</a></td>
                   <td>repeated</td>
                   <td><p> </p></td>
@@ -484,7 +460,7 @@
       <p></p>
 
       
-        <h3 id="hiqidashi.WsCommunicationData">WsCommunicationData</h3>
+        <h3 id="hiqidashi.WsError">WsError</h3>
         <p></p>
 
         
@@ -495,15 +471,39 @@
             <tbody>
               
                 <tr>
-                  <td>get_hiqidashi</td>
-                  <td><a href="#hiqidashi.WsGetHiqidashi">WsGetHiqidashi</a></td>
+                  <td>message</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="hiqidashi.WsHeyaData">WsHeyaData</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>send_hiqidashi</td>
+                  <td><a href="#hiqidashi.WsSendHiqidashi">WsSendHiqidashi</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>get_hiqidashis</td>
-                  <td><a href="#hiqidashi.WsGetHiqidashis">WsGetHiqidashis</a></td>
+                  <td>send_hiqidashis</td>
+                  <td><a href="#hiqidashi.WsSendHiqidashis">WsSendHiqidashis</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -525,6 +525,13 @@
                 <tr>
                   <td>delete_hiqidashi</td>
                   <td><a href="#hiqidashi.WsDeleteHiqidashi">WsDeleteHiqidashi</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#hiqidashi.WsError">WsError</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>

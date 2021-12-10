@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/hackathon-21winter-05/HiQidas/server"
 	"log"
 	"time"
 
 	"github.com/hackathon-21winter-05/HiQidas/config"
+	"github.com/hackathon-21winter-05/HiQidas/server"
 )
 
 func init() {
@@ -31,5 +31,5 @@ func main() {
 		log.Panic(err)
 	}
 
-	sv.Run(c)
+	sv.Run()
 }

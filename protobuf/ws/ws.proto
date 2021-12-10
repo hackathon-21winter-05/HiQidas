@@ -6,12 +6,15 @@ import "protobuf/ws/hiqidashi.proto";
 
 option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/ws";
 
-message WsCommunicationData {
+message WsHeyaData {
   oneof payload {
-    WsGetHiqidashi get_hiqidashi = 1;
-    WsGetHiqidashis get_hiqidashis = 2;
+    WsSendHiqidashi send_hiqidashi = 1;
+    WsSendHiqidashis send_hiqidashis = 2;
     WsCreateHiqidashi create_hiqidashi = 3;
     WsEditHiqidashi edit_hiqidashi = 4;
     WsDeleteHiqidashi delete_hiqidashi = 5;
+    WsError error = 6;
   }
 }
+
+message WsError { string message = 2; }
