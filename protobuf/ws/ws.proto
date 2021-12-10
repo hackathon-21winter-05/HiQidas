@@ -13,5 +13,8 @@ message WsHeyaData {
     WsCreateHiqidashi create_hiqidashi = 3;
     WsEditHiqidashi edit_hiqidashi = 4;
     WsDeleteHiqidashi delete_hiqidashi = 5;
+    WsError error = 6;
   }
 }
+
+message WsError { string message = 2; }

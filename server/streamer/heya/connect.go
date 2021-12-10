@@ -53,7 +53,7 @@ func (hs *HeyaStreamer) ConnectHeyaWS(c echo.Context) error {
 
 	<-cli.closer
 
-	hs.ser.DeleteHeyaClient(heyaID, clientID)
+	_ = hs.ser.DeleteHeyaClient(heyaID, clientID)
 
 	delete(hs.heyaClients, clientID)
 

@@ -16,9 +16,10 @@ type heyaClient struct {
 }
 
 type heyaCliMessage struct {
-	userID uuid.UUID
-	heyaid uuid.UUID
-	body   []byte
+	clientID uuid.UUID
+	userID   uuid.UUID
+	heyaid   uuid.UUID
+	body     []byte
 }
 
 func (hc *heyaClient) listen() {
@@ -30,9 +31,10 @@ func (hc *heyaClient) listen() {
 		}
 
 		*hc.receiver <- &heyaCliMessage{
-			userID: hc.userID,
-			heyaid: hc.heyaID,
-			body:   message,
+			clientID: hc.id,
+			userID:   hc.userID,
+			heyaid:   hc.heyaID,
+			body:     message,
 		}
 	}
 }
