@@ -7,23 +7,22 @@ import (
 	"github.com/hackathon-21winter-05/HiQidas/model"
 )
 
-// GetHeyasID すべてのヘヤのIDを取得
-func (repo *GormRepository) GetHeyasID(ctx context.Context) ([]uuid.UUID, error) {
+// GetHeyas すべてのヘヤの取得
+func (repo *GormRepository) GetHeyas(ctx context.Context) ([]*model.Heya, error) {
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get db: %w", err)
 	}
 
-	var heyaIDs []uuid.UUID
+	heyas := make([]*model.Heya, 0)
 
 	err = db.
-		Model(model.Heya{}).
-		Pluck("id", &heyaIDs).Error
+		Find(&heyas).Error
 	if err != nil {
 		return nil, fmt.Errorf("failed to get heyaIDs :%w", err)
 	}
 
-	return heyaIDs, nil
+	return heyas, nil
 }
 
 func (repo *GormRepository) GetHeyaByID(ctx context.Context, id uuid.UUID) (*model.Heya, error) {

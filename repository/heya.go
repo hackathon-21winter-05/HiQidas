@@ -7,7 +7,7 @@ import (
 )
 
 type HeyaRepository interface {
-	GetHeyasID(ctx context.Context) ([]uuid.UUID, error)
+	GetHeyas(ctx context.Context) ([]*model.Heya, error)
 	GetHeyaByID(ctx context.Context, id uuid.UUID) (*model.Heya, error)
 	CreateHeya(ctx context.Context, heya *model.Heya) error
 	UpdateHeyaByID(ctx context.Context, heya *model.NullHeya) error

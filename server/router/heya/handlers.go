@@ -14,15 +14,27 @@ import (
 
 // GetHeyasHandler GET /heyas
 func (h *HeyaHandleGroup) GetHeyasHandler(c echo.Context) error {
-	heyaIDs, err := h.hs.GetHeyas(c.Request().Context())
+	heyas, err := h.hs.GetHeyas(c.Request().Context())
 	if err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
-	heyaStringIDs := utils.UuidsToStrings(heyaIDs)
-	res := rest.GetHeyasResponse{
-		HeyaId: heyaStringIDs,
+	var rheyas []*rest.Heya
+	for _, heya := range heyas {
+		rheyas = append(rheyas, &rest.Heya{
+			Id:           heya.ID.String(),
+			Title:        heya.Title,
+			Description:  heya.Description,
+			CreatorId:    heya.CreatorID.String(),
+			LastEditorId: heya.LastEditorID.String(),
+			CreatedAt:    utils.TimeStampToTIme(heya.CreatedAt),
+			UpdatedAt:    utils.TimeStampToTIme(heya.UpdatedAt),
+		})
 	}
+	res := rest.GetHeyasResponse{
+		Heyas: &rest.Heyas{Heyas: rheyas},
+	}
+
 	return utils.SendProtobuf(c, http.StatusOK, &res)
 }
 
@@ -140,12 +152,12 @@ func (h *HeyaHandleGroup) PutHeyasByIDHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 	heya := model.NullHeya{
-		Title:        sql.NullString{String: heyaRequest.Title, Valid: true},
-		Description:  sql.NullString{String: heyaRequest.Description, Valid: true},
+		Title:       sql.NullString{String: heyaRequest.Title, Valid: true},
+		Description: sql.NullString{String: heyaRequest.Description, Valid: true},
 	}
 
 	//TODO:セッションor MiddlewareからUserIDをもってこれるようにする
-	if err = h.hs.PutHeyaByID(c.Request().Context(),&heya, heyaUUID,uuid.Nil); err != nil {
+	if err = h.hs.PutHeyaByID(c.Request().Context(), &heya, heyaUUID, uuid.Nil); err != nil {
 		if errors.Is(err, repository.ErrNoRecordUpdated) {
 			c.Logger().Info(err)
 			return echo.NewHTTPError(http.StatusBadRequest, err)
