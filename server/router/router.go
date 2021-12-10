@@ -11,6 +11,7 @@ import (
 
 // ルーター
 type Router struct {
+	e   *echo.Echo
 	api *APIHandler
 }
 
@@ -20,6 +21,7 @@ func NewRouter(api *APIHandler) *Router {
 	echoApi := e.Group("/api")
 	{
 		echoApi.GET("/ping", func(c echo.Context) error {
+
 			return c.String(http.StatusOK, "pong")
 		})
 		userApi := echoApi.Group("/users")
@@ -44,19 +46,18 @@ func NewRouter(api *APIHandler) *Router {
 		}
 		wsApi := echoApi.Group("/ws")
 		{
-			wsApi.GET("",api.ConnectHeyaWS)
+			wsApi.GET("", api.ConnectHeyaWS)
 		}
 		echoApi.GET("*", func(c echo.Context) error {
 			return c.String(http.StatusNotImplemented, "Not Implemented")
 		})
 
 	}
-	return &Router{api: api}
+	return &Router{e: e, api: api}
 }
 
 func (r *Router) Run() {
-	e := newEcho()
-	e.Logger.Fatal(e.Start(":7070"))
+	r.e.Logger.Fatal(r.e.Start(":7070"))
 }
 
 func newEcho() *echo.Echo {
