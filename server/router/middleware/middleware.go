@@ -7,7 +7,10 @@ import (
 
 type Middleware struct {
 }
-
+type IMIddleware interface {
+	SettraPUserIDMiddleware(next echo.HandlerFunc) echo.HandlerFunc
+	GetUserID(c echo.Context) (string, error)
+}
 func NewMiddleware() *Middleware {
 	return &Middleware{}
 }
