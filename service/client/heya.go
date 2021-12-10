@@ -1,38 +1,20 @@
 package client
 
 import (
-	"errors"
-
 	"github.com/gofrs/uuid"
 )
 
-var (
-	ErrNotFound = errors.New("client not found")
+var heyaClients = map[uuid.UUID][]uuid.UUID{}
 
-	heyaClients = map[uuid.UUID][]uuid.UUID{}
-)
-
-type HeyaClientService interface {
-	GetHeyaClientsIDByHeyaID(heyaID uuid.UUID) []uuid.UUID
-	AddHeyaClient(heyaID uuid.UUID, clientID uuid.UUID)
-	DeleteHeyaClient(heyaID uuid.UUID, clientID uuid.UUID) error
-}
-
-type HeyaClientServiceImpl struct{}
-
-func NewHeyaClientService() HeyaClientService {
-	return &HeyaClientServiceImpl{}
-}
-
-func (cs *HeyaClientServiceImpl) GetHeyaClientsIDByHeyaID(heyaID uuid.UUID) []uuid.UUID {
+func (cs *ClientServiceImpl) GetHeyaClientsIDByHeyaID(heyaID uuid.UUID) []uuid.UUID {
 	return heyaClients[heyaID]
 }
 
-func (cs *HeyaClientServiceImpl) AddHeyaClient(heyaID uuid.UUID, clientID uuid.UUID) {
+func (cs *ClientServiceImpl) AddHeyaClient(heyaID uuid.UUID, clientID uuid.UUID) {
 	heyaClients[heyaID] = append(heyaClients[heyaID], clientID)
 }
 
-func (cs *HeyaClientServiceImpl) DeleteHeyaClient(heyaID uuid.UUID, clientID uuid.UUID) error {
+func (cs *ClientServiceImpl) DeleteHeyaClient(heyaID uuid.UUID, clientID uuid.UUID) error {
 	for i, v := range heyaClients[heyaID] {
 		if v == clientID {
 			heyaClients[heyaID][i] = heyaClients[heyaID][len(heyaClients)-1]

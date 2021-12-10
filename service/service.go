@@ -7,15 +7,15 @@ import (
 )
 
 type Service struct {
-	client.HeyaClientService
+	client.ClientService
 	hiqidashi.HiqidashiService
 	repo repository.Repository
 }
 
 func NewService(repo repository.Repository) *Service {
 	return &Service{
-		HeyaClientService: client.NewHeyaClientService(),
-		HiqidashiService:  hiqidashi.NewHiqidashiService(repo),
-		repo:              repo,
+		ClientService:    client.NewClientService(),
+		HiqidashiService: hiqidashi.NewHiqidashiService(repo),
+		repo:             repo,
 	}
 }
