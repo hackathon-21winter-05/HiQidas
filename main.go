@@ -26,7 +26,10 @@ func main() {
 		log.Panic(err)
 	}
 
-	s := server.NewServer(c)
+	sv, err := server.InjectServer(c)
+	if err != nil {
+		log.Panic(err)
+	}
 
-	s.Run()
+	sv.Run(c)
 }
