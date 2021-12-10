@@ -50,7 +50,22 @@ func (h *HeyaHandleGroup) GetHeyasByIDHandler(c echo.Context) error {
 }
 
 func (h *HeyaHandleGroup) GetUsersByHeyaIDHandler(c echo.Context) error {
-	return nil
+	heyaID := c.Param("heyaID")
+	heyaUUID, err := uuid.FromString(heyaID)
+	if err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusBadRequest, err)
+	}
+
+	userIDs, err := h.hs.GetUsersByHeyaID(c.Request().Context(), heyaUUID)
+	if err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+
+	res := rest.GetHeyasHeyaIdUsersResponse{UserId: utils.UuidsToStrings(userIDs)}
+
+	return utils.SendProtobuf(c, http.StatusOK, &res)
 }
 
 func (h *HeyaHandleGroup) DeleteHeyasByIDHandler(c echo.Context) error {
