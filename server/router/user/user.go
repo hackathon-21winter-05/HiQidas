@@ -5,9 +5,9 @@ import (
 )
 
 type UserHandlerGroup struct {
-	s service.Service
+	s *service.Service
 }
 
-func NewUserHandlerGroup(s service.Service) *UserHandlerGroup {
+func NewUserHandlerGroup(s *service.Service) *UserHandlerGroup {
 	return &UserHandlerGroup{s: s}
 }

@@ -5,9 +5,9 @@ import (
 )
 
 type HeyaHandleGroup struct {
-	hs service.Service
+	hs *service.Service
 }
 
-func NewHeyaHandleGroup(hs service.Service) *HeyaHandleGroup {
+func NewHeyaHandleGroup(hs *service.Service) *HeyaHandleGroup {
 	return &HeyaHandleGroup{hs: hs}
 }
