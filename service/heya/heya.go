@@ -13,6 +13,7 @@ type HeyaService interface {
 	CreateHeya(c context.Context, userID uuid.UUID, title, description string) (*model.Heya, error)
 	DeleteHeya(c context.Context, heyaID uuid.UUID) error
 	GetHeyas(c context.Context) ([]uuid.UUID, error)
+	GetHeyasByID(c context.Context, heyaID uuid.UUID) (*model.Heya, error)
 }
 
 type HeyaServiceImpl struct {
@@ -28,6 +29,18 @@ func (h *HeyaServiceImpl) GetHeyas(c context.Context) ([]uuid.UUID, error) {
 	}
 
 	return heyasID, nil
+}
+
+func (h *HeyaServiceImpl) GetHeyasByID(c context.Context, heyaID uuid.UUID) (*model.Heya, error) {
+	ctx, cancel := utils.CreateTxContext(c)
+	defer cancel()
+
+	heya, err := h.GetHeyasByID(ctx, heyaID)
+	if err != nil {
+		return nil, err
+	}
+
+	return heya, nil
 }
 func (h *HeyaServiceImpl) DeleteHeya(c context.Context, heyaID uuid.UUID) error {
 	ctx, cancel := utils.CreateTxContext(c)
