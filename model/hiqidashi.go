@@ -30,6 +30,6 @@ type NullHiqidashi struct {
 	Title        sql.NullString
 	Description  sql.NullString
 	Drawing      sql.NullString
-	ColorID      sql.NullString
-	UpdatedAt    sql.NullTime
+	ColorCode    sql.NullString
+	UpdatedAt    time.Time
 }

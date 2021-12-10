@@ -11,6 +11,7 @@ import (
 type HiqidashiService interface {
 	GetHiqidashisByHeyaID(c context.Context, heyaID uuid.UUID) ([]*model.Hiqidashi, error)
 	CreateHiqidashi(c context.Context, createrID, heyaID, parentID uuid.UUID) (*model.Hiqidashi, error)
+	UpdateHiqidashiByID(c context.Context, hiqidashi *model.NullHiqidashi) error
 }
 
 type HiqidashiServiceImpl struct {

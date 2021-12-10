@@ -15,9 +15,8 @@ message WsCreateHiqidashi { string parent_id = 1; }
 message WsEditHiqidashi {
   string id = 1;
   google.protobuf.StringValue title = 2;
-  google.protobuf.StringValue description = 3;
-  google.protobuf.StringValue drawing = 4;
-  google.protobuf.StringValue color_code = 5;
+  google.protobuf.StringValue drawing = 3;
+  google.protobuf.StringValue color_code = 4;
 }
 
 message WsDeleteHiqidashi { string id = 1; }
