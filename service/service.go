@@ -1,14 +1,18 @@
 package service
 
 import (
-	"github.com/hackathon-21winter-05/HiQidas/service/heya"
+	"context"
+	"github.com/gofrs/uuid"
+	"github.com/hackathon-21winter-05/HiQidas/model"
+	"github.com/hackathon-21winter-05/HiQidas/repository"
 )
 
 type Service struct {
-	UserService
-	heya.HeyaService
+	repo repository.Repository
 }
 
-func NewService(userService UserService, heyaService heya.HeyaService) *Service {
-	return &Service{UserService: userService, HeyaService: heyaService}
+
+
+func NewService(repo repository.Repository) *Service {
+	return &Service{repo: repo}
 }
