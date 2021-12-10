@@ -20,7 +20,7 @@ func NewRouter(c *config.Config) *Router {
 	r := &Router{
 		e: newEcho(),
 	}
-	_api, err := InjectAPIServer(c)
+	_api, err := InjectAPIHandlers(c)
 	if err != nil {
 		log.Error(err)
 	}
