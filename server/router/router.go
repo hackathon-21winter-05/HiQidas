@@ -12,15 +12,15 @@ import (
 
 // ルーター
 type Router struct {
-	e   *echo.Echo
+	e *echo.Echo
 }
 
 // 新しいルーターを生成
 func NewRouter(c *config.Config) *Router {
 	r := &Router{
-		e:   newEcho(),
+		e: newEcho(),
 	}
-	_api, err :=InjectAPIServer(c)
+	_api, err := InjectAPIServer(c)
 	if err != nil {
 		log.Error(err)
 	}
@@ -33,17 +33,17 @@ func NewRouter(c *config.Config) *Router {
 		})
 		userApi := echoApi.Group("/users")
 		{
-			userApi.GET("",api.GetUsersHandler)
+			userApi.GET("", api.GetUsersHandler)
 		}
 
 		heyaApi := echoApi.Group("/heyas")
 		{
-			heyaApi.GET("",api.GetHeyasHandler)
-			heyaApi.GET("/:heyaID",api.GetHeyaHandler)
-			heyaApi.GET("/:heyaID/users",api.GetUsersByHeyaIDHandler)
-			heyaApi.POST("/",api.PostHeyasHandler)
-			heyaApi.DELETE("/:heyaID",api.DeleteHeyasByIDHandler)
-			heyaApi.PUT("/:heyaID",api.PutHeyasByIDHandler)
+			heyaApi.GET("", api.GetHeyasHandler)
+			heyaApi.GET("/:heyaID", api.GetHeyaHandler)
+			heyaApi.GET("/:heyaID/users", api.GetUsersByHeyaIDHandler)
+			heyaApi.POST("/", api.PostHeyasHandler)
+			heyaApi.DELETE("/:heyaID", api.DeleteHeyasByIDHandler)
+			heyaApi.PUT("/:heyaID", api.PutHeyasByIDHandler)
 		}
 
 		oauthApi := echoApi.Group("/oauth")
@@ -78,17 +78,4 @@ func newEcho() *echo.Echo {
 // ルーターを起動
 func (r *Router) Run() error {
 	return r.e.Start(":7070")
-}
-
-// ルーターのハンドラを設定
-func (r *Router) setHandlers() {
-
-	api := r.e.Group("/api")
-	api.GET("/ping", func(c echo.Context) error {
-		return c.String(http.StatusOK, "pong")
-	})
-
-	api.GET("*", func(c echo.Context) error {
-		return c.String(http.StatusNotImplemented, "Not Implemented")
-	})
 }
