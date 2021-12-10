@@ -45,6 +45,12 @@ func NewRouter(c *config.Config) *Router {
 			heyaApi.PUT("/:heyaID",api.PutHeyasByIDHandler)
 		}
 
+		oauthApi := echoApi.Group("/oauth")
+		{
+			oauthApi.GET("/callback", api.GetOauthCallbackHandler)
+			oauthApi.POST("/code", api.PostOauthCodeHandler)
+		}
+
 		echoApi.GET("*", func(c echo.Context) error {
 			return c.String(http.StatusNotImplemented, "Not Implemented")
 		})
