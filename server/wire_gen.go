@@ -38,7 +38,7 @@ func InjectServer(c *config.Config) (*Server, error) {
 	streamerStreamer := streamer.NewStreamer()
 	wsHandlerGroup := ws.NewWSHandlerGroup(streamerStreamer)
 	apiHandler := router.NewAPIHandler(middlewareMiddleware, heyaHandleGroup, userHandlerGroup, oauthHandlerGroup, wsHandlerGroup)
-	routerRouter := router.NewRouter(apiHandler)
+	routerRouter := router.NewRouter(*apiHandler)
 	server := NewServer(routerRouter, streamerStreamer)
 	return server, nil
 }
