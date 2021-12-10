@@ -63,7 +63,7 @@ func (h *HeyaServiceImpl) DeleteHeya(c context.Context, heyaID uuid.UUID) error 
 		if err := h.repo.DeleteHistoryByHeyaID(ctx, heyaID); err != nil {
 			return err
 		}
-		if err := h.repo.DeleteHiqidashiByHeyaID(ctx, heyaID); err != nil {
+		if err := h.repo.DeleteHiqidashisByHeyaID(ctx, heyaID); err != nil {
 			return err
 		}
 		return nil
@@ -91,11 +91,12 @@ func (h *HeyaServiceImpl) CreateHeya(c context.Context, userID uuid.UUID, title,
 		UpdatedAt:    now,
 	}
 
-	hiqidashi := &model.Hiqidashi{
+	rootHiqidashi := &model.Hiqidashi{
 		ID:           utils.GetUUID(),
 		HeyaID:       heyaID,
 		CreatorID:    userID,
 		LastEditorID: userID,
+		ParentID: uuid.NullUUID{UUID: uuid.Nil,Valid: false},
 		Title:        title,
 		Description:  description,
 		CreatedAt:    now,
@@ -107,7 +108,7 @@ func (h *HeyaServiceImpl) CreateHeya(c context.Context, userID uuid.UUID, title,
 			return err
 		}
 
-		if err := h.repo.CreateHiqidashi(ctx, hiqidashi); err != nil {
+		if err := h.repo.CreateHiqidashi(ctx, rootHiqidashi); err != nil {
 			return err
 		}
 		return nil
