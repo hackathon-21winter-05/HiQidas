@@ -20,10 +20,11 @@ func NewRouter(c *config.Config) *Router {
 	r := &Router{
 		e:   newEcho(),
 	}
-	api,err :=InjectAPIServer(c)
+	_api, err :=InjectAPIServer(c)
 	if err != nil {
 		log.Error(err)
 	}
+	api := *_api
 
 	echoApi := r.e.Group("/api")
 	{
@@ -38,7 +39,7 @@ func NewRouter(c *config.Config) *Router {
 		heyaApi := echoApi.Group("/heyas")
 		{
 			heyaApi.GET("",api.GetHeyasHandler)
-			heyaApi.GET("/:heyaID",api.GetHeyasByIDHandler)
+			heyaApi.GET("/:heyaID",api.GetHeyaHandler)
 			heyaApi.GET("/:heyaID/users",api.GetUsersByHeyaIDHandler)
 			heyaApi.POST("/",api.PostHeyasHandler)
 			heyaApi.DELETE("/:heyaID",api.DeleteHeyasByIDHandler)

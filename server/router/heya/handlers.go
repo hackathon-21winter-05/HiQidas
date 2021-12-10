@@ -12,6 +12,7 @@ import (
 	"net/http"
 )
 
+// GetHeyasHandler GET /heyas
 func (h *HeyaHandleGroup) GetHeyasHandler(c echo.Context) error {
 	heyaIDs, err := h.hs.GetHeyas(c.Request().Context())
 	if err != nil {
@@ -25,7 +26,8 @@ func (h *HeyaHandleGroup) GetHeyasHandler(c echo.Context) error {
 	return utils.SendProtobuf(c, http.StatusOK, &res)
 }
 
-func (h *HeyaHandleGroup) GetHeyasByIDHandler(c echo.Context) error {
+// GetHeyaHandler GET /heyas/:heyaID
+func (h *HeyaHandleGroup) GetHeyaHandler(c echo.Context) error {
 	heyaID := c.Param("heyaID")
 	heyaUUID, err := uuid.FromString(heyaID)
 	if err != nil {
@@ -51,6 +53,7 @@ func (h *HeyaHandleGroup) GetHeyasByIDHandler(c echo.Context) error {
 	return utils.SendProtobuf(c, http.StatusOK, &res)
 }
 
+// GetUsersByHeyaIDHandler GET /heyas/:heyaID/users
 func (h *HeyaHandleGroup) GetUsersByHeyaIDHandler(c echo.Context) error {
 	heyaID := c.Param("heyaID")
 	heyaUUID, err := uuid.FromString(heyaID)
@@ -70,6 +73,7 @@ func (h *HeyaHandleGroup) GetUsersByHeyaIDHandler(c echo.Context) error {
 	return utils.SendProtobuf(c, http.StatusOK, &res)
 }
 
+// DeleteHeyasByIDHandler DELETE /heyas/:heyaID
 func (h *HeyaHandleGroup) DeleteHeyasByIDHandler(c echo.Context) error {
 	heyaID := c.Param("heyaID")
 	heyaUUID, err := uuid.FromString(heyaID)
@@ -90,6 +94,7 @@ func (h *HeyaHandleGroup) DeleteHeyasByIDHandler(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
+// PostHeyasHandler POST /heyas
 func (h *HeyaHandleGroup) PostHeyasHandler(c echo.Context) error {
 	heyaRequest := rest.PostHeyasRequest{}
 
@@ -119,6 +124,7 @@ func (h *HeyaHandleGroup) PostHeyasHandler(c echo.Context) error {
 	return utils.SendProtobuf(c, http.StatusCreated, &heyaResponse)
 }
 
+// PutHeyasByIDHandler PUT /heyas/:heyaID
 func (h *HeyaHandleGroup) PutHeyasByIDHandler(c echo.Context) error {
 	heyaID := c.Param("heyaID")
 	heyaUUID, err := uuid.FromString(heyaID)
