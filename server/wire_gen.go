@@ -45,4 +45,4 @@ func InjectServer(c *config.Config) (*Server, error) {
 
 // wire.go:
 
-var SuperSet = wire.NewSet(repository.NewGormRepository, wire.Struct(new(repository.GormRepository), "*"), service.NewService, user.NewUserHandlerGroup, heya.NewHeyaHandleGroup, oauth.NewOauthHandlerGroup, wire.NewSet(traq.NewAPIClient, traq.NewConfiguration), middleware.NewMiddleware, ws.NewWSHandlerGroup, streamer.NewStreamer, router.NewAPIHandler, router.NewRouter, NewServer)
+var SuperSet = wire.NewSet(repository.NewGormRepository, wire.Struct(new(repository.GormRepository), "*"), service.NewService, user.NewUserHandlerGroup, wire.Bind(new(user.UserHandler), new(*user.UserHandlerGroup)), heya.NewHeyaHandleGroup, wire.Bind(new(heya.HeyaHandler), new(*heya.HeyaHandleGroup)), oauth.NewOauthHandlerGroup, wire.Bind(new(oauth.OauthHandler), new(*oauth.OauthHandlerGroup)), wire.NewSet(traq.NewAPIClient, traq.NewConfiguration), middleware.NewMiddleware, wire.Bind(new(middleware.IMIddleware), new(*middleware.Middleware)), ws.NewWSHandlerGroup, wire.Bind(new(ws.WSHandler), new(*ws.WSHandlerGroup)), streamer.NewStreamer, router.NewAPIHandler, router.NewRouter, NewServer)
