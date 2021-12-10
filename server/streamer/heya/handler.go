@@ -29,6 +29,13 @@ func (hs *HeyaStreamer) heyaWSHandler(mes *heyaCliMessage) error {
 		}
 		return nil
 
+	case *ws.WsHeyaData_DeleteHiqidashi:
+		err := hs.deleteHiqidashiHandler(mes.heyaid, WsHeyaData.GetDeleteHiqidashi())
+		if err != nil {
+			_ = hs.sendErrorMes(mes.clientID, err.Error())
+		}
+		return nil
+
 	default:
 		return nil
 	}

@@ -78,3 +78,22 @@ func (hs *HiqidashiServiceImpl) UpdateHiqidashiByID(c context.Context, hiqidashi
 
 	return nil
 }
+
+func (hs *HiqidashiServiceImpl) DeleteHiqidashiByID(c context.Context, id uuid.UUID) error {
+	ctx, cancel := utils.CreateTxContext(c)
+	defer cancel()
+
+	err := hs.repo.Do(ctx, nil, func(ctx context.Context) error {
+		err := hs.repo.DeleteHiqidashiByID(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

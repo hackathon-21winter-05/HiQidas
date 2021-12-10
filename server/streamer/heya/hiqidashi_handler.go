@@ -90,3 +90,27 @@ func (hs *HeyaStreamer) editHiqidashiHandler(userID, heyaID uuid.UUID, body *ws.
 
 	return nil
 }
+
+func (hs *HeyaStreamer) deleteHiqidashiHandler(heyaID uuid.UUID, body *ws.WsDeleteHiqidashi) error {
+	uuid, err := uuid.FromString(body.GetId())
+	if err != nil {
+		return err
+	}
+
+	err = hs.ser.DeleteHiqidashiByID(context.Background(), uuid)
+	if err != nil {
+		return err
+	}
+
+	err = hs.sendHeyaMes(heyaID,
+		&ws.WsHeyaData{
+			Payload: &ws.WsHeyaData_DeleteHiqidashi{
+				DeleteHiqidashi: body,
+			},
+		})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
