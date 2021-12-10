@@ -2,37 +2,66 @@ package router
 
 import (
 	"github.com/gorilla/sessions"
-	"github.com/hackathon-21winter-05/HiQidas/config"
-	"github.com/hackathon-21winter-05/HiQidas/server/streamer"
-	"github.com/hackathon-21winter-05/HiQidas/service"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
+	"net/http"
 )
 
 // ルーター
 type Router struct {
 	e   *echo.Echo
-	hgs []HandlerGroup
+	api *APIHandler
 }
 
-// 新しいルーターを生成
-func NewRouter(c *config.Config, s *streamer.Streamer, ser *service.Service) *Router {
-	r := &Router{
-		e:   newEcho(),
-		hgs: newHandlerGroups(c, ser, s),
+func NewRouter(api *APIHandler) *Router {
+	e := newEcho()
+
+	echoApi := e.Group("/api")
+	{
+		echoApi.GET("/ping", func(c echo.Context) error {
+
+			return c.String(http.StatusOK, "pong")
+		})
+		userApi := echoApi.Group("/users")
+		{
+			userApi.GET("", api.GetUsersHandler)
+		}
+
+		heyaApi := echoApi.Group("/heyas")
+		{
+			heyaApi.GET("", api.GetHeyasHandler)
+			heyaApi.GET("/:heyaID", api.GetHeyaHandler)
+			heyaApi.GET("/:heyaID/users", api.GetUsersByHeyaIDHandler)
+			heyaApi.POST("/", api.PostHeyasHandler)
+			heyaApi.DELETE("/:heyaID", api.DeleteHeyasByIDHandler)
+			heyaApi.PUT("/:heyaID", api.PutHeyasByIDHandler)
+		}
+
+		oauthApi := echoApi.Group("/oauth")
+		{
+			oauthApi.GET("/callback", api.GetOauthCallbackHandler)
+			oauthApi.POST("/code", api.PostOauthCodeHandler)
+		}
+		wsApi := echoApi.Group("/ws")
+		{
+			wsApi.GET("", api.ConnectHeyaWS)
+		}
+		echoApi.GET("*", func(c echo.Context) error {
+			return c.String(http.StatusNotImplemented, "Not Implemented")
+		})
+
 	}
-
-	r.setHandlers()
-
-	return r
+	return &Router{e: e, api: api}
 }
 
-// 設定済みの新しいEchoインスタンスを生成
+func (r *Router) Run() {
+	r.e.Logger.Fatal(r.e.Start(":7070"))
+}
+
 func newEcho() *echo.Echo {
 	e := echo.New()
-
 	// ログの設定
 	e.Logger.SetLevel(log.DEBUG)
 	e.Logger.SetHeader("${time_rfc3339} ${prefix} ${short_file} ${line} |")
@@ -42,9 +71,4 @@ func newEcho() *echo.Echo {
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
 
 	return e
-}
-
-// ルーターを起動
-func (r *Router) Run() error {
-	return r.e.Start(":7070")
 }

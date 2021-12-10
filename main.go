@@ -1,13 +1,11 @@
 package main
 
 import (
+	"github.com/hackathon-21winter-05/HiQidas/server"
 	"log"
 	"time"
 
 	"github.com/hackathon-21winter-05/HiQidas/config"
-	"github.com/hackathon-21winter-05/HiQidas/repository"
-	"github.com/hackathon-21winter-05/HiQidas/server"
-	"github.com/hackathon-21winter-05/HiQidas/service"
 )
 
 func init() {
@@ -28,14 +26,10 @@ func main() {
 		log.Panic(err)
 	}
 
-	repo, err := repository.NewGormRepository(c)
+	sv, err := server.InjectServer(c)
 	if err != nil {
 		log.Panic(err)
 	}
 
-	ser := service.NewService(repo)
-
-	s := server.NewServer(c, ser)
-
-	s.Run()
+	sv.Run(c)
 }

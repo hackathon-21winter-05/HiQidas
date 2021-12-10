@@ -18,11 +18,7 @@ func NewOauthHandlerGroup(c *config.Config, cli *traq.APIClient) *OauthHandlerGr
 	}
 }
 
-func (oh *OauthHandlerGroup) Path() string {
-	return "/oauth"
-}
-
-func (oh *OauthHandlerGroup) Setup(oauthApi *echo.Group) {
-	oauthApi.GET("/callback", oh.GetOauthCallbackHandler)
-	oauthApi.POST("/code", oh.PostOauthCodeHandler)
+type OauthHandler interface {
+	PostOauthCodeHandler(c echo.Context) error
+	GetOauthCallbackHandler(c echo.Context) error
 }

@@ -6,19 +6,13 @@ import (
 )
 
 type UserHandlerGroup struct {
-	us service.UserService
+	s *service.Service
 }
 
-func NewUserHandlerGroup(us service.UserService) *UserHandlerGroup {
-	return &UserHandlerGroup{
-		us: us,
-	}
+func NewUserHandlerGroup(s *service.Service) *UserHandlerGroup {
+	return &UserHandlerGroup{s: s}
 }
 
-func (uh *UserHandlerGroup) Path() string {
-	return "/users"
-}
-
-func (uh *UserHandlerGroup) Setup(usersApi *echo.Group) {
-	usersApi.GET("", uh.GetUsersHandler)
+type UserHandler interface {
+	GetUsersHandler(c echo.Context) error
 }
