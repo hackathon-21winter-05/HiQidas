@@ -1,6 +1,8 @@
 package heya
 
 import (
+	"errors"
+
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/server/protobuf/ws"
 	"google.golang.org/protobuf/proto"
@@ -11,6 +13,7 @@ func (hs *HeyaStreamer) heyaWSHandler(mes *heyaCliMessage) error {
 
 	err := proto.Unmarshal(mes.body, WsHeyaData)
 	if err != nil {
+		_ = hs.sendErrorMes(mes.clientID, err.Error())
 		return err
 	}
 
@@ -19,6 +22,7 @@ func (hs *HeyaStreamer) heyaWSHandler(mes *heyaCliMessage) error {
 		err := hs.createHiqidashiHandler(mes.userID, mes.heyaid, WsHeyaData.GetCreateHiqidashi())
 		if err != nil {
 			_ = hs.sendErrorMes(mes.clientID, err.Error())
+			return err
 		}
 		return nil
 
@@ -26,6 +30,7 @@ func (hs *HeyaStreamer) heyaWSHandler(mes *heyaCliMessage) error {
 		err := hs.editHiqidashiHandler(mes.userID, mes.heyaid, WsHeyaData.GetEditHiqidashi())
 		if err != nil {
 			_ = hs.sendErrorMes(mes.clientID, err.Error())
+			return err
 		}
 		return nil
 
@@ -33,11 +38,13 @@ func (hs *HeyaStreamer) heyaWSHandler(mes *heyaCliMessage) error {
 		err := hs.deleteHiqidashiHandler(mes.heyaid, WsHeyaData.GetDeleteHiqidashi())
 		if err != nil {
 			_ = hs.sendErrorMes(mes.clientID, err.Error())
+			return err
 		}
 		return nil
 
 	default:
-		return nil
+		_ = hs.sendErrorMes(mes.clientID, "unknown payload")
+		return errors.New("unknown payload")
 	}
 }
 
