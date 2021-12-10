@@ -6,9 +6,9 @@ import "google/protobuf/wrappers.proto";
 
 option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/ws";
 
-message WsGetHiqidashi { Hiqidashi hiqidashi = 1; }
+message WsSendHiqidashi { Hiqidashi hiqidashi = 1; }
 
-message WsGetHiqidashis { repeated Hiqidashi hiqidashi = 1; }
+message WsSendHiqidashis { repeated Hiqidashi hiqidashi = 1; }
 
 message WsCreateHiqidashi {
   string parent_id = 1;
