@@ -11,8 +11,7 @@ import (
 )
 
 func (h *HeyaHandleGroup) GetHeyasHandler(c echo.Context) error {
-
-	heyaIDs, err := h.hs.GetHeyas()
+	heyaIDs, err := h.hs.GetHeyas(c.Request().Context(),)
 	res := rest.GetHeyasResponse{
 		HeyaId: nil,
 	}

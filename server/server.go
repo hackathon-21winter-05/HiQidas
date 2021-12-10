@@ -1,12 +1,11 @@
 package server
 
 import (
+	"github.com/hackathon-21winter-05/HiQidas/config"
 	"log"
 
-	"github.com/hackathon-21winter-05/HiQidas/config"
 	"github.com/hackathon-21winter-05/HiQidas/server/router"
 	"github.com/hackathon-21winter-05/HiQidas/server/streamer"
-	"github.com/hackathon-21winter-05/HiQidas/service"
 )
 
 // サーバー
@@ -16,9 +15,9 @@ type Server struct {
 }
 
 // 新たなサーバーを取得
-func NewServer(c *config.Config, ser *service.Service) *Server {
+func NewServer(c *config.Config) *Server {
 	s := streamer.NewStreamer()
-	r := router.NewRouter(c, s, ser)
+	r := router.NewRouter(c)
 
 	server := &Server{
 		r: r,
