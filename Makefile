@@ -51,6 +51,10 @@ protobuf-doc:
 	@protoc --doc_out=html,rest.html:docs/protobuf_schema protobuf/rest/*.proto
 	@protoc --doc_out=html,ws.html:docs/protobuf_schema protobuf/ws/*.proto
 
+.PHONY: wire
+wire:
+	@cd server && wire
+
 .PHONY: tbls
 tbls:
 	@rm -rf docs/db_schema
