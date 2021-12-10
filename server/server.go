@@ -1,7 +1,6 @@
 package server
 
 import (
-	"github.com/hackathon-21winter-05/HiQidas/config"
 	"github.com/hackathon-21winter-05/HiQidas/server/router"
 	"github.com/hackathon-21winter-05/HiQidas/server/streamer"
 )
@@ -17,7 +16,7 @@ func NewServer(r *router.Router, s *streamer.Streamer) *Server {
 }
 
 // サーバーを起動
-func (s *Server) Run(c *config.Config) {
+func (s *Server) Run() {
 	s.s.Run()
 	s.r.Run()
 }
