@@ -1,6 +1,7 @@
 package heya
 
 import (
+	"database/sql"
 	"errors"
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
@@ -30,7 +31,7 @@ func (h *HeyaHandleGroup) GetHeyasByIDHandler(c echo.Context) error {
 		c.Logger().Info(err)
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
-	heya, err := h.hs.GetHeyasByID(c.Request().Context(), heyaUUID)
+	heya, err := h.hs.GetHeyaByID(c.Request().Context(), heyaUUID)
 	if err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
@@ -124,8 +125,20 @@ func (h *HeyaHandleGroup) PutHeyasByIDHandler(c echo.Context) error {
 		c.Logger().Info(err)
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
+
+	heyaRequest := rest.PutHeyasHeyaIdRequest{}
+
+	if err := utils.BindProtobuf(c, &heyaRequest); err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusBadRequest, err)
+	}
+	heya := model.NullHeya{
+		Title:        sql.NullString{String: heyaRequest.Title, Valid: true},
+		Description:  sql.NullString{String: heyaRequest.Description, Valid: true},
+	}
+
 	//TODO:セッションor MiddlewareからUserIDをもってこれるようにする
-	if err = h.hs.PutHeyasByID(c.Request().Context(), heyaUUID,uuid.Nil); err != nil {
+	if err = h.hs.PutHeyaByID(c.Request().Context(),&heya, heyaUUID,uuid.Nil); err != nil {
 		if errors.Is(err, model.ErrNoRecordUpdated) {
 			c.Logger().Info(err)
 			return echo.NewHTTPError(http.StatusBadRequest, err)

@@ -2,6 +2,7 @@ package heya
 
 import (
 	"context"
+	"database/sql"
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
 	"github.com/hackathon-21winter-05/HiQidas/repository"
@@ -13,8 +14,9 @@ type HeyaService interface {
 	CreateHeya(c context.Context, userID uuid.UUID, title, description string) (*model.Heya, error)
 	DeleteHeya(c context.Context, heyaID uuid.UUID) error
 	GetHeyas(c context.Context) ([]uuid.UUID, error)
-	GetHeyasByID(c context.Context, heyaID uuid.UUID) (*model.Heya, error)
+	GetHeyaByID(c context.Context, heyaID uuid.UUID) (*model.Heya, error)
 	GetUsersByHeyaID(c context.Context, heyaID uuid.UUID) ([]uuid.UUID, error)
+	PutHeyaByID(c context.Context, heya *model.NullHeya, heyaID, userID uuid.UUID) error
 }
 
 type HeyaServiceImpl struct {
@@ -32,7 +34,7 @@ func (h *HeyaServiceImpl) GetHeyas(c context.Context) ([]uuid.UUID, error) {
 	return heyasID, nil
 }
 
-func (h *HeyaServiceImpl) GetHeyasByID(c context.Context, heyaID uuid.UUID) (*model.Heya, error) {
+func (h *HeyaServiceImpl) GetHeyaByID(c context.Context, heyaID uuid.UUID) (*model.Heya, error) {
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
 
@@ -115,6 +117,31 @@ func (h *HeyaServiceImpl) CreateHeya(c context.Context, userID uuid.UUID, title,
 	}
 
 	return heya, nil
+}
+
+func (h *HeyaServiceImpl) PutHeyaByID(c context.Context, heya *model.NullHeya, heyaID, userID uuid.UUID) error {
+	ctx, cancel := utils.CreateTxContext(c)
+	defer cancel()
+
+	err := h.repo.Do(ctx, nil, func(ctx context.Context) error {
+		now := time.Now()
+		nullHeya := model.NullHeya{
+			ID:           heyaID,
+			Title:        heya.Title,
+			Description:  heya.Description,
+			LastEditorID: userID,
+			UpdatedAt:    sql.NullTime{Time: now, Valid: true},
+		}
+		if err := h.repo.UpdateHeyaByID(ctx, &nullHeya); err != nil {
+				return err
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func NewHeyaServiceImpl(repo repository.Repository) *HeyaServiceImpl {
