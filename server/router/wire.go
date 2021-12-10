@@ -34,7 +34,7 @@ var SuperSet = wire.NewSet(
 	streamer.NewStreamer,
 	middleware.NewMiddleware,
 	)
-func InjectAPIServer(c *config.Config) (*API,error) {
+func injectAPIServer(c *config.Config) (*API,error) {
 	wire.Build(SuperSet)
 
 	return nil,nil

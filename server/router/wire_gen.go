@@ -23,7 +23,7 @@ import (
 
 // Injectors from wire.go:
 
-func injectAPIServer(c *config.Config) (*API, error) {
+func InjectAPIServer(c *config.Config) (*API, error) {
 	middlewareMiddleware := middleware.NewMiddleware()
 	repositoryRepository, err := repository.NewGormRepository(c)
 	if err != nil {

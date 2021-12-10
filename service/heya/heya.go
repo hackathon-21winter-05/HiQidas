@@ -36,7 +36,7 @@ func (h *HeyaServiceImpl) GetHeyasByID(c context.Context, heyaID uuid.UUID) (*mo
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
 
-	heya, err := h.GetHeyasByID(ctx, heyaID)
+	heya, err := h.repo.GetHeyaByID(ctx, heyaID)
 	if err != nil {
 		return nil, err
 	}
