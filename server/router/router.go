@@ -14,7 +14,7 @@ type Router struct {
 	api *APIHandler
 }
 
-func NewRouter(api APIHandler) *Router {
+func NewRouter(api *APIHandler) *Router {
 	e := newEcho()
 
 	echoApi := e.Group("/api")
@@ -51,7 +51,7 @@ func NewRouter(api APIHandler) *Router {
 		})
 
 	}
-	return &Router{api: &api}
+	return &Router{api: api}
 }
 
 func (r *Router) Run() {
