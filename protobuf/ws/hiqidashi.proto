@@ -8,7 +8,7 @@ option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/ws";
 
 message WsSendHiqidashi { Hiqidashi hiqidashi = 1; }
 
-message WsSendHiqidashis { repeated Hiqidashi hiqidashi = 1; }
+message WsSendHiqidashis { repeated Hiqidashi hiqidashis = 1; }
 
 message WsCreateHiqidashi { string parent_id = 1; }
 
@@ -25,7 +25,7 @@ message WsDeleteHiqidashi { string id = 1; }
 message Hiqidashi {
   string id = 1;
   string creator_id = 2;
-  string parent_id = 3;
+  google.protobuf.StringValue parent_id = 3;
   string title = 4;
   string description = 5;
   google.protobuf.StringValue drawing = 6;
