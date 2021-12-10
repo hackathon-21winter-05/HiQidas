@@ -11,11 +11,16 @@ import (
 )
 
 func (h *HeyaHandleGroup) GetHeyasHandler(c echo.Context) error {
-	heyaIDs, err := h.hs.GetHeyas(c.Request().Context(),)
-	res := rest.GetHeyasResponse{
-		HeyaId: nil,
+	heyaIDs, err := h.hs.GetHeyas(c.Request().Context())
+	if err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
-	return nil
+	heyaStringIDs := utils.UuidsToStrings(heyaIDs)
+	res := rest.GetHeyasResponse{
+		HeyaId: heyaStringIDs,
+	}
+	return utils.SendProtobuf(c, http.StatusOK, &res)
 }
 
 func (h *HeyaHandleGroup) GetHeyasByIDHandler(c echo.Context) error {
