@@ -1,10 +1,11 @@
-// +build wireinject
-package router
+//+build wireinject
+package server
 
 import (
 	"github.com/google/wire"
 	"github.com/hackathon-21winter-05/HiQidas/config"
 	"github.com/hackathon-21winter-05/HiQidas/repository"
+	"github.com/hackathon-21winter-05/HiQidas/server/router"
 	heya2 "github.com/hackathon-21winter-05/HiQidas/server/router/heya"
 	"github.com/hackathon-21winter-05/HiQidas/server/router/middleware"
 	"github.com/hackathon-21winter-05/HiQidas/server/router/oauth"
@@ -26,7 +27,7 @@ var SuperSet = wire.NewSet(
 	service.NewUserServiceImpl,
 	wire.Bind(new(service.UserService),new(*service.UserServiceImpl)),
 
-	NewAPI,
+	router.NewAPI,
 	heya2.NewHeyaHandleGroup,
 	user2.NewUserHandlerGroup,
 	ws.NewWSHandlerGroup,
@@ -36,8 +37,8 @@ var SuperSet = wire.NewSet(
 	middleware.NewMiddleware,
 	)
 
-func injectAPIHandlers(c *config.Config) (*APIHandlers,error) {
-	wire.Build(superSet)
+func injectAPIHandlers(c *config.Config) (*router.APIHandlers,error) {
+	wire.Build(SuperSet)
 
 	return nil,nil
 }
