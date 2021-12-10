@@ -118,5 +118,21 @@ func (h *HeyaHandleGroup) PostHeyasHandler(c echo.Context) error {
 }
 
 func (h *HeyaHandleGroup) PutHeyasByIDHandler(c echo.Context) error {
-	return nil
+	heyaID := c.Param("heyaID")
+	heyaUUID, err := uuid.FromString(heyaID)
+	if err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusBadRequest, err)
+	}
+
+	if err = h.hs.PutHeyasByID(c.Request().Context(), heyaUUID); err != nil {
+		if errors.Is(err, model.ErrNoRecordUpdated) {
+			c.Logger().Info(err)
+			return echo.NewHTTPError(http.StatusBadRequest, err)
+		}
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+
+	return c.NoContent(http.StatusOK)
 }
