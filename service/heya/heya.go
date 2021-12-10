@@ -13,7 +13,7 @@ import (
 type HeyaService interface {
 	CreateHeya(c context.Context, userID uuid.UUID, title, description string) (*model.Heya, error)
 	DeleteHeya(c context.Context, heyaID uuid.UUID) error
-	GetHeyas(c context.Context) ([]model.Heya, error)
+	GetHeyas(c context.Context) ([]*model.Heya, error)
 	GetHeyaByID(c context.Context, heyaID uuid.UUID) (*model.Heya, error)
 	GetUsersByHeyaID(c context.Context, heyaID uuid.UUID) ([]uuid.UUID, error)
 	PutHeyaByID(c context.Context, heya *model.NullHeya, heyaID, userID uuid.UUID) error
@@ -23,15 +23,15 @@ type HeyaServiceImpl struct {
 	repo repository.Repository
 }
 
-func (h *HeyaServiceImpl) GetHeyas(c context.Context) ([]model.Heya, error) {
+func (h *HeyaServiceImpl) GetHeyas(c context.Context) ([]*model.Heya, error) {
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
-	heyasID, err := h.repo.GetHeyas(ctx)
+	heyas, err := h.repo.GetHeyas(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return heyasID, nil
+	return heyas, nil
 }
 
 func (h *HeyaServiceImpl) GetHeyaByID(c context.Context, heyaID uuid.UUID) (*model.Heya, error) {
