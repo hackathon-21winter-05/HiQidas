@@ -9,7 +9,7 @@ import (
 )
 
 func (uh *UserHandlerGroup) GetUsersHandler(c echo.Context) error {
-	userIDs, err := uh.us.GetUsersID()
+	userIDs, err := uh.s.GetUsersID()
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
