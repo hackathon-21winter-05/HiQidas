@@ -32,12 +32,12 @@ func NewRouter(c *config.Config) *Router {
 		})
 		userApi := echoApi.Group("/users")
 		{
-			userApi.GET("/",api.GetUsersHandler)
+			userApi.GET("",api.GetUsersHandler)
 		}
 
 		heyaApi := echoApi.Group("/heyas")
 		{
-			heyaApi.GET("/",api.GetHeyasHandler)
+			heyaApi.GET("",api.GetHeyasHandler)
 			heyaApi.GET("/:heyaID",api.GetHeyasByIDHandler)
 			heyaApi.GET("/:heyaID/users",api.GetUsersByHeyaIDHandler)
 			heyaApi.POST("/",api.PostHeyasHandler)
