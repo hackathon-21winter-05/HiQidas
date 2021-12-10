@@ -17,7 +17,7 @@ message WsEditHiqidashi {
   google.protobuf.StringValue title = 2;
   google.protobuf.StringValue description = 3;
   google.protobuf.StringValue drawing = 4;
-  google.protobuf.StringValue color_id = 5;
+  google.protobuf.StringValue color_code = 5;
 }
 
 message WsDeleteHiqidashi { string id = 1; }
@@ -25,11 +25,10 @@ message WsDeleteHiqidashi { string id = 1; }
 // Hiqidashiの基本的な情報
 message Hiqidashi {
   string id = 1;
-  string parent_id = 2;
-  string title = 3;
-  string description = 4;
-  google.protobuf.StringValue drawing = 5;
-  string color_id = 6;
-  string created_at = 7;
-  string updated_at = 8;
+  string creator_id = 2;
+  string parent_id = 3;
+  string title = 4;
+  string description = 5;
+  google.protobuf.StringValue drawing = 6;
+  string color_code = 7;
 }
