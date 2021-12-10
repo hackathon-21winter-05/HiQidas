@@ -39,7 +39,7 @@ func (repo *GormRepository) GetHeyaByID(ctx context.Context, id uuid.UUID) (*mod
 	var heya *model.Heya
 
 	err = db.
-		Where("db = ?", id).
+		Where("id = ?", id).
 		First(&heya).Error
 	if err != nil {
 		return nil, fmt.Errorf("failed to get heya :%w", err)
