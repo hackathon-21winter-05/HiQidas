@@ -1,32 +1,25 @@
 package streamer
 
 import (
-	"log"
-
-	"github.com/gofrs/uuid"
+	"github.com/hackathon-21winter-05/HiQidas/server/streamer/heya"
+	"github.com/hackathon-21winter-05/HiQidas/service"
+	"github.com/labstack/echo/v4"
 )
 
 type Streamer struct {
-	clients       map[uuid.UUID]*client
-	receiveBuffer chan *cliMessage
+	*heya.HeyaStreamer
 }
 
-func NewStreamer() *Streamer {
-	s := &Streamer{
-		clients:       map[uuid.UUID]*client{},
-		receiveBuffer: make(chan *cliMessage),
-	}
-
-	return s
-}
-
-func (s *Streamer) listen() {
-	for {
-		msg := <-s.receiveBuffer
-		log.Print(*msg)
+func NewStreamer(ser *service.Service) *Streamer {
+	return &Streamer{
+		HeyaStreamer: heya.NewHeyaStreamer(ser),
 	}
 }
 
 func (s *Streamer) Run() {
-	go s.listen()
+	s.HeyaStreamer.Listen()
+}
+
+func (s *Streamer) ConnectHeyaWS(c echo.Context) error {
+	return s.HeyaStreamer.ConnectHeyaWS(c)
 }

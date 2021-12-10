@@ -17,7 +17,7 @@ type Server struct {
 
 // 新たなサーバーを取得
 func NewServer(c *config.Config, ser *service.Service) *Server {
-	s := streamer.NewStreamer()
+	s := streamer.NewStreamer(ser)
 	r := router.NewRouter(c, s, ser)
 
 	server := &Server{
@@ -30,6 +30,6 @@ func NewServer(c *config.Config, ser *service.Service) *Server {
 
 // サーバーを起動
 func (s *Server) Run() {
-	s.s.Run()
+	go s.s.Run()
 	log.Panic(s.r.Run())
 }
