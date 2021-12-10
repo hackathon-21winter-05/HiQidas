@@ -96,7 +96,7 @@ func (h *HeyaHandleGroup) PostHeyasHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
-	//TODO:セッションからUserIDをもってこれるようにする
+	//TODO:セッションor MiddlewareからUserIDをもってこれるようにする
 	heya, err := h.hs.CreateHeya(c.Request().Context(), uuid.Nil, heyaRequest.Title, heyaRequest.Description)
 	if err != nil {
 		c.Logger().Error(err)
@@ -124,8 +124,8 @@ func (h *HeyaHandleGroup) PutHeyasByIDHandler(c echo.Context) error {
 		c.Logger().Info(err)
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
-
-	if err = h.hs.PutHeyasByID(c.Request().Context(), heyaUUID); err != nil {
+	//TODO:セッションor MiddlewareからUserIDをもってこれるようにする
+	if err = h.hs.PutHeyasByID(c.Request().Context(), heyaUUID,uuid.Nil); err != nil {
 		if errors.Is(err, model.ErrNoRecordUpdated) {
 			c.Logger().Info(err)
 			return echo.NewHTTPError(http.StatusBadRequest, err)
