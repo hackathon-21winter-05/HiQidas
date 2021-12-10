@@ -30,7 +30,7 @@ var SuperSet = wire.NewSet(
 	wire.Bind(new(oauth.OauthHandler),new(*oauth.OauthHandlerGroup)),
 	wire.NewSet(traq.NewAPIClient, traq.NewConfiguration),
 	middleware.NewMiddleware,
-	wire.Bind(new(middleware.IMIddleware),new(*middleware.Middleware)),
+	wire.Bind(new(middleware.IMiddleware),new(*middleware.Middleware)),
 	ws.NewWSHandlerGroup,
 	wire.Bind(new(ws.WSHandler),new(*ws.WSHandlerGroup)),
 	streamer.NewStreamer,
