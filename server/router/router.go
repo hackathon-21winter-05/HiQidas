@@ -10,7 +10,7 @@ import (
 
 // ルーター
 type Router struct {
-	e *echo.Echo
+	e   *echo.Echo
 	Api *APIHandler
 }
 
@@ -19,7 +19,7 @@ func NewRouter(e *echo.Echo, api *APIHandler) *Router {
 }
 
 // 設定済みの新しいEchoインスタンスを生成
-func newEcho() *echo.Echo {
+func (r *Router) NewEcho() *echo.Echo {
 	e := echo.New()
 
 	// ログの設定

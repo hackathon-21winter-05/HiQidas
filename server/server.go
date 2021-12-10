@@ -17,13 +17,13 @@ type Server struct {
 
 // 新たなサーバーを取得
 func NewServer(c *config.Config) *Server {
-	e := echo.New()
 	server, err := injectServer(c)
 	if err != nil {
 		log.Panic(err)
 	}
+	e := server.r.NewEcho()
 
-	echoApi := e.Group("/r")
+	echoApi := e.Group("/api")
 	{
 		echoApi.GET("/ping", func(c echo.Context) error {
 			return c.String(http.StatusOK, "pong")
