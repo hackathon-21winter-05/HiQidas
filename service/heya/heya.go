@@ -14,6 +14,7 @@ type HeyaService interface {
 	DeleteHeya(c context.Context, heyaID uuid.UUID) error
 	GetHeyas(c context.Context) ([]uuid.UUID, error)
 	GetHeyasByID(c context.Context, heyaID uuid.UUID) (*model.Heya, error)
+	GetUsersByHeyaID(c context.Context, heyaID uuid.UUID) ([]uuid.UUID, error)
 }
 
 type HeyaServiceImpl struct {
@@ -41,6 +42,13 @@ func (h *HeyaServiceImpl) GetHeyasByID(c context.Context, heyaID uuid.UUID) (*mo
 	}
 
 	return heya, nil
+}
+
+func (h *HeyaServiceImpl) GetUsersByID(c context.Context, heyaID uuid.UUID) ([]uuid.UUID, error) {
+	//TODO: どこからUserがそのヘヤにいるのかを持ってくる
+	/*ctx,cancel := utils.CreateTxContext(c)
+	defer cancel()*/
+	return nil, nil
 }
 func (h *HeyaServiceImpl) DeleteHeya(c context.Context, heyaID uuid.UUID) error {
 	ctx, cancel := utils.CreateTxContext(c)
