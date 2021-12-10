@@ -24,7 +24,29 @@ func (h *HeyaHandleGroup) GetHeyasHandler(c echo.Context) error {
 }
 
 func (h *HeyaHandleGroup) GetHeyasByIDHandler(c echo.Context) error {
-	return nil
+	heyaID := c.Param("heyaID")
+	heyaUUID, err := uuid.FromString(heyaID)
+	if err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusBadRequest, err)
+	}
+	heya, err := h.hs.GetHeyasByID(c.Request().Context(), heyaUUID)
+	if err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	rheya := rest.Heya{
+		Id:           heya.ID.String(),
+		Title:        heya.Title,
+		Description:  heya.Description,
+		CreatorId:    heya.CreatorID.String(),
+		LastEditorId: heya.LastEditorID.String(),
+		CreatedAt:    utils.TimeStampToTIme(heya.CreatedAt),
+		UpdatedAt:    utils.TimeStampToTIme(heya.UpdatedAt),
+	}
+	res := rest.GetHeyasHeyaIdResponse{Heya: &rheya}
+
+	return utils.SendProtobuf(c, http.StatusOK, &res)
 }
 
 func (h *HeyaHandleGroup) GetUsersByHeyaIDHandler(c echo.Context) error {
