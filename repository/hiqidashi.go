@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
 )
@@ -14,4 +15,5 @@ type HiqidashiRepository interface {
 	DeleteHiqidashisByHeyaID(ctx context.Context, heyaID uuid.UUID) error
 	UpdateHiqidashiByID(ctx context.Context, hiqidashi *model.NullHiqidashi) error
 	DeleteHiqidashiDrawing(ctx context.Context, hiqidashi *model.Hiqidashi) error
+	UpdateRootHiqidashiByHeyaID(ctx context.Context,heyaID uuid.UUID,title,description sql.NullString) error
 }

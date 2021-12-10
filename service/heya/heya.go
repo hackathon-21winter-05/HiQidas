@@ -96,7 +96,7 @@ func (h *HeyaServiceImpl) CreateHeya(c context.Context, userID uuid.UUID, title,
 		HeyaID:       heyaID,
 		CreatorID:    userID,
 		LastEditorID: userID,
-		ParentID: uuid.NullUUID{UUID: uuid.Nil,Valid: false},
+		ParentID:     uuid.NullUUID{UUID: uuid.Nil, Valid: false},
 		Title:        title,
 		Description:  description,
 		CreatedAt:    now,
@@ -134,7 +134,10 @@ func (h *HeyaServiceImpl) PutHeyaByID(c context.Context, heya *model.NullHeya, h
 			UpdatedAt:    sql.NullTime{Time: now, Valid: true},
 		}
 		if err := h.repo.UpdateHeyaByID(ctx, &nullHeya); err != nil {
-				return err
+			return err
+		}
+		if err := h.repo.UpdateRootHiqidashiByHeyaID(ctx, heyaID, nullHeya.Title, nullHeya.Description); err != nil {
+			return err
 		}
 		return nil
 	})

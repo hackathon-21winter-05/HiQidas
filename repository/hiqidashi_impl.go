@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
@@ -180,6 +181,38 @@ func (repo *GormRepository) DeleteHiqidashisByHeyaID(ctx context.Context, heyaID
 	}
 	if result.RowsAffected == 0 {
 		return ErrNoRecordDeleted
+	}
+
+	return nil
+}
+
+func (repo *GormRepository) UpdateRootHiqidashiByHeyaID(ctx context.Context, heyaID uuid.UUID, title, description sql.NullString) error {
+	if heyaID == uuid.Nil {
+		return ErrNillUUID
+	}
+	hiqidashiMap := map[string]interface{}{}
+	hiqidashiMap["heya_id"] = heyaID
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+	if title.Valid {
+		hiqidashiMap["title"] = title.String
+	}
+	if description.Valid {
+		hiqidashiMap["description"] = description.String
+	}
+
+	result := db.
+		Model(&model.Hiqidashi{}).
+		Where("heya_id = ? AND parent_id is NULL", heyaID).
+		Updates(hiqidashiMap)
+	err = result.Error
+	if err != nil {
+		return fmt.Errorf("failed to updates root hiqidashi :%w", err)
+	}
+	if result.RowsAffected == 0 {
+		return ErrNoRecordUpdated
 	}
 
 	return nil
