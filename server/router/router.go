@@ -1,12 +1,13 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
-	"net/http"
 )
 
 // ルーター
@@ -21,9 +22,9 @@ func NewRouter(api *APIHandler) *Router {
 	echoApi := e.Group("/api")
 	{
 		echoApi.GET("/ping", func(c echo.Context) error {
-
 			return c.String(http.StatusOK, "pong")
 		})
+
 		userApi := echoApi.Group("/users")
 		{
 			userApi.GET("", api.GetUsersHandler)
@@ -44,10 +45,12 @@ func NewRouter(api *APIHandler) *Router {
 			oauthApi.GET("/callback", api.GetOauthCallbackHandler)
 			oauthApi.POST("/code", api.PostOauthCodeHandler)
 		}
+
 		wsApi := echoApi.Group("/ws")
 		{
-			wsApi.GET("", api.ConnectHeyaWS)
+			wsApi.GET("/heya/:heyaid", api.ConnectHeyaWS)
 		}
+
 		echoApi.GET("*", func(c echo.Context) error {
 			return c.String(http.StatusNotImplemented, "Not Implemented")
 		})

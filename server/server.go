@@ -19,6 +19,6 @@ func NewServer(r *router.Router, s *streamer.Streamer) *Server {
 
 // サーバーを起動
 func (s *Server) Run(c *config.Config) {
-	s.s.Run()
+	go s.s.Run()
 	s.r.Run()
 }

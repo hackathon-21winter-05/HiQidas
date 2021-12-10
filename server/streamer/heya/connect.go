@@ -20,10 +20,10 @@ func (hs *HeyaStreamer) ConnectHeyaWS(c echo.Context) error {
 	}
 	userID := sess.Values["user_id"].(uuid.UUID)
 
-	heyaIDString := c.Param("roomid")
+	heyaIDString := c.Param("heyaid")
 	heyaID, err := uuid.FromString(heyaIDString)
 	if err != nil {
-		return c.String(http.StatusBadRequest, "Invalid room ID")
+		return c.String(http.StatusBadRequest, "invalid heyaID")
 	}
 
 	upgrader := websocket.Upgrader{}

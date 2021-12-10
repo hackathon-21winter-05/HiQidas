@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/hackathon-21winter-05/HiQidas/server"
 	"log"
 	"time"
 
+	"github.com/hackathon-21winter-05/HiQidas/server"
 	"github.com/hackathon-21winter-05/HiQidas/config"
 )
 

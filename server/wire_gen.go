@@ -30,14 +30,14 @@ func InjectServer(c *config.Config) (*Server, error) {
 		return nil, err
 	}
 	serviceService := service.NewService(repositoryRepository)
-	heyaHandleGroup := heya.NewHeyaHandleGroup(serviceService)
+	heyaHandlerGroup := heya.NewHeyaHandleGroup(serviceService)
 	userHandlerGroup := user.NewUserHandlerGroup(serviceService)
 	configuration := traq.NewConfiguration()
 	apiClient := traq.NewAPIClient(configuration)
 	oauthHandlerGroup := oauth.NewOauthHandlerGroup(c, apiClient)
-	streamerStreamer := streamer.NewStreamer()
+	streamerStreamer := streamer.NewStreamer(serviceService)
 	wsHandlerGroup := ws.NewWSHandlerGroup(streamerStreamer)
-	apiHandler := router.NewAPIHandler(middlewareMiddleware, heyaHandleGroup, userHandlerGroup, oauthHandlerGroup, wsHandlerGroup)
+	apiHandler := router.NewAPIHandler(middlewareMiddleware, heyaHandlerGroup, userHandlerGroup, oauthHandlerGroup, wsHandlerGroup)
 	routerRouter := router.NewRouter(apiHandler)
 	server := NewServer(routerRouter, streamerStreamer)
 	return server, nil
@@ -45,4 +45,4 @@ func InjectServer(c *config.Config) (*Server, error) {
 
 // wire.go:
 
-var SuperSet = wire.NewSet(repository.NewGormRepository, wire.Struct(new(repository.GormRepository), "*"), service.NewService, user.NewUserHandlerGroup, wire.Bind(new(user.UserHandler), new(*user.UserHandlerGroup)), heya.NewHeyaHandleGroup, wire.Bind(new(heya.HeyaHandler), new(*heya.HeyaHandleGroup)), oauth.NewOauthHandlerGroup, wire.Bind(new(oauth.OauthHandler), new(*oauth.OauthHandlerGroup)), wire.NewSet(traq.NewAPIClient, traq.NewConfiguration), middleware.NewMiddleware, wire.Bind(new(middleware.IMiddleware), new(*middleware.Middleware)), ws.NewWSHandlerGroup, wire.Bind(new(ws.WSHandler), new(*ws.WSHandlerGroup)), streamer.NewStreamer, router.NewAPIHandler, router.NewRouter, NewServer)
+var SuperSet = wire.NewSet(repository.NewGormRepository, wire.Struct(new(repository.GormRepository), "*"), service.NewService, user.NewUserHandlerGroup, heya.NewHeyaHandleGroup, oauth.NewOauthHandlerGroup, wire.NewSet(traq.NewAPIClient, traq.NewConfiguration), middleware.NewMiddleware, ws.NewWSHandlerGroup, streamer.NewStreamer, router.NewAPIHandler, router.NewRouter, NewServer)

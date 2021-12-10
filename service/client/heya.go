@@ -20,7 +20,7 @@ type HeyaClientService interface {
 
 type HeyaClientServiceImpl struct{}
 
-func NewClientService() HeyaClientService {
+func NewHeyaClientService() HeyaClientService {
 	return &HeyaClientServiceImpl{}
 }
 

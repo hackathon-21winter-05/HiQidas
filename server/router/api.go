@@ -9,13 +9,25 @@ import (
 )
 
 type APIHandler struct {
-	middleware.IMiddleware
-	heya.HeyaHandler
-	user.UserHandler
-	oauth.OauthHandler
-	ws.WSHandler
+	*middleware.Middleware
+	*heya.HeyaHandlerGroup
+	*user.UserHandlerGroup
+	*oauth.OauthHandlerGroup
+	*ws.WSHandlerGroup
 }
 
-func NewAPIHandler(IMiddleware middleware.IMiddleware, heyaHandler heya.HeyaHandler, userHandler user.UserHandler, oauthHandler oauth.OauthHandler, WSHandler ws.WSHandler) *APIHandler {
-	return &APIHandler{IMiddleware: IMiddleware, HeyaHandler: heyaHandler, UserHandler: userHandler, OauthHandler: oauthHandler, WSHandler: WSHandler}
+func NewAPIHandler(
+	Middleware *middleware.Middleware,
+	heyaHandlerGroup *heya.HeyaHandlerGroup,
+	userHandlerGroup *user.UserHandlerGroup,
+	oauthHandlerGroup *oauth.OauthHandlerGroup,
+	WSHandlerGroup *ws.WSHandlerGroup,
+) *APIHandler {
+	return &APIHandler{
+		Middleware:        Middleware,
+		HeyaHandlerGroup:  heyaHandlerGroup,
+		UserHandlerGroup:  userHandlerGroup,
+		OauthHandlerGroup: oauthHandlerGroup,
+		WSHandlerGroup:    WSHandlerGroup,
+	}
 }
