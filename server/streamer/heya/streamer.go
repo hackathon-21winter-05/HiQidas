@@ -8,15 +8,15 @@ import (
 )
 
 type HeyaStreamer struct {
-	heyaClients   map[uuid.UUID]*heyaClient
-	receiveBuffer chan *heyaCliMessage
+	clients       map[uuid.UUID]*client
+	receiveBuffer chan *cliMessage
 	ser           *service.Service
 }
 
 func NewHeyaStreamer(ser *service.Service) *HeyaStreamer {
 	s := &HeyaStreamer{
-		heyaClients:   map[uuid.UUID]*heyaClient{},
-		receiveBuffer: make(chan *heyaCliMessage),
+		clients:       map[uuid.UUID]*client{},
+		receiveBuffer: make(chan *cliMessage),
 		ser:           ser,
 	}
 
@@ -27,7 +27,7 @@ func (hs *HeyaStreamer) Listen() {
 	for {
 		msg := <-hs.receiveBuffer
 
-		err := hs.heyaWSHandler(msg)
+		err := hs.handlerSelector(msg)
 		if err != nil {
 			log.Println(err)
 		}
@@ -43,5 +43,5 @@ func (hs *HeyaStreamer) sendToHeya(heyaID uuid.UUID, body []byte) {
 }
 
 func (hs *HeyaStreamer) sendToClient(clientID uuid.UUID, body []byte) {
-	hs.heyaClients[clientID].sender <- body
+	hs.clients[clientID].sender <- body
 }

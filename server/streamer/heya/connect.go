@@ -38,7 +38,7 @@ func (hs *HeyaStreamer) ConnectHeyaWS(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	cli := &heyaClient{
+	cli := &client{
 		id:       clientID,
 		userID:   userID,
 		heyaID:   heyaID,
@@ -56,13 +56,13 @@ func (hs *HeyaStreamer) ConnectHeyaWS(c echo.Context) error {
 	}
 
 	hs.ser.AddHeyaClient(heyaID, clientID)
-	hs.heyaClients[clientID] = cli
+	hs.clients[clientID] = cli
 
 	<-cli.closer
 
 	_ = hs.ser.DeleteHeyaClient(heyaID, clientID)
 
-	delete(hs.heyaClients, clientID)
+	delete(hs.clients, clientID)
 
 	return nil
 }

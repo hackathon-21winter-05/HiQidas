@@ -5,24 +5,24 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-type heyaClient struct {
+type client struct {
 	id       uuid.UUID
 	userID   uuid.UUID
 	heyaID   uuid.UUID
 	conn     *websocket.Conn
-	receiver *chan *heyaCliMessage
+	receiver *chan *cliMessage
 	sender   chan []byte
 	closer   chan bool
 }
 
-type heyaCliMessage struct {
+type cliMessage struct {
 	clientID uuid.UUID
 	userID   uuid.UUID
 	heyaid   uuid.UUID
 	body     []byte
 }
 
-func (hc *heyaClient) listen() {
+func (hc *client) listen() {
 	for {
 		_, message, err := hc.conn.ReadMessage()
 		if err != nil {
@@ -30,7 +30,7 @@ func (hc *heyaClient) listen() {
 			break
 		}
 
-		*hc.receiver <- &heyaCliMessage{
+		*hc.receiver <- &cliMessage{
 			clientID: hc.id,
 			userID:   hc.userID,
 			heyaid:   hc.heyaID,
@@ -39,7 +39,7 @@ func (hc *heyaClient) listen() {
 	}
 }
 
-func (hc *heyaClient) serve() {
+func (hc *client) serve() {
 	for {
 		mes := <-hc.sender
 
