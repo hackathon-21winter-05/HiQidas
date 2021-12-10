@@ -23,13 +23,25 @@ func NewHeyaStreamer(ser *service.Service) *HeyaStreamer {
 	return s
 }
 
-func (s *HeyaStreamer) Listen() {
+func (hs *HeyaStreamer) Listen() {
 	for {
-		msg := <-s.receiveBuffer
+		msg := <-hs.receiveBuffer
 
-		err := s.heyaWSHandler(msg)
+		err := hs.heyaWSHandler(msg)
 		if err != nil {
 			log.Println(err)
 		}
 	}
+}
+
+func (hs *HeyaStreamer) sendToHeya(heyaID uuid.UUID, body []byte) {
+	clientsID := hs.ser.GetHeyaClientsIDByHeyaID(heyaID)
+
+	for _, clientID := range clientsID {
+		hs.sendToClient(clientID, body)
+	}
+}
+
+func (hs *HeyaStreamer) sendToClient(clientID uuid.UUID, body []byte) {
+	hs.heyaClients[clientID].sender <- body
 }
