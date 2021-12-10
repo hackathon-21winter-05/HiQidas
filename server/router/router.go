@@ -3,28 +3,52 @@ package router
 import (
 	"github.com/gorilla/sessions"
 	"github.com/hackathon-21winter-05/HiQidas/config"
-	"github.com/hackathon-21winter-05/HiQidas/server/streamer"
-	"github.com/hackathon-21winter-05/HiQidas/service"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
+	"net/http"
 )
 
 // ルーター
 type Router struct {
 	e   *echo.Echo
-	hgs []HandlerGroup
 }
 
 // 新しいルーターを生成
-func NewRouter(c *config.Config, s *streamer.Streamer, ser *service.Service) *Router {
+func NewRouter(c *config.Config) *Router {
 	r := &Router{
 		e:   newEcho(),
-		hgs: newHandlerGroups(c, ser, s),
+	}
+	api,err :=injectAPIServer(c)
+	if err != nil {
+		log.Error(err)
 	}
 
-	r.setHandlers()
+	echoApi := r.e.Group("/api")
+	{
+		echoApi.GET("/ping", func(c echo.Context) error {
+			return c.String(http.StatusOK, "pong")
+		})
+		userApi := echoApi.Group("/users")
+		{
+			userApi.GET("/",api.GetUsersHandler)
+		}
+
+		heyaApi := echoApi.Group("/heyas")
+		{
+			heyaApi.GET("/",api.GetHeyasHandler)
+			heyaApi.GET("/:heyaID",api.GetHeyasByIDHandler)
+			heyaApi.GET("/:heyaID/users",api.GetUsersByHeyaIDHandler)
+			heyaApi.POST("/",api.PostHeyasHandler)
+			heyaApi.DELETE("/:heyaID",api.DeleteHeyasByIDHandler)
+			heyaApi.PUT("/:heyaID",api.PutHeyasByIDHandler)
+		}
+
+		echoApi.GET("*", func(c echo.Context) error {
+			return c.String(http.StatusNotImplemented, "Not Implemented")
+		})
+	}
 
 	return r
 }
@@ -47,4 +71,17 @@ func newEcho() *echo.Echo {
 // ルーターを起動
 func (r *Router) Run() error {
 	return r.e.Start(":7070")
+}
+
+// ルーターのハンドラを設定
+func (r *Router) setHandlers() {
+
+	api := r.e.Group("/api")
+	api.GET("/ping", func(c echo.Context) error {
+		return c.String(http.StatusOK, "pong")
+	})
+
+	api.GET("*", func(c echo.Context) error {
+		return c.String(http.StatusNotImplemented, "Not Implemented")
+	})
 }
