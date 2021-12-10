@@ -64,7 +64,7 @@ func (hs *HiqidashiServiceImpl) UpdateHiqidashiByID(c context.Context, hiqidashi
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
 
-	tempHiqidashi, err := hs.repo.GetHiqidashisByID(ctx, hiqidashi.ID)
+	tempHiqidashi, err := hs.repo.GetHiqidashiByID(ctx, hiqidashi.ID)
 	if err != nil {
 		return err
 	}

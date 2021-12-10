@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func (repo *GormRepository) GetHiqidashisByID(ctx context.Context, id uuid.UUID) (*model.Hiqidashi, error) {
+func (repo *GormRepository) GetHiqidashiByID(ctx context.Context, id uuid.UUID) (*model.Hiqidashi, error) {
 	if id == uuid.Nil {
 		return nil, ErrNillUUID
 	}
