@@ -21,29 +21,29 @@ type heyaCliMessage struct {
 	body   []byte
 }
 
-func (cli *heyaClient) listen() {
+func (hc *heyaClient) listen() {
 	for {
-		_, message, err := cli.conn.ReadMessage()
+		_, message, err := hc.conn.ReadMessage()
 		if err != nil {
-			cli.closer <- true
+			hc.closer <- true
 			break
 		}
 
-		*cli.receiver <- &heyaCliMessage{
-			userID: cli.userID,
-			heyaid: cli.heyaID,
+		*hc.receiver <- &heyaCliMessage{
+			userID: hc.userID,
+			heyaid: hc.heyaID,
 			body:   message,
 		}
 	}
 }
 
-func (cli *heyaClient) serve() {
+func (hc *heyaClient) serve() {
 	for {
-		mes := <-cli.sender
+		mes := <-hc.sender
 
-		err := cli.conn.WriteMessage(websocket.BinaryMessage, mes)
+		err := hc.conn.WriteMessage(websocket.BinaryMessage, mes)
 		if err != nil {
-			cli.closer <- true
+			hc.closer <- true
 			break
 		}
 	}

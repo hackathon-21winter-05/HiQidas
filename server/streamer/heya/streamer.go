@@ -1,6 +1,8 @@
 package heya
 
 import (
+	"log"
+
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/service"
 )
@@ -24,6 +26,10 @@ func NewHeyaStreamer(ser *service.Service) *HeyaStreamer {
 func (s *HeyaStreamer) Listen() {
 	for {
 		msg := <-s.receiveBuffer
-		s.heyaWSHandler(msg)
+
+		err := s.heyaWSHandler(msg)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 }
