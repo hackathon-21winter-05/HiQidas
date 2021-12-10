@@ -23,7 +23,7 @@ import (
 
 // Injectors from wire.go:
 
-func InjectAPIServer(c *config.Config) (*API, error) {
+func InjectAPIServer(c *config.Config) (*APIHandlers, error) {
 	middlewareMiddleware := middleware.NewMiddleware()
 	repositoryRepository, err := repository.NewGormRepository(c)
 	if err != nil {
@@ -38,10 +38,10 @@ func InjectAPIServer(c *config.Config) (*API, error) {
 	oauthHandlerGroup := oauth.NewOauthHandlerGroup(c, apiClient)
 	streamerStreamer := streamer.NewStreamer()
 	wsHandlerGroup := ws.NewWSHandlerGroup(streamerStreamer)
-	api := NewAPI(middlewareMiddleware, heyaHandleGroup, userHandlerGroup, oauthHandlerGroup, wsHandlerGroup)
-	return api, nil
+	apiHandlers := NewAPI(middlewareMiddleware, heyaHandleGroup, userHandlerGroup, oauthHandlerGroup, wsHandlerGroup)
+	return apiHandlers, nil
 }
 
 // wire.go:
 
-var superSet = wire.NewSet(repository.NewGormRepository, wire.Struct(new(repository.GormRepository), "*"), heya.NewHeyaServiceImpl, wire.Bind(new(heya.HeyaService), new(*heya.HeyaServiceImpl)), service.NewUserServiceImpl, wire.Bind(new(service.UserService), new(*service.UserServiceImpl)), NewAPI, heya2.NewHeyaHandleGroup, user.NewUserHandlerGroup, ws.NewWSHandlerGroup, oauth.NewOauthHandlerGroup, wire.NewSet(traq.NewAPIClient, traq.NewConfiguration), streamer.NewStreamer, middleware.NewMiddleware)
+var SuperSet = wire.NewSet(repository.NewGormRepository, wire.Struct(new(repository.GormRepository), "*"), heya.NewHeyaServiceImpl, wire.Bind(new(heya.HeyaService), new(*heya.HeyaServiceImpl)), service.NewUserServiceImpl, wire.Bind(new(service.UserService), new(*service.UserServiceImpl)), NewAPI, heya2.NewHeyaHandleGroup, user.NewUserHandlerGroup, ws.NewWSHandlerGroup, oauth.NewOauthHandlerGroup, wire.NewSet(traq.NewAPIClient, traq.NewConfiguration), streamer.NewStreamer, middleware.NewMiddleware)

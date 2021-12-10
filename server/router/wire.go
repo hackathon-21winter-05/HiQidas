@@ -17,7 +17,7 @@ import (
 )
 
 
-var SuperSet = wire.NewSet(
+var superSet = wire.NewSet(
 	repository.NewGormRepository,
 	wire.Struct(new(repository.GormRepository),"*"),
 
@@ -25,6 +25,7 @@ var SuperSet = wire.NewSet(
 	wire.Bind(new(heya.HeyaService),new(*heya.HeyaServiceImpl)),
 	service.NewUserServiceImpl,
 	wire.Bind(new(service.UserService),new(*service.UserServiceImpl)),
+
 	NewAPI,
 	heya2.NewHeyaHandleGroup,
 	user2.NewUserHandlerGroup,
@@ -34,7 +35,8 @@ var SuperSet = wire.NewSet(
 	streamer.NewStreamer,
 	middleware.NewMiddleware,
 	)
-func injectAPIServer(c *config.Config) (*API,error) {
+
+func injectAPIServer(c *config.Config) (*APIHandlers,error) {
 	wire.Build(SuperSet)
 
 	return nil,nil
