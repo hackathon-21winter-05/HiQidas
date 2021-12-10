@@ -10,16 +10,16 @@ import (
 )
 
 type HeyaService interface {
-	CreateHeya(userID uuid.UUID, title, description string) (*model.Heya, error)
-	DeleteHeya(heyaID uuid.UUID) error
+	CreateHeya(c context.Context,userID uuid.UUID, title, description string) (*model.Heya, error)
+	DeleteHeya(c context.Context,heyaID uuid.UUID) error
 }
 
 type HeyaServiceImpl struct {
 	repo repository.Repository
 }
 
-func (h *HeyaServiceImpl) DeleteHeya(heyaID uuid.UUID) error {
-	ctx, cancel := utils.CreateTxContext()
+func (h *HeyaServiceImpl) DeleteHeya(c context.Context,heyaID uuid.UUID) error {
+	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
 
 	err := h.repo.Do(ctx, nil, func(ctx context.Context) error {
@@ -41,8 +41,8 @@ func (h *HeyaServiceImpl) DeleteHeya(heyaID uuid.UUID) error {
 	return nil
 }
 
-func (h *HeyaServiceImpl) CreateHeya(userID uuid.UUID, title, description string) (*model.Heya, error) {
-	ctx, cancel := utils.CreateTxContext()
+func (h *HeyaServiceImpl) CreateHeya(c context.Context,userID uuid.UUID, title, description string) (*model.Heya, error) {
+	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
 
 	now := time.Now()

@@ -11,6 +11,11 @@ import (
 )
 
 func (h *HeyaHandleGroup) GetHeyasHandler(c echo.Context) error {
+
+	heyaIDs, err := h.hs.GetHeyas()
+	res := rest.GetHeyasResponse{
+		HeyaId: nil,
+	}
 	return nil
 }
 
@@ -30,7 +35,7 @@ func (h *HeyaHandleGroup) DeleteHeyasByIDHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
-	if err = h.hs.DeleteHeya(heyaUUID); err != nil {
+	if err = h.hs.DeleteHeya(c.Request().Context(), heyaUUID); err != nil {
 		if errors.Is(err, model.ErrNoRecordDeleted) {
 			c.Logger().Info(err)
 			return echo.NewHTTPError(http.StatusBadRequest, err)
@@ -51,7 +56,7 @@ func (h *HeyaHandleGroup) PostHeyasHandler(c echo.Context) error {
 	}
 
 	//TODO:セッションからUserIDをもってこれるようにする
-	heya, err := h.hs.CreateHeya(uuid.Nil, heyaRequest.Title, heyaRequest.Description)
+	heya, err := h.hs.CreateHeya(c.Request().Context(), uuid.Nil, heyaRequest.Title, heyaRequest.Description)
 	if err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
