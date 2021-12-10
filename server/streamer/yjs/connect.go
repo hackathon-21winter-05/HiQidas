@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (hs *YjsStreamer) ConnectHiqidashiWS(c echo.Context) error {
+func (hs *YjsStreamer) ConnectYjsWS(c echo.Context) error {
 	hiqidashiIDString := c.Param("hiqidashiid")
 	hiqidashiID, err := uuid.FromString(hiqidashiIDString)
 	if err != nil {

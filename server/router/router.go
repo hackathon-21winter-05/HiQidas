@@ -49,6 +49,7 @@ func NewRouter(api *APIHandler) *Router {
 		wsApi := echoApi.Group("/ws")
 		{
 			wsApi.GET("/heya/:heyaid", api.ConnectHeyaWS)
+			wsApi.GET("/yjs/:hiqidashiid", api.ConnectYjsWS)
 		}
 
 		echoApi.GET("*", func(c echo.Context) error {

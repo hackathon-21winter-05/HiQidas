@@ -11,7 +11,7 @@ type YjsStreamer struct {
 	ser           *service.Service
 }
 
-func NewHeyaStreamer(ser *service.Service) *YjsStreamer {
+func NewYjsStreamer(ser *service.Service) *YjsStreamer {
 	s := &YjsStreamer{
 		clients:       map[uuid.UUID]*client{},
 		receiveBuffer: make(chan *cliMessage),
