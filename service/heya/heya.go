@@ -44,7 +44,7 @@ func (h *HeyaServiceImpl) GetHeyasByID(c context.Context, heyaID uuid.UUID) (*mo
 	return heya, nil
 }
 
-func (h *HeyaServiceImpl) GetUsersByID(c context.Context, heyaID uuid.UUID) ([]uuid.UUID, error) {
+func (h *HeyaServiceImpl) GetUsersByHeyaID(c context.Context, heyaID uuid.UUID) ([]uuid.UUID, error) {
 	//TODO: どこからUserがそのヘヤにいるのかを持ってくる
 	/*ctx,cancel := utils.CreateTxContext(c)
 	defer cancel()*/
