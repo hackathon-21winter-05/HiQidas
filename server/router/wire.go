@@ -7,11 +7,13 @@ import (
 	"github.com/hackathon-21winter-05/HiQidas/repository"
 	heya2 "github.com/hackathon-21winter-05/HiQidas/server/router/heya"
 	"github.com/hackathon-21winter-05/HiQidas/server/router/middleware"
+	"github.com/hackathon-21winter-05/HiQidas/server/router/oauth"
 	user2 "github.com/hackathon-21winter-05/HiQidas/server/router/user"
 	"github.com/hackathon-21winter-05/HiQidas/server/router/ws"
 	"github.com/hackathon-21winter-05/HiQidas/server/streamer"
 	"github.com/hackathon-21winter-05/HiQidas/service"
 	"github.com/hackathon-21winter-05/HiQidas/service/heya"
+	"github.com/sapphi-red/go-traq"
 )
 
 
@@ -27,6 +29,8 @@ var SuperSet = wire.NewSet(
 	heya2.NewHeyaHandleGroup,
 	user2.NewUserHandlerGroup,
 	ws.NewWSHandlerGroup,
+	oauth.NewOauthHandlerGroup,
+	wire.NewSet(traq.NewAPIClient,traq.NewConfiguration),
 	streamer.NewStreamer,
 	middleware.NewMiddleware,
 	)

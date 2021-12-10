@@ -12,11 +12,13 @@ import (
 	"github.com/hackathon-21winter-05/HiQidas/repository"
 	heya2 "github.com/hackathon-21winter-05/HiQidas/server/router/heya"
 	"github.com/hackathon-21winter-05/HiQidas/server/router/middleware"
+	"github.com/hackathon-21winter-05/HiQidas/server/router/oauth"
 	"github.com/hackathon-21winter-05/HiQidas/server/router/user"
 	"github.com/hackathon-21winter-05/HiQidas/server/router/ws"
 	"github.com/hackathon-21winter-05/HiQidas/server/streamer"
 	"github.com/hackathon-21winter-05/HiQidas/service"
 	"github.com/hackathon-21winter-05/HiQidas/service/heya"
+	"github.com/sapphi-red/go-traq"
 )
 
 // Injectors from wire.go:
@@ -31,12 +33,15 @@ func injectAPIServer(c *config.Config) (*API, error) {
 	heyaHandleGroup := heya2.NewHeyaHandleGroup(heyaServiceImpl)
 	userServiceImpl := service.NewUserServiceImpl(repositoryRepository)
 	userHandlerGroup := user.NewUserHandlerGroup(userServiceImpl)
+	configuration := traq.NewConfiguration()
+	apiClient := traq.NewAPIClient(configuration)
+	oauthHandlerGroup := oauth.NewOauthHandlerGroup(c, apiClient)
 	streamerStreamer := streamer.NewStreamer()
 	wsHandlerGroup := ws.NewWSHandlerGroup(streamerStreamer)
-	api := NewAPI(middlewareMiddleware, heyaHandleGroup, userHandlerGroup, wsHandlerGroup)
+	api := NewAPI(middlewareMiddleware, heyaHandleGroup, userHandlerGroup, oauthHandlerGroup, wsHandlerGroup)
 	return api, nil
 }
 
 // wire.go:
 
-var superSet = wire.NewSet(repository.NewGormRepository, wire.Struct(new(repository.GormRepository), "*"), heya.NewHeyaServiceImpl, wire.Bind(new(heya.HeyaService), new(*heya.HeyaServiceImpl)), service.NewUserServiceImpl, wire.Bind(new(service.UserService), new(*service.UserServiceImpl)), NewAPI, heya2.NewHeyaHandleGroup, user.NewUserHandlerGroup, ws.NewWSHandlerGroup, streamer.NewStreamer, middleware.NewMiddleware)
+var superSet = wire.NewSet(repository.NewGormRepository, wire.Struct(new(repository.GormRepository), "*"), heya.NewHeyaServiceImpl, wire.Bind(new(heya.HeyaService), new(*heya.HeyaServiceImpl)), service.NewUserServiceImpl, wire.Bind(new(service.UserService), new(*service.UserServiceImpl)), NewAPI, heya2.NewHeyaHandleGroup, user.NewUserHandlerGroup, ws.NewWSHandlerGroup, oauth.NewOauthHandlerGroup, wire.NewSet(traq.NewAPIClient, traq.NewConfiguration), streamer.NewStreamer, middleware.NewMiddleware)
