@@ -8,6 +8,10 @@ import (
 type Middleware struct {
 }
 
+func NewMiddleware() *Middleware {
+	return &Middleware{}
+}
+
 const userIDKey = "userID"
 
 func (m *Middleware) SettraPUserIDMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
