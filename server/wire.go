@@ -1,4 +1,5 @@
 //+build wireinject
+
 package server
 
 import (
@@ -18,7 +19,7 @@ import (
 )
 
 
-var superSet = wire.NewSet(
+var SuperSet = wire.NewSet(
 	repository.NewGormRepository,
 	wire.Struct(new(repository.GormRepository),"*"),
 
@@ -27,17 +28,19 @@ var superSet = wire.NewSet(
 	service.NewUserServiceImpl,
 	wire.Bind(new(service.UserService),new(*service.UserServiceImpl)),
 
-	router.NewAPI,
+	NewServer,
+	router.NewAPIHandler,
 	heya2.NewHeyaHandleGroup,
 	user2.NewUserHandlerGroup,
 	ws.NewWSHandlerGroup,
 	oauth.NewOauthHandlerGroup,
 	wire.NewSet(traq.NewAPIClient,traq.NewConfiguration),
+
 	streamer.NewStreamer,
 	middleware.NewMiddleware,
-	)
+)
 
-func InjectAPIHandlers(c *config.Config) (*router.APIHandlers,error) {
+func injectServer(c *config.Config) (*Server,error) {
 	wire.Build(SuperSet)
 
 	return nil,nil
