@@ -24,12 +24,12 @@ import (
 // Injectors from wire.go:
 
 func InjectServer(c *config.Config) (*Server, error) {
-	middlewareMiddleware := middleware.NewMiddleware()
 	repositoryRepository, err := repository.NewGormRepository(c)
 	if err != nil {
 		return nil, err
 	}
 	serviceService := service.NewService(repositoryRepository)
+	middlewareMiddleware := middleware.NewMiddleware(serviceService)
 	heyaHandlerGroup := heya.NewHeyaHandleGroup(serviceService)
 	userHandlerGroup := user.NewUserHandlerGroup(serviceService)
 	configuration := traq.NewConfiguration()
