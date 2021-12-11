@@ -53,7 +53,7 @@ Response
 | ------- | -------- |
 | heya | []model.heya |
 
-#### `GET /users/me/favorites` 自分のお気に入りの部屋の一覧を取得　(未実装)
+#### `GET /users/me/favorites` 自分のお気に入りの部屋の一覧を取得　
 
 | Field   | type     |
 | ------- | -------- |
@@ -105,6 +105,13 @@ Request
 | ------- | -------- |
 | title | string |
 | description | string |
+
+#### `PUT /heyas/{heyaID}/favorite` ヘヤのお気に入りの変更
+Request 
+
+| Field   | type     |
+| ------- | -------- |
+| is_favorite | bool |
 
 #### `DELETE /heyas/{heyaID}` ヘヤの削除
 
