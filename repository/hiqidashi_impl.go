@@ -145,7 +145,8 @@ func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *
 	hiqidashiMap["updated_at"] = hiqidashi.UpdatedAt
 
 	result := db.
-		Model(&hiqidashi).
+		Model(&model.Hiqidashi{}).
+		Where("id = ?", hiqidashi.ID).
 		Updates(&hiqidashiMap)
 	err = result.Error
 	if err != nil {

@@ -35,7 +35,7 @@ func NewRouter(api *APIHandler) *Router {
 			heyaApi.GET("", api.GetHeyasHandler)
 			heyaApi.GET("/:heyaID", api.GetHeyaHandler)
 			heyaApi.GET("/:heyaID/users", api.GetUsersByHeyaIDHandler)
-			heyaApi.POST("/", api.PostHeyasHandler)
+			heyaApi.POST("", api.PostHeyasHandler)
 			heyaApi.DELETE("/:heyaID", api.DeleteHeyasByIDHandler)
 			heyaApi.PUT("/:heyaID", api.PutHeyasByIDHandler)
 		}

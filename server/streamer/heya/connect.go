@@ -51,12 +51,14 @@ func (hs *HeyaStreamer) ConnectHeyaWS(c echo.Context) error {
 	go cli.serve()
 	go cli.listen()
 
+	hs.clients[clientID] = cli
+
 	if err := hs.sendHiqidashis(clientID, heyaID); err != nil {
+		delete(hs.clients, clientID)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	hs.ser.AddHeyaClient(heyaID, clientID)
-	hs.clients[clientID] = cli
 
 	<-cli.closer
 

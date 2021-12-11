@@ -9,9 +9,9 @@ import (
 )
 
 func (hs *HeyaStreamer) handlerSelector(mes *cliMessage) error {
-	var WsHeyaData *ws.WsHeyaData
+	var WsHeyaData ws.WsHeyaData
 
-	err := proto.Unmarshal(mes.body, WsHeyaData)
+	err := proto.Unmarshal(mes.body, &WsHeyaData)
 	if err != nil {
 		_ = hs.sendErrorMes(mes.clientID, err.Error())
 		return err
