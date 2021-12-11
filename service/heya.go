@@ -165,11 +165,19 @@ func (s *Service) PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, userI
 				UserID: userID,
 				HeyaID: heyaID,
 			}
-			if err := s.repo.CreateFavorite(ctx, &favo); err != nil {
+			_,err := s.repo.GetFavoritesByUserID(ctx,userID)
+			//存在していたらnilを返す
+			if err == repository.ErrNotFound {
+				return nil
+			}
+			if err = s.repo.CreateFavorite(ctx, &favo); err != nil {
 				return err
 			}
 		} else {
 			if err := s.repo.DeleteFavoriteByHeyaIDAndUserID(ctx, heyaID, userID); err != nil {
+				if errors.Is(err,repository.ErrNoRecordDeleted) {
+					return nil
+				}
 				return err
 			}
 		}

@@ -2,9 +2,11 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
+	"gorm.io/gorm"
 )
 
 func (repo *GormRepository) GetFavoritesByUserID(ctx context.Context, userID uuid.UUID) ([]*model.Favorite, error) {
@@ -18,7 +20,9 @@ func (repo *GormRepository) GetFavoritesByUserID(ctx context.Context, userID uui
 	err = db.
 		Where("user_id = ?", userID).
 		Find(&favorites).Error
-
+	if errors.Is(err,gorm.ErrRecordNotFound) {
+		return nil,ErrNotFound
+	}
 	if err != nil {
 		return nil, fmt.Errorf("failed to get favorites : %w", err)
 	}
