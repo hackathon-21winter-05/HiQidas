@@ -1,7 +1,10 @@
 package yjs
 
 import (
+	"log"
+
 	"github.com/gofrs/uuid"
+	"github.com/hackathon-21winter-05/HiQidas/server/streamer/parser"
 	"github.com/hackathon-21winter-05/HiQidas/service"
 )
 
@@ -9,13 +12,15 @@ type YjsStreamer struct {
 	clients       map[uuid.UUID]*client
 	receiveBuffer chan *cliMessage
 	ser           *service.Service
+	ps            *parser.ParserStreamer
 }
 
-func NewYjsStreamer(ser *service.Service) *YjsStreamer {
+func NewYjsStreamer(ser *service.Service, ps *parser.ParserStreamer) *YjsStreamer {
 	s := &YjsStreamer{
 		clients:       map[uuid.UUID]*client{},
 		receiveBuffer: make(chan *cliMessage),
 		ser:           ser,
+		ps:            ps,
 	}
 
 	return s
@@ -26,6 +31,11 @@ func (hs *YjsStreamer) Listen() {
 		msg := <-hs.receiveBuffer
 
 		hs.sendToHiqidashi(msg.clientID, msg.hiqidashiID, msg.body)
+		err := hs.ps.SendDiff(msg.hiqidashiID, msg.body)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
 	}
 }
 

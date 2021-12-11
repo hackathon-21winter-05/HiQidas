@@ -10,6 +10,18 @@ import (
 	"github.com/hackathon-21winter-05/HiQidas/service/utils"
 )
 
+func (hs *HiqidashiServiceImpl) GetHiqidashis(c context.Context) ([]*model.Hiqidashi, error) {
+	ctx, cancel := utils.CreateTxContext(c)
+	defer cancel()
+
+	hiqidashis, err := hs.repo.GetHiqidashis(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return hiqidashis, nil
+}
+
 func (hs *HiqidashiServiceImpl) GetHiqidashisByHeyaID(c context.Context, heyaID uuid.UUID) ([]*model.Hiqidashi, error) {
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()

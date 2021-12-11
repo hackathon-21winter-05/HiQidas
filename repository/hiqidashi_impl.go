@@ -10,6 +10,23 @@ import (
 	"gorm.io/gorm"
 )
 
+func (repo *GormRepository) GetHiqidashis(ctx context.Context) ([]*model.Hiqidashi, error) {
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get db: %w", err)
+	}
+
+	hiqidashis := make([]*model.Hiqidashi, 0)
+
+	err = db.
+		Find(&hiqidashis).Error
+	if err != nil {
+		return nil, fmt.Errorf("failed to get hiqidashi :%w", err)
+	}
+
+	return hiqidashis, nil
+}
+
 func (repo *GormRepository) GetHiqidashiByID(ctx context.Context, id uuid.UUID) (*model.Hiqidashi, error) {
 	if id == uuid.Nil {
 		return nil, ErrNillUUID

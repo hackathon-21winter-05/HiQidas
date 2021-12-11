@@ -60,6 +60,7 @@ func NewRouter(api *APIHandler) *Router {
 		{
 			wsApi.GET("/heya/:heyaid", api.ConnectHeyaWS)
 			wsApi.GET("/yjs/:hiqidashiid", api.ConnectYjsWS)
+			wsApi.GET("/parser", api.ConnectParserWS)
 		}
 
 		echoApi.GET("*", func(c echo.Context) error {
