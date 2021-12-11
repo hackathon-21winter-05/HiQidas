@@ -20,7 +20,7 @@ import (
 
 const oauthCodeRedirect = "https://q.trap.jp/api/v3/oauth2/authorize"
 
-// GET /oauth/callback ハンドラ
+// GetOauthCallbackHandler GET /oauth/callback ハンドラ
 func (oh *OauthHandlerGroup) GetOauthCallbackHandler(c echo.Context) error {
 	verifier := randstr.String(64)
 	hash := sha256.Sum256([]byte(verifier))
@@ -57,7 +57,7 @@ func (oh *OauthHandlerGroup) GetOauthCallbackHandler(c echo.Context) error {
 	return utils.SendProtobuf(c, http.StatusOK, oauthRedirectData)
 }
 
-// POST /oauth/code ハンドラ
+// PostOauthCodeHandler POST /oauth/code ハンドラ
 func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 	sess, err := session.Get("session", c)
 	if err != nil {

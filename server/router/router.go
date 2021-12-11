@@ -27,6 +27,12 @@ func NewRouter(api *APIHandler) *Router {
 		userApi := echoApi.Group("/users")
 		{
 			userApi.GET("", api.GetUsersHandler)
+			userApi.GET("/:userID",api.GetUsersByIDHandler)
+			userApi.GET("/me",api.GetUsersMeHandler)
+			userApi.GET("/me/favorites",api.GetFavoriteUsersMeHandler)
+			userApi.GET("/me/heyas",api.GetHeyasByMeHandler)
+			userApi.POST("",api.PostUsersHandler)
+
 		}
 
 		heyaApi := echoApi.Group("/heyas")

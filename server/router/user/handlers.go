@@ -34,7 +34,7 @@ func (uh *UserHandlerGroup) GetHeyasByMeHandler(c echo.Context) error {
 	panic("implement me")
 }
 
-// GetFavoriteUsersMeHandler GET /users/me/favorite
+// GetFavoriteUsersMeHandler GET /users/me/favorites
 func (uh *UserHandlerGroup) GetFavoriteUsersMeHandler(c echo.Context) error {
 	panic("implement me")
 }
