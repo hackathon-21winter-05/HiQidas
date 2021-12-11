@@ -30,7 +30,7 @@ func (uh *UserHandlerGroup) GetUsersHandler(c echo.Context) error {
 func (uh *UserHandlerGroup) GetUsersMeHandler(c echo.Context) error {
 	sess, err := session.Get("session", c)
 	if err != nil {
-		c.Logger().Error(err)
+		c.Logger().Info(err)
 		return echo.NewHTTPError(http.StatusBadRequest, "failed to get session", err)
 	}
 
@@ -66,7 +66,35 @@ func (uh *UserHandlerGroup) GetFavoriteUsersMeHandler(c echo.Context) error {
 
 // GetUsersByIDHandler GET /users/{userID}
 func (uh *UserHandlerGroup) GetUsersByIDHandler(c echo.Context) error {
-	panic("implement me")
+	userID := c.Param("userID")
+	sess,err := session.Get("session",c)
+	if err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusBadRequest, "failed to get session", err)
+	}
+
+	accessToken := sess.Values["accessToken"]
+	if accessToken == nil {
+		//こんな感じ？
+	}
+
+	uuidUserID,err :=uuid.FromString(userID)
+	if err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusBadRequest,err)
+	}
+	user, err := uh.s.GetUserByID(c.Request().Context(), uuidUserID)
+	if err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+
+	res := rest.User{
+		Id:   userID,
+		Name: user.Name,
+	}
+
+	return utils.SendProtobuf(c,http.StatusOK,&res)
 }
 
 // PostUsersHandler POST /users
