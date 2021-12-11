@@ -31,6 +31,7 @@
 | ------- | -------- |
 | id | string |
 | name | string |
+|icon_file_id | string |
 
 |   model.heya   | type                      |
 |:--------------:| ------------------------- |
