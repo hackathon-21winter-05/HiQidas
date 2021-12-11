@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package parser;
+
+option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/parser";
+
+message ParserSendData {
+  oneof payload {
+    ParserDiff parser_diff = 1;
+    ParserDescriptions parser_descriptions = 2;
+  }
+}
+
+message ParserDiff {
+  string hiqidashi_id = 1;
+  bytes diff = 2;
+}
+
+message ParserDescriptions { repeated Description descriptions = 1; }
+
+message ParserEditDescription { Description description = 1; }
+
+message Description {
+  string hiqidashi_id = 1;
+  string content = 2;
+}
