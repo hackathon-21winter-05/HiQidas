@@ -20,7 +20,7 @@ func (m *Middleware) CheckLogin(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		sess, err := session.Get("session", c)
 		if err != nil {
-			return c.String(http.StatusInternalServerError, err.Error())
+			return echo.NewHTTPError(http.StatusInternalServerError, err)
 		}
 		userID := sess.Values["userid"]
 		if userID == nil {

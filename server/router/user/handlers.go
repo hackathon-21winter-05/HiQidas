@@ -32,7 +32,7 @@ func (uh *UserHandlerGroup) GetUsersHandler(c echo.Context) error {
 func (uh *UserHandlerGroup) GetUsersMeHandler(c echo.Context) error {
 	sess, err := session.Get("session", c)
 	if err != nil {
-		return c.String(http.StatusInternalServerError, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 	userID := sess.Values["userid"].(uuid.UUID)
 
@@ -54,7 +54,7 @@ func (uh *UserHandlerGroup) GetUsersMeHandler(c echo.Context) error {
 func (uh *UserHandlerGroup) GetHeyasByMeHandler(c echo.Context) error {
 	sess, err := session.Get("session", c)
 	if err != nil {
-		return c.String(http.StatusInternalServerError, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 	userID := sess.Values["userid"].(uuid.UUID)
 

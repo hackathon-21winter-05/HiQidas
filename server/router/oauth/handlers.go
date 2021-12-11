@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/base64"
-	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -18,7 +17,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/sapphi-red/go-traq"
 	"github.com/thanhpk/randstr"
-	"gorm.io/gorm"
 )
 
 const oauthCodeRedirect = "https://q.trap.jp/api/v3/oauth2/authorize"
@@ -64,7 +62,7 @@ func (oh *OauthHandlerGroup) GetOauthCallbackHandler(c echo.Context) error {
 func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 	sess, err := session.Get("session", c)
 	if err != nil {
-		return c.String(http.StatusInternalServerError, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
 	oauthCodeData := &rest.PostOauthCodeRequest{}
@@ -88,23 +86,29 @@ func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 	}
 	token, res, err := r.cli.Oauth2Api.PostOAuth2Token(context.Background(), "authorization_code", opts)
 	if err != nil || token.AccessToken == "" || res.StatusCode >= 400 {
-		return c.String(res.StatusCode, err.Error())
+		return echo.NewHTTPError(res.StatusCode, err)
 	}
 
 	auth := context.WithValue(context.Background(), traq.ContextAccessToken, token.AccessToken)
 	v, res, err := r.cli.MeApi.GetMe(auth)
 	if err != nil || res.StatusCode != http.StatusOK {
-		return c.String(res.StatusCode, err.Error())
+		return echo.NewHTTPError(res.StatusCode, err)
 	}
 
-	userUUID, _ := uuid.FromString(v.Id)
-	_, err = r.ser.GetUserByID(c.Request().Context(), userUUID)
+	userUUID, err := uuid.FromString(v.Id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	user, _ := r.ser.GetUserByID(c.Request().Context(), userUUID)
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		iconFileUUID, _ := uuid.FromString(v.IconFileId)
+	if user == nil {
+		iconFileUUID, err := uuid.FromString(v.IconFileId)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err)
+		}
 		_, err = r.ser.CreateTraPUser(c.Request().Context(), userUUID, iconFileUUID, v.Name)
 		if err != nil {
-			return c.String(http.StatusInternalServerError, err.Error())
+			return echo.NewHTTPError(http.StatusInternalServerError, err)
 		}
 	}
 
@@ -116,7 +120,7 @@ func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 	}
 	err = sess.Save(c.Request(), c.Response())
 	if err != nil {
-		return c.String(http.StatusInternalServerError, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
 	return c.NoContent(http.StatusNoContent)
