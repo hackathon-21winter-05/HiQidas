@@ -59,7 +59,6 @@ func (repo *GormRepository) CreateHeya(ctx context.Context, heya *model.Heya) er
 	}
 
 	err = db.
-		Omit("Creator").
 		Create(&heya).Error
 	if err != nil {
 		return fmt.Errorf("failed to create : %w", err)
