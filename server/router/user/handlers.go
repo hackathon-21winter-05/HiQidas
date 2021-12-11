@@ -2,7 +2,6 @@ package user
 
 import (
 	"github.com/gofrs/uuid"
-	"github.com/labstack/echo-contrib/session"
 	"net/http"
 
 	"github.com/hackathon-21winter-05/HiQidas/server/protobuf/rest"
@@ -29,18 +28,9 @@ func (uh *UserHandlerGroup) GetUsersHandler(c echo.Context) error {
 
 // GetUsersMeHandler GET /users/me
 func (uh *UserHandlerGroup) GetUsersMeHandler(c echo.Context) error {
-	sess, err := session.Get("session", c)
-	if err != nil {
-		c.Logger().Info(err)
-		return echo.NewHTTPError(http.StatusBadRequest, "failed to get session", err)
-	}
 
-	accessToken := sess.Values["accessToken"]
-	if accessToken == nil {
-		//こんな感じ？
-	}
-
-	UserID := sess.Values["userID"].(uuid.UUID)
+	//TODO:一時的にNilと置いた
+	UserID :=uuid.Nil
 
 	user, err := uh.s.GetUserByID(c.Request().Context(), UserID)
 	if err != nil {
@@ -57,18 +47,8 @@ func (uh *UserHandlerGroup) GetUsersMeHandler(c echo.Context) error {
 
 // GetHeyasByMeHandler GET /users/me/heyas
 func (uh *UserHandlerGroup) GetHeyasByMeHandler(c echo.Context) error {
-	sess, err := session.Get("session", c)
-	if err != nil {
-		c.Logger().Info(err)
-		return echo.NewHTTPError(http.StatusBadRequest, "failed to get session", err)
-	}
-
-	accessToken := sess.Values["accessToken"]
-	if accessToken == nil {
-		//こんな感じ？
-	}
-
-	UserID := sess.Values["userID"].(uuid.UUID)
+	//TODO:一時的にNilと置いた
+	UserID := uuid.Nil
 
 	heyas, err := uh.s.GetHeyaByUserMe(c.Request().Context(), UserID)
 	if err != nil {
@@ -104,16 +84,6 @@ func (uh *UserHandlerGroup) GetFavoriteUsersMeHandler(c echo.Context) error {
 // GetUsersByIDHandler GET /users/{userID}
 func (uh *UserHandlerGroup) GetUsersByIDHandler(c echo.Context) error {
 	userID := c.Param("userID")
-	sess, err := session.Get("session", c)
-	if err != nil {
-		c.Logger().Info(err)
-		return echo.NewHTTPError(http.StatusBadRequest, "failed to get session", err)
-	}
-
-	accessToken := sess.Values["accessToken"]
-	if accessToken == nil {
-		//こんな感じ？
-	}
 
 	uuidUserID, err := uuid.FromString(userID)
 	if err != nil {
