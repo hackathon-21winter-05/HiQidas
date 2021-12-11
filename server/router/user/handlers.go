@@ -90,7 +90,12 @@ func (uh *UserHandlerGroup) GetFavoriteUsersMeHandler(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
-	userID := sess.Values["userid"].(uuid.UUID)
+	userIDstr := sess.Values["userid"].(string)
+	userID, err := uuid.FromString(userIDstr)
+	if err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusInternalServerError,err)
+	}
 
 	favorites, err := uh.s.GetUserMeFavorites(c.Request().Context(), userID)
 	if err != nil {
@@ -102,7 +107,7 @@ func (uh *UserHandlerGroup) GetFavoriteUsersMeHandler(c echo.Context) error {
 	for _, favorite := range favorites {
 		favoIDs = append(favoIDs, favorite.HeyaID.String())
 	}
-	res := rest.GetUsersMeFavorites{FavoriteHeyaId: favoIDs}
+	res := rest.GetUsersMeFavoritesRequest{FavoriteHeyaId: favoIDs}
 
 	return utils.SendProtobuf(c, http.StatusOK, &res)
 }

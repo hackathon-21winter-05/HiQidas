@@ -22,7 +22,7 @@ message GetUsersUserIdResponse { User user = 1; }
 message GetUsersMeResponse { User me = 1; }
 
 // GET /users/me/favorites 自分のお気に入りシートの取得
-message GetUsersMeFavorites { repeated string favorite_heya_id = 1; }
+message GetUsersMeFavoritesRequest { repeated string favorite_heya_id = 1; }
 
 // GET /users/me/heyas
 message GetUsersMeHeyasResponse { heya.Heyas heyas = 1; }
