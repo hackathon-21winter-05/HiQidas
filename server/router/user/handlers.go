@@ -30,18 +30,21 @@ func (uh *UserHandlerGroup) GetUsersHandler(c echo.Context) error {
 
 // GetUsersMeHandler GET /users/me
 func (uh *UserHandlerGroup) GetUsersMeHandler(c echo.Context) error {
+	sess, err := session.Get("session", c)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+	userID := sess.Values["userid"].(uuid.UUID)
 
-	//TODO:一時的にNilと置いた
-	UserID := uuid.Nil
-
-	user, err := uh.s.GetUserByID(c.Request().Context(), UserID)
+	user, err := uh.s.GetUserByID(c.Request().Context(), userID)
 	if err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 	res := rest.User{
-		Id:   UserID.String(),
-		Name: user.Name,
+		Id:         userID.String(),
+		Name:       user.Name,
+		IconFileId: user.IconFileID.UUID.String(),
 	}
 
 	return utils.SendProtobuf(c, http.StatusOK, &res)
@@ -49,10 +52,13 @@ func (uh *UserHandlerGroup) GetUsersMeHandler(c echo.Context) error {
 
 // GetHeyasByMeHandler GET /users/me/heyas
 func (uh *UserHandlerGroup) GetHeyasByMeHandler(c echo.Context) error {
-	//TODO:一時的にNilと置いた
-	UserID := uuid.Nil
+	sess, err := session.Get("session", c)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+	userID := sess.Values["userid"].(uuid.UUID)
 
-	heyas, err := uh.s.GetHeyaByUserMe(c.Request().Context(), UserID)
+	heyas, err := uh.s.GetHeyaByUserMe(c.Request().Context(), userID)
 	if err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
@@ -99,8 +105,9 @@ func (uh *UserHandlerGroup) GetUsersByIDHandler(c echo.Context) error {
 	}
 
 	res := rest.User{
-		Id:   userID,
-		Name: user.Name,
+		Id:         userID,
+		Name:       user.Name,
+		IconFileId: user.IconFileID.UUID.String(),
 	}
 
 	return utils.SendProtobuf(c, http.StatusOK, &res)
@@ -126,7 +133,7 @@ func (uh *UserHandlerGroup) PostUsersHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
-	sess.Values["userID"] = res.ID
+	sess.Values["userid"] = res.ID
 	sess.Options = &sessions.Options{
 		Path:     "/",
 		MaxAge:   60 * 60 * 24 * 14,

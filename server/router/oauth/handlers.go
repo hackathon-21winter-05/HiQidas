@@ -102,7 +102,7 @@ func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	sess.Values["userID"] = userUUID
+	sess.Values["userid"] = userUUID
 	sess.Options = &sessions.Options{
 		Path:     "/",
 		MaxAge:   int(token.ExpiresIn),

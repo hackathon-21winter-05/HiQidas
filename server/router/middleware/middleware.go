@@ -22,7 +22,7 @@ func (m *Middleware) CheckLogin(next echo.HandlerFunc) echo.HandlerFunc {
 		if err != nil {
 			return c.String(http.StatusInternalServerError, err.Error())
 		}
-		userID := sess.Values["userID"]
+		userID := sess.Values["userid"]
 		if userID == nil {
 			return echo.NewHTTPError(http.StatusUnauthorized, "Please Login")
 		}

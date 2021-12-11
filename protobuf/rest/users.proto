@@ -12,8 +12,8 @@ message GetUsersResponse { repeated string user_id = 1; }
 // POST /users ユーザーの名前をPOST
 message PostUsersRequest { string name = 1; }
 
-//POST /users　レスポンス
-message PostUsersResponse { User user = 1;}
+// POST /users レスポンス
+message PostUsersResponse { User user = 1; }
 
 // GET /users/{userId} ユーザーの詳細情報を取得
 message GetUsersUserIdResponse { User user = 1; }
@@ -30,6 +30,7 @@ message GetUsersMeHeyasResponse { heya.Heyas heyas = 1; }
 message User {
   string id = 1;
   string name = 2;
+  string icon_file_id = 3;
 }
 
 message Users { repeated User users = 1; }
