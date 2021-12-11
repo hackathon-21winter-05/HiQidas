@@ -3,6 +3,7 @@ package heya
 import (
 	"database/sql"
 	"errors"
+	"github.com/labstack/echo-contrib/session"
 	"net/http"
 
 	"github.com/gofrs/uuid"
@@ -109,6 +110,10 @@ func (h *HeyaHandlerGroup) DeleteHeyasByIDHandler(c echo.Context) error {
 
 // PostHeyasHandler POST /heyas
 func (h *HeyaHandlerGroup) PostHeyasHandler(c echo.Context) error {
+	sess, err := session.Get("session", c)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
 	heyaRequest := rest.PostHeyasRequest{}
 
 	if err := utils.BindProtobuf(c, &heyaRequest); err != nil {
@@ -116,8 +121,14 @@ func (h *HeyaHandlerGroup) PostHeyasHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
-	//TODO:セッションor MiddlewareからUserIDをもってこれるようにする
-	heya, err := h.hs.CreateHeya(c.Request().Context(), uuid.Nil, heyaRequest.Title, heyaRequest.Description)
+	userIDstr := sess.Values["userid"].(string)
+	userID, err := uuid.FromString(userIDstr)
+	if err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusInternalServerError,err)
+	}
+
+	heya, err := h.hs.CreateHeya(c.Request().Context(), userID, heyaRequest.Title, heyaRequest.Description)
 	if err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
@@ -139,11 +150,22 @@ func (h *HeyaHandlerGroup) PostHeyasHandler(c echo.Context) error {
 
 // PutHeyasByIDHandler PUT /heyas/:heyaID
 func (h *HeyaHandlerGroup) PutHeyasByIDHandler(c echo.Context) error {
+	sess, err := session.Get("session", c)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
 	heyaID := c.Param("heyaID")
 	heyaUUID, err := uuid.FromString(heyaID)
 	if err != nil {
 		c.Logger().Info(err)
 		return echo.NewHTTPError(http.StatusBadRequest, err)
+	}
+
+	userIDstr := sess.Values["userid"].(string)
+	userID, err := uuid.FromString(userIDstr)
+	if err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusInternalServerError,err)
 	}
 
 	heyaRequest := rest.PutHeyasHeyaIdRequest{}
@@ -157,8 +179,7 @@ func (h *HeyaHandlerGroup) PutHeyasByIDHandler(c echo.Context) error {
 		Description: sql.NullString{String: heyaRequest.Description, Valid: true},
 	}
 
-	//TODO:セッションor MiddlewareからUserIDをもってこれるようにする
-	if err = h.hs.PutHeyaByID(c.Request().Context(), &heya, heyaUUID, uuid.Nil); err != nil {
+	if err = h.hs.PutHeyaByID(c.Request().Context(), &heya, heyaUUID, userID); err != nil {
 		if errors.Is(err, repository.ErrNoRecordUpdated) {
 			c.Logger().Info(err)
 			return echo.NewHTTPError(http.StatusBadRequest, err)
