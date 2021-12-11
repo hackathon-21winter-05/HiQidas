@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/service/utils"
 
@@ -60,8 +61,9 @@ func (s *Service) CreateUser(c context.Context, name string) (*model.User, error
 
 	id := utils.GetUUID()
 	user := model.User{
-		ID:   id,
-		Name: name,
+		ID:         id,
+		Name:       name,
+		IconFileID: utils.NullUUID(),
 	}
 
 	err := s.repo.Do(ctx, nil, func(ctx context.Context) error {
@@ -75,5 +77,29 @@ func (s *Service) CreateUser(c context.Context, name string) (*model.User, error
 	if err != nil {
 		return nil, err
 	}
+	return &user, nil
+}
+
+func (s *Service) CreateTraPUser(c context.Context, id, iconFileID uuid.UUID, name string) (*model.User, error) {
+	ctx, cancel := utils.CreateTxContext(c)
+	defer cancel()
+
+	user := model.User{
+		ID:         id,
+		Name:       name,
+		IconFileID: utils.NullUUIDFrom(iconFileID),
+	}
+
+	err := s.repo.Do(ctx, nil, func(ctx context.Context) error {
+		if err := s.repo.CreateUser(ctx, &user); err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	return &user, nil
 }

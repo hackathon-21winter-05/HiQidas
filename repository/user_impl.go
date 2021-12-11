@@ -90,7 +90,7 @@ func (repo *GormRepository) DeleteUserByID(ctx context.Context, id uuid.UUID) er
 
 // UpdateUserByID ユーザーの情報を更新
 func (repo *GormRepository) UpdateUserByID(ctx context.Context, user *model.User) error {
-	if user.ID == uuid.Nil || user.IconFileID == uuid.Nil {
+	if user.ID == uuid.Nil || !user.IconFileID.Valid {
 		return ErrNillUUID
 	}
 
