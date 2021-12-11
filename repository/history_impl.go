@@ -17,7 +17,7 @@ func (repo *GormRepository) GetHistoriesByUserID(ctx context.Context, userID uui
 	histories := make([]*model.History, len(userID))
 
 	err = db.
-		Where("id = ?", userID).
+		Where("user_id = ?", userID).
 		Find(&histories).Error
 
 	if err != nil {
