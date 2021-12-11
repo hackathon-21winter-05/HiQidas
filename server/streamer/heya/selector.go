@@ -9,17 +9,17 @@ import (
 )
 
 func (hs *HeyaStreamer) handlerSelector(mes *cliMessage) error {
-	var WsHeyaData ws.WsHeyaData
+	wsHeyaData := &ws.WsHeyaData{}
 
-	err := proto.Unmarshal(mes.body, &WsHeyaData)
+	err := proto.Unmarshal(mes.body, wsHeyaData)
 	if err != nil {
 		_ = hs.sendErrorMes(mes.clientID, err.Error())
 		return err
 	}
 
-	switch WsHeyaData.GetPayload().(type) {
+	switch wsHeyaData.GetPayload().(type) {
 	case *ws.WsHeyaData_CreateHiqidashi:
-		err := hs.createHiqidashiHandler(mes.userID, mes.heyaid, WsHeyaData.GetCreateHiqidashi())
+		err := hs.createHiqidashiHandler(mes.userID, mes.heyaid, wsHeyaData.GetCreateHiqidashi())
 		if err != nil {
 			_ = hs.sendErrorMes(mes.clientID, err.Error())
 			return err
@@ -27,7 +27,7 @@ func (hs *HeyaStreamer) handlerSelector(mes *cliMessage) error {
 		return nil
 
 	case *ws.WsHeyaData_EditHiqidashi:
-		err := hs.editHiqidashiHandler(mes.userID, mes.heyaid, WsHeyaData.GetEditHiqidashi())
+		err := hs.editHiqidashiHandler(mes.userID, mes.heyaid, wsHeyaData.GetEditHiqidashi())
 		if err != nil {
 			_ = hs.sendErrorMes(mes.clientID, err.Error())
 			return err
@@ -35,7 +35,7 @@ func (hs *HeyaStreamer) handlerSelector(mes *cliMessage) error {
 		return nil
 
 	case *ws.WsHeyaData_DeleteHiqidashi:
-		err := hs.deleteHiqidashiHandler(mes.heyaid, WsHeyaData.GetDeleteHiqidashi())
+		err := hs.deleteHiqidashiHandler(mes.heyaid, wsHeyaData.GetDeleteHiqidashi())
 		if err != nil {
 			_ = hs.sendErrorMes(mes.clientID, err.Error())
 			return err
