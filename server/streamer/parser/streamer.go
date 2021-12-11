@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/gofrs/uuid"
+	"github.com/hackathon-21winter-05/HiQidas/config"
 	"github.com/hackathon-21winter-05/HiQidas/model"
 	"github.com/hackathon-21winter-05/HiQidas/server/protobuf/parser"
 	"github.com/hackathon-21winter-05/HiQidas/service"
@@ -13,13 +14,15 @@ import (
 )
 
 type ParserStreamer struct {
+	c             *config.Config
 	client        []*client
 	receiveBuffer chan []byte
 	ser           *service.Service
 }
 
-func NewParserStreamer(ser *service.Service) *ParserStreamer {
+func NewParserStreamer(c *config.Config, ser *service.Service) *ParserStreamer {
 	s := &ParserStreamer{
+		c:             c,
 		client:        []*client{},
 		receiveBuffer: make(chan []byte),
 		ser:           ser,

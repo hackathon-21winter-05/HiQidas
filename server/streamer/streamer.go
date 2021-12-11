@@ -1,6 +1,7 @@
 package streamer
 
 import (
+	"github.com/hackathon-21winter-05/HiQidas/config"
 	"github.com/hackathon-21winter-05/HiQidas/server/streamer/heya"
 	"github.com/hackathon-21winter-05/HiQidas/server/streamer/parser"
 	"github.com/hackathon-21winter-05/HiQidas/server/streamer/yjs"
@@ -14,8 +15,8 @@ type Streamer struct {
 	ps *parser.ParserStreamer
 }
 
-func NewStreamer(ser *service.Service) *Streamer {
-	ps := parser.NewParserStreamer(ser)
+func NewStreamer(c *config.Config, ser *service.Service) *Streamer {
+	ps := parser.NewParserStreamer(c, ser)
 
 	return &Streamer{
 		hs: heya.NewHeyaStreamer(ser),
