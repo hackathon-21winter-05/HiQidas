@@ -76,11 +76,7 @@ func (h *HeyaHandlerGroup) GetUsersByHeyaIDHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
-	userIDs, err := h.hs.GetUsersByHeyaID(c.Request().Context(), heyaUUID)
-	if err != nil {
-		c.Logger().Error(err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err)
-	}
+	userIDs := h.hs.GetHeyaClientsIDByHeyaID(heyaUUID)
 
 	res := rest.GetHeyasHeyaIdUsersResponse{UserId: utils.UuidsToStrings(userIDs)}
 

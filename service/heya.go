@@ -4,11 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"time"
+
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
 	"github.com/hackathon-21winter-05/HiQidas/repository"
 	"github.com/hackathon-21winter-05/HiQidas/service/utils"
-	"time"
 )
 
 type HeyaService interface {
@@ -16,7 +17,6 @@ type HeyaService interface {
 	DeleteHeya(c context.Context, heyaID uuid.UUID) error
 	GetHeyas(c context.Context) ([]*model.Heya, error)
 	GetHeyaByID(c context.Context, heyaID uuid.UUID) (*model.Heya, error)
-	GetUsersByHeyaID(c context.Context, heyaID uuid.UUID) ([]uuid.UUID, error)
 	PutHeyaByID(c context.Context, heya *model.NullHeya, heyaID, userID uuid.UUID) error
 	PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, isFavorite bool) error
 }
@@ -119,13 +119,6 @@ func (s *Service) GetHeyaByID(c context.Context, heyaID uuid.UUID) (*model.Heya,
 	return heya, nil
 }
 
-func (s *Service) GetUsersByHeyaID(c context.Context, heyaID uuid.UUID) ([]uuid.UUID, error) {
-	//TODO: どこからUserがそのヘヤにいるのかを持ってくる
-	/*ctx,cancel := utils.CreateTxContext(c)
-	defer cancel()*/
-	return nil, nil
-}
-
 func (s *Service) PutHeyaByID(c context.Context, heya *model.NullHeya, heyaID, userID uuid.UUID) error {
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
@@ -164,7 +157,7 @@ func (s *Service) PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, userI
 				UserID: userID,
 				HeyaID: heyaID,
 			}
-			favos,err := s.repo.GetFavoritesByUserID(ctx,userID)
+			favos, err := s.repo.GetFavoritesByUserID(ctx, userID)
 			if err == repository.ErrNotFound {
 				return nil
 			}
@@ -184,7 +177,7 @@ func (s *Service) PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, userI
 			}
 		} else {
 			if err := s.repo.DeleteFavoriteByHeyaIDAndUserID(ctx, heyaID, userID); err != nil {
-				if errors.Is(err,repository.ErrNoRecordDeleted) {
+				if errors.Is(err, repository.ErrNoRecordDeleted) {
 					return nil
 				}
 				return err
