@@ -17,7 +17,9 @@ type HeyaService interface {
 	GetHeyaByID(c context.Context, heyaID uuid.UUID) (*model.Heya, error)
 	GetUsersByHeyaID(c context.Context, heyaID uuid.UUID) ([]uuid.UUID, error)
 	PutHeyaByID(c context.Context, heya *model.NullHeya, heyaID, userID uuid.UUID) error
+	PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, isFavorite bool) error
 }
+
 func (s *Service) CreateHeya(c context.Context, userID uuid.UUID, title, description string) (*model.Heya, error) {
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
@@ -144,3 +146,30 @@ func (s *Service) PutHeyaByID(c context.Context, heya *model.NullHeya, heyaID, u
 	return nil
 }
 
+func (s *Service) PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, userID uuid.UUID, isFavorite bool) error {
+	ctx, cancel := utils.CreateTxContext(c)
+	defer cancel()
+
+	favo := model.Favorite{
+		UserID: userID,
+		HeyaID: heyaID,
+	}
+
+	err := s.repo.Do(ctx, nil, func(ctx context.Context) error {
+		if isFavorite {
+			if err := s.repo.DeleteFavoriteByHeyaID(ctx, heyaID); err != nil {
+				return err
+			}
+		} else {
+			if err := s.repo.CreateFavorite(ctx, &favo); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
