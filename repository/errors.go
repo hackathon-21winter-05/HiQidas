@@ -9,4 +9,6 @@ var (
 	ErrNoRecordUpdated = errors.New("no record updated")
 	// ErrNillUUID UUIDがnullです
 	ErrNillUUID = errors.New("nil uuid")
+	// ErrNotFound 取得したレコードがありませんでした
+	ErrNotFound = errors.New("record not found")
 )
