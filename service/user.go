@@ -39,5 +39,25 @@ func (s *Service) GetHeyaByUserMe(c context.Context, myUserID uuid.UUID) ([]*mod
 }
 
 func (s *Service) CreateUser(c context.Context, name string) (*model.User, error) {
-	panic("implement me")
+	ctx, cancel := utils.CreateTxContext(c)
+	defer cancel()
+
+	id := utils.GetUUID()
+	user := model.User{
+		ID:   id,
+		Name: name,
+	}
+
+	err := s.repo.Do(ctx, nil, func(ctx context.Context) error {
+
+		if err := s.repo.CreateUser(ctx, &user); err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
