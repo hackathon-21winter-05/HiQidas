@@ -14,7 +14,8 @@ import (
 func (uh *UserHandlerGroup) GetUsersHandler(c echo.Context) error {
 	userIDs, err := uh.s.GetUsersID(c.Request().Context())
 	if err != nil {
-		return c.String(http.StatusInternalServerError, err.Error())
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
 	userStringIDs := utils.UuidsToStrings(userIDs)
