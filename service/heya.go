@@ -157,11 +157,11 @@ func (s *Service) PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, userI
 
 	err := s.repo.Do(ctx, nil, func(ctx context.Context) error {
 		if isFavorite {
-			if err := s.repo.DeleteFavoriteByHeyaID(ctx, heyaID); err != nil {
+			if err := s.repo.CreateFavorite(ctx, &favo); err != nil {
 				return err
 			}
 		} else {
-			if err := s.repo.CreateFavorite(ctx, &favo); err != nil {
+			if err := s.repo.DeleteFavoriteByHeyaID(ctx, heyaID); err != nil {
 				return err
 			}
 		}
