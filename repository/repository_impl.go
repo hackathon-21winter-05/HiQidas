@@ -18,6 +18,7 @@ var allTables = []interface{}{
 	model.History{},
 	model.Hiqidashi{},
 	model.Tsuna{},
+	model.Favorite{},
 }
 
 type GormRepository struct {
