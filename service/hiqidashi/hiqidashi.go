@@ -11,6 +11,7 @@ import (
 var defaultColors = []string{"0F2540", "00AA90", "E03C8A", "9E7A7A", "2EA9DF", "42602D", "77428D", "FFB11B"}
 
 type HiqidashiService interface {
+	GetHiqidashis(c context.Context) ([]*model.Hiqidashi, error)
 	GetHiqidashisByHeyaID(c context.Context, heyaID uuid.UUID) ([]*model.Hiqidashi, error)
 	CreateHiqidashi(c context.Context, createrID, heyaID, parentID uuid.UUID) (*model.Hiqidashi, error)
 	UpdateHiqidashiByID(c context.Context, hiqidashi *model.NullHiqidashi) error
