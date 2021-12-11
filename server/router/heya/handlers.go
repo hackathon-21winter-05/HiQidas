@@ -178,7 +178,13 @@ func (h *HeyaHandlerGroup) PutFavoriteByHeyaIDHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
-	userID := sess.Values["userid"].(uuid.UUID)
+	userIDstr := sess.Values["userid"].(string)
+	userID, err := uuid.FromString(userIDstr)
+	if err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusInternalServerError,err)
+	}
+
 	heyaID := c.Param("heyaID")
 
 	uuidHeyaID,err := uuid.FromString(heyaID)
