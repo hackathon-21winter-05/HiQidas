@@ -1,6 +1,8 @@
 package user
 
 import (
+	"github.com/gofrs/uuid"
+	"github.com/labstack/echo-contrib/session"
 	"net/http"
 
 	"github.com/hackathon-21winter-05/HiQidas/server/protobuf/rest"
@@ -26,7 +28,30 @@ func (uh *UserHandlerGroup) GetUsersHandler(c echo.Context) error {
 
 // GetUsersMeHandler GET /users/me
 func (uh *UserHandlerGroup) GetUsersMeHandler(c echo.Context) error {
-	panic("implement me")
+	sess, err := session.Get("session", c)
+	if err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusBadRequest, "failed to get session", err)
+	}
+
+	accessToken := sess.Values["accessToken"]
+	if accessToken == nil {
+		//こんな感じ？
+	}
+
+	UserID := sess.Values["userID"].(uuid.UUID)
+
+	user, err := uh.s.GetUserByID(c.Request().Context(), UserID)
+	if err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	res := rest.User{
+		Id:   UserID.String(),
+		Name: user.Name,
+	}
+
+	return utils.SendProtobuf(c, http.StatusOK, &res)
 }
 
 // GetHeyasByMeHandler GET /users/me/heyas
