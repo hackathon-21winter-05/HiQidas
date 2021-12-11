@@ -135,5 +135,23 @@ func (uh *UserHandlerGroup) GetUsersByIDHandler(c echo.Context) error {
 
 // PostUsersHandler POST /users
 func (uh *UserHandlerGroup) PostUsersHandler(c echo.Context) error {
-	panic("implement me")
+	req := rest.PostUsersResponse{}
+
+	if err := utils.BindProtobuf(c, &req); err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusBadRequest,err)
+	}
+
+	res,err := uh.s.CreateUser(c.Request().Context(),req.User.Name)
+	if err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+
+	protoRes := rest.PostUsersResponse{User: &rest.User{
+		Id:   res.ID.String(),
+		Name: res.Name,
+	}}
+
+	return utils.SendProtobuf(c,http.StatusCreated,&protoRes)
 }
