@@ -18,7 +18,11 @@ func (hs *HeyaStreamer) ConnectHeyaWS(c echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
-	userID := sess.Values["userid"].(uuid.UUID)
+	userIDstr := sess.Values["userid"].(string)
+	userID, err := uuid.FromString(userIDstr)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
 
 	heyaIDString := c.Param("heyaid")
 	heyaID, err := uuid.FromString(heyaIDString)
