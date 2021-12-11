@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -17,6 +18,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/sapphi-red/go-traq"
 	"github.com/thanhpk/randstr"
+	"gorm.io/gorm"
 )
 
 const oauthCodeRedirect = "https://q.trap.jp/api/v3/oauth2/authorize"
@@ -96,10 +98,14 @@ func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 	}
 
 	userUUID, _ := uuid.FromString(v.Id)
-	iconFileUUID, _ := uuid.FromString(v.IconFileId)
-	_, err = r.ser.CreateTraPUser(c.Request().Context(), userUUID, iconFileUUID, v.Name)
-	if err != nil {
-		return c.String(http.StatusInternalServerError, err.Error())
+	_, err = r.ser.GetUserByID(c.Request().Context(), userUUID)
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		iconFileUUID, _ := uuid.FromString(v.IconFileId)
+		_, err = r.ser.CreateTraPUser(c.Request().Context(), userUUID, iconFileUUID, v.Name)
+		if err != nil {
+			return c.String(http.StatusInternalServerError, err.Error())
+		}
 	}
 
 	sess.Values["userid"] = userUUID
