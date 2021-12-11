@@ -82,7 +82,7 @@ func (s *Service) DeleteHeya(c context.Context, heyaID uuid.UUID) error {
 			return err
 		}
 		if err := s.repo.DeleteFavoriteByHeyaID(ctx, heyaID); err != nil {
-			//そもそもFavorite似ない可能性があるため無かったらerrではなくnilを返す
+			//そもそもFavoriteにない可能性があるため無かったらerrではなくnilを返す
 			if errors.Is(err,repository.ErrNoRecordDeleted) {
 				return nil
 			}
@@ -159,13 +159,12 @@ func (s *Service) PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, userI
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
 
-	favo := model.Favorite{
-		UserID: userID,
-		HeyaID: heyaID,
-	}
-
 	err := s.repo.Do(ctx, nil, func(ctx context.Context) error {
 		if isFavorite {
+			favo := model.Favorite{
+				UserID: userID,
+				HeyaID: heyaID,
+			}
 			if err := s.repo.CreateFavorite(ctx, &favo); err != nil {
 				return err
 			}
