@@ -15,10 +15,7 @@ type UserService interface {
 	GetHeyaByUserMe(c context.Context, myUserID uuid.UUID) ([]*model.Heya, error)
 	CreateUser(c context.Context, name string) (*model.User, error)
 	CreateTraPUser(c context.Context, id, iconFileID uuid.UUID, name string) (*model.User, error)
-
-	/* 未実装
-	GetUserMeFavorites(c context.Context)
-	*/
+	GetUserMeFavorites(c context.Context, userID uuid.UUID) ([]uuid.UUID, error)
 }
 
 func (s *Service) GetUsersID(c context.Context) (model.UserIDs, error) {
@@ -54,6 +51,18 @@ func (s *Service) GetHeyaByUserMe(c context.Context, myUserID uuid.UUID) ([]*mod
 	}
 
 	return heyas, nil
+}
+
+func (s *Service) GetUserMeFavorites(c context.Context, userID uuid.UUID) ([]*model.Favorite, error) {
+	ctx, cancel := utils.CreateTxContext(c)
+	defer cancel()
+
+	favorites,err := s.repo.GetFavoritesByUserID(ctx,userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return favorites,nil
 }
 
 func (s *Service) CreateUser(c context.Context, name string) (*model.User, error) {

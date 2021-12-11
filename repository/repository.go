@@ -7,4 +7,5 @@ type Repository interface {
 	HiqidashiRepository
 	HistoryRepository
 	TsunaRepository
+	FavoriteRepository
 }

@@ -9,6 +9,10 @@ import (
 
 // GetHistoriesByUserID ユーザーの履歴の取得
 func (repo *GormRepository) GetHistoriesByUserID(ctx context.Context, userID uuid.UUID) ([]*model.History, error) {
+	if userID == uuid.Nil {
+		return nil,ErrNillUUID
+	}
+
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get db: %w", err)
@@ -17,7 +21,7 @@ func (repo *GormRepository) GetHistoriesByUserID(ctx context.Context, userID uui
 	histories := make([]*model.History, len(userID))
 
 	err = db.
-		Where("id = ?", userID).
+		Where("user_id = ?", userID).
 		Find(&histories).Error
 
 	if err != nil {

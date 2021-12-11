@@ -3,9 +3,10 @@ package service
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
-
+	"github.com/hackathon-21winter-05/HiQidas/repository"
 	"github.com/hackathon-21winter-05/HiQidas/service/utils"
 	"time"
 )
@@ -17,7 +18,9 @@ type HeyaService interface {
 	GetHeyaByID(c context.Context, heyaID uuid.UUID) (*model.Heya, error)
 	GetUsersByHeyaID(c context.Context, heyaID uuid.UUID) ([]uuid.UUID, error)
 	PutHeyaByID(c context.Context, heya *model.NullHeya, heyaID, userID uuid.UUID) error
+	PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, isFavorite bool) error
 }
+
 func (s *Service) CreateHeya(c context.Context, userID uuid.UUID, title, description string) (*model.Heya, error) {
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
@@ -75,6 +78,13 @@ func (s *Service) DeleteHeya(c context.Context, heyaID uuid.UUID) error {
 			return err
 		}
 		if err := s.repo.DeleteHiqidashisByHeyaID(ctx, heyaID); err != nil {
+			return err
+		}
+		if err := s.repo.DeleteFavoriteByHeyaID(ctx, heyaID); err != nil {
+			//そもそもFavoriteにない可能性があるため無かったらerrではなくnilを返す
+			if errors.Is(err, repository.ErrNoRecordDeleted) {
+				return nil
+			}
 			return err
 		}
 		return nil
@@ -144,3 +154,47 @@ func (s *Service) PutHeyaByID(c context.Context, heya *model.NullHeya, heyaID, u
 	return nil
 }
 
+func (s *Service) PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, userID uuid.UUID, isFavorite bool) error {
+	ctx, cancel := utils.CreateTxContext(c)
+	defer cancel()
+
+	err := s.repo.Do(ctx, nil, func(ctx context.Context) error {
+		if isFavorite {
+			favo := model.Favorite{
+				UserID: userID,
+				HeyaID: heyaID,
+			}
+			favos,err := s.repo.GetFavoritesByUserID(ctx,userID)
+			if err == repository.ErrNotFound {
+				return nil
+			}
+			//存在していたらtrueを返す
+			exists := false
+			for _, favorite := range favos {
+				if favorite.HeyaID != heyaID {
+					continue
+				}
+				exists = true
+			}
+			if exists {
+				return nil
+			}
+			if err = s.repo.CreateFavorite(ctx, &favo); err != nil {
+				return err
+			}
+		} else {
+			if err := s.repo.DeleteFavoriteByHeyaIDAndUserID(ctx, heyaID, userID); err != nil {
+				if errors.Is(err,repository.ErrNoRecordDeleted) {
+					return nil
+				}
+				return err
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

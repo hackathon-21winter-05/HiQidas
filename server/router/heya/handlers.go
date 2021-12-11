@@ -190,3 +190,40 @@ func (h *HeyaHandlerGroup) PutHeyasByIDHandler(c echo.Context) error {
 
 	return c.NoContent(http.StatusOK)
 }
+
+// PutFavoriteByHeyaIDHandler PUT /heyas/{heyaID}/favorite
+func (h *HeyaHandlerGroup) PutFavoriteByHeyaIDHandler(c echo.Context) error {
+	sess, err := session.Get("session", c)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+
+	userIDstr := sess.Values["userid"].(string)
+	userID, err := uuid.FromString(userIDstr)
+	if err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusInternalServerError,err)
+	}
+
+	heyaID := c.Param("heyaID")
+
+	uuidHeyaID,err := uuid.FromString(heyaID)
+	if err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusBadRequest,err)
+	}
+
+	req := rest.PutHeyasUserIdFavoriteRequest{}
+
+	if err = utils.BindProtobuf(c, &req); err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusBadRequest,"failed to bind ",err)
+	}
+
+	if err = h.hs.PutFavoriteByHeyaID(c.Request().Context(), uuidHeyaID, userID, req.IsFavorite); err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError,err)
+	}
+
+	return c.NoContent(http.StatusOK)
+}

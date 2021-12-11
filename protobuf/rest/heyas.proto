@@ -37,6 +37,11 @@ message DeleteHeyasHeyaIdRequest { common.Status status = 1; }
 // GET /heyas/{heyaId}/users ヘヤにいるUserを返す
 message GetHeyasHeyaIdUsersResponse { repeated string user_id = 1; }
 
+//PUT /heyas/{heyaID}/favorite ヘヤのお気に入りを変更
+message PutHeyasUserIdFavoriteRequest {
+    bool is_favorite = 1;
+}
+
 message Heya {
   string id = 1;
   string title = 2;
