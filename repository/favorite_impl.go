@@ -44,7 +44,32 @@ func (repo *GormRepository) CreateFavorite(ctx context.Context, favorite *model.
 	return nil
 }
 
-func (repo *GormRepository) DeleteFavoriteByHeyaID(ctx context.Context, heyaID uuid.UUID) error {
+func (repo *GormRepository) DeleteFavoriteByHeyaIDAndUserID(ctx context.Context, heyaID,userID uuid.UUID) error {
+	if heyaID == uuid.Nil {
+		return ErrNillUUID
+	}
+
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get db: %w", err)
+	}
+
+	result := db.
+		Where("heya_id = ? AND user_id = ?", heyaID,userID).
+		Delete(&model.Favorite{})
+	err = result.Error
+
+	if err != nil {
+		return fmt.Errorf("failed to delete favorite :%w", err)
+	}
+	if result.RowsAffected == 0 {
+		return ErrNoRecordDeleted
+	}
+
+	return nil
+}
+
+func (repo *GormRepository) DeleteFavoriteByHeyaID(ctx context.Context, heyaID uuid.UUID) error  {
 	if heyaID == uuid.Nil {
 		return ErrNillUUID
 	}
