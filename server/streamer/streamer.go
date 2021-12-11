@@ -2,6 +2,7 @@ package streamer
 
 import (
 	"github.com/hackathon-21winter-05/HiQidas/server/streamer/heya"
+	"github.com/hackathon-21winter-05/HiQidas/server/streamer/parser"
 	"github.com/hackathon-21winter-05/HiQidas/server/streamer/yjs"
 	"github.com/hackathon-21winter-05/HiQidas/service"
 	"github.com/labstack/echo/v4"
@@ -10,6 +11,7 @@ import (
 type Streamer struct {
 	hs *heya.HeyaStreamer
 	ys *yjs.YjsStreamer
+	ps *parser.ParserStreamer
 }
 
 func NewStreamer(ser *service.Service) *Streamer {
@@ -22,6 +24,7 @@ func NewStreamer(ser *service.Service) *Streamer {
 func (s *Streamer) Run() {
 	go s.hs.Listen()
 	go s.ys.Listen()
+	go s.ps.Listen()
 }
 
 func (s *Streamer) ConnectHeyaWS(c echo.Context) error {
@@ -30,4 +33,8 @@ func (s *Streamer) ConnectHeyaWS(c echo.Context) error {
 
 func (s *Streamer) ConnectYjsWS(c echo.Context) error {
 	return s.ys.ConnectYjsWS(c)
+}
+
+func (s *Streamer) ConnectParserWS(c echo.Context) error {
+	return s.ps.ConnectParserWS(c)
 }
