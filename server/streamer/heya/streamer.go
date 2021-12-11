@@ -35,10 +35,10 @@ func (hs *HeyaStreamer) Listen() {
 }
 
 func (hs *HeyaStreamer) sendToHeya(heyaID uuid.UUID, body []byte) {
-	clientsID := hs.ser.GetHeyaClientsIDByHeyaID(heyaID)
+	clients := hs.ser.GetHeyaClientsIDByHeyaID(heyaID)
 
-	for _, clientID := range clientsID {
-		hs.sendToClient(clientID, body)
+	for _, client := range clients {
+		hs.sendToClient(client.ID, body)
 	}
 }
 

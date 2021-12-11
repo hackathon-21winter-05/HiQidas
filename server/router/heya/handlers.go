@@ -3,8 +3,9 @@ package heya
 import (
 	"database/sql"
 	"errors"
-	"github.com/labstack/echo-contrib/session"
 	"net/http"
+
+	"github.com/labstack/echo-contrib/session"
 
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
@@ -76,7 +77,11 @@ func (h *HeyaHandlerGroup) GetUsersByHeyaIDHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
-	userIDs := h.hs.GetHeyaClientsIDByHeyaID(heyaUUID)
+	clients := h.hs.GetHeyaClientsIDByHeyaID(heyaUUID)
+	userIDs := make([]uuid.UUID, 0)
+	for _, client := range clients {
+		userIDs = append(userIDs, client.UserID)
+	}
 
 	res := rest.GetHeyasHeyaIdUsersResponse{UserId: utils.UuidsToStrings(userIDs)}
 
@@ -121,7 +126,7 @@ func (h *HeyaHandlerGroup) PostHeyasHandler(c echo.Context) error {
 	userID, err := uuid.FromString(userIDstr)
 	if err != nil {
 		c.Logger().Info(err)
-		return echo.NewHTTPError(http.StatusInternalServerError,err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
 	heya, err := h.hs.CreateHeya(c.Request().Context(), userID, heyaRequest.Title, heyaRequest.Description)
@@ -161,7 +166,7 @@ func (h *HeyaHandlerGroup) PutHeyasByIDHandler(c echo.Context) error {
 	userID, err := uuid.FromString(userIDstr)
 	if err != nil {
 		c.Logger().Info(err)
-		return echo.NewHTTPError(http.StatusInternalServerError,err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
 	heyaRequest := rest.PutHeyasHeyaIdRequest{}
@@ -198,27 +203,27 @@ func (h *HeyaHandlerGroup) PutFavoriteByHeyaIDHandler(c echo.Context) error {
 	userID, err := uuid.FromString(userIDstr)
 	if err != nil {
 		c.Logger().Info(err)
-		return echo.NewHTTPError(http.StatusInternalServerError,err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
 	heyaID := c.Param("heyaID")
 
-	uuidHeyaID,err := uuid.FromString(heyaID)
+	uuidHeyaID, err := uuid.FromString(heyaID)
 	if err != nil {
 		c.Logger().Info(err)
-		return echo.NewHTTPError(http.StatusBadRequest,err)
+		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
 	req := rest.PutHeyasUserIdFavoriteRequest{}
 
 	if err = utils.BindProtobuf(c, &req); err != nil {
 		c.Logger().Info(err)
-		return echo.NewHTTPError(http.StatusBadRequest,"failed to bind ",err)
+		return echo.NewHTTPError(http.StatusBadRequest, "failed to bind ", err)
 	}
 
 	if err = h.hs.PutFavoriteByHeyaID(c.Request().Context(), uuidHeyaID, userID, req.IsFavorite); err != nil {
 		c.Logger().Error(err)
-		return echo.NewHTTPError(http.StatusInternalServerError,err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
 	return c.NoContent(http.StatusOK)

@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofrs/uuid"
 	"github.com/gorilla/websocket"
+	"github.com/hackathon-21winter-05/HiQidas/model"
 	"github.com/hackathon-21winter-05/HiQidas/server/protobuf/ws"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -62,7 +63,12 @@ func (hs *HeyaStreamer) ConnectHeyaWS(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	hs.ser.AddHeyaClient(heyaID, clientID)
+	hs.ser.AddHeyaClient(heyaID,
+		&model.HeyaClient{
+			ID:                 clientID,
+			UserID:             userID,
+			EditingHiqidashiID: uuid.Nil,
+		})
 
 	<-cli.closer
 
