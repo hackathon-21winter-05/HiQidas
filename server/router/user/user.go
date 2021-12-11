@@ -15,9 +15,9 @@ func NewUserHandlerGroup(s *service.Service) *UserHandlerGroup {
 
 type UserHandler interface {
 	GetUsersHandler(c echo.Context) error
-	GetUsersMeHandler(c echo.Context) error
-	GetHeyasByMeHandler(c echo.Context) error
-	GetFavoriteUsersMeHandler(c echo.Context) error
 	GetUsersByIDHandler(c echo.Context) error
+	GetUsersMeHandler(c echo.Context) error
+	GetFavoriteUsersMeHandler(c echo.Context) error
+	GetHeyasByMeHandler(c echo.Context) error
 	PostUsersHandler(c echo.Context) error
 }
