@@ -56,18 +56,18 @@ func (uh *UserHandlerGroup) GetUsersMeHandler(c echo.Context) error {
 
 // GetHeyasByMeHandler GET /users/me/heyas
 func (uh *UserHandlerGroup) GetHeyasByMeHandler(c echo.Context) error {
-	panic("implement me")
+
 }
 
 // GetFavoriteUsersMeHandler GET /users/me/favorites
 func (uh *UserHandlerGroup) GetFavoriteUsersMeHandler(c echo.Context) error {
-	panic("implement me")
+	return c.String(http.StatusOK, "favorite")
 }
 
 // GetUsersByIDHandler GET /users/{userID}
 func (uh *UserHandlerGroup) GetUsersByIDHandler(c echo.Context) error {
 	userID := c.Param("userID")
-	sess,err := session.Get("session",c)
+	sess, err := session.Get("session", c)
 	if err != nil {
 		c.Logger().Info(err)
 		return echo.NewHTTPError(http.StatusBadRequest, "failed to get session", err)
@@ -78,10 +78,10 @@ func (uh *UserHandlerGroup) GetUsersByIDHandler(c echo.Context) error {
 		//こんな感じ？
 	}
 
-	uuidUserID,err :=uuid.FromString(userID)
+	uuidUserID, err := uuid.FromString(userID)
 	if err != nil {
 		c.Logger().Info(err)
-		return echo.NewHTTPError(http.StatusBadRequest,err)
+		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 	user, err := uh.s.GetUserByID(c.Request().Context(), uuidUserID)
 	if err != nil {
@@ -94,7 +94,7 @@ func (uh *UserHandlerGroup) GetUsersByIDHandler(c echo.Context) error {
 		Name: user.Name,
 	}
 
-	return utils.SendProtobuf(c,http.StatusOK,&res)
+	return utils.SendProtobuf(c, http.StatusOK, &res)
 }
 
 // PostUsersHandler POST /users
