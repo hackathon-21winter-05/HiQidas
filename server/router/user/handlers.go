@@ -86,7 +86,25 @@ func (uh *UserHandlerGroup) GetHeyasByMeHandler(c echo.Context) error {
 
 // GetFavoriteUsersMeHandler GET /users/me/favorites
 func (uh *UserHandlerGroup) GetFavoriteUsersMeHandler(c echo.Context) error {
-	return c.String(http.StatusOK, "favorite")
+	sess, err := session.Get("session", c)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	userID := sess.Values["userid"].(uuid.UUID)
+
+	favorites, err := uh.s.GetUserMeFavorites(c.Request().Context(), userID)
+	if err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+
+	favoIDs := []string{}
+	for _, favorite := range favorites {
+		favoIDs = append(favoIDs, favorite.HeyaID.String())
+	}
+	res := rest.GetUsersMeFavorites{FavoriteHeyaId: favoIDs}
+
+	return utils.SendProtobuf(c, http.StatusOK, &res)
 }
 
 // GetUsersByIDHandler GET /users/{userID}
