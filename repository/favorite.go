@@ -7,7 +7,7 @@ import (
 )
 
 type FavoriteRepository interface {
-	GetFavoritesByUserID(ctx context.Context, userID uuid.UUID) ([]*model.History, error)
-	CreateFavorite(ctx context.Context, history *model.History) error
+	GetFavoritesByUserID(ctx context.Context, userID uuid.UUID) ([]*model.Favorite, error)
+	CreateFavorite(ctx context.Context, favorite *model.Favorite) error
 	DeleteFavoriteByHeyaID(ctx context.Context, heyaID uuid.UUID) error
 }
