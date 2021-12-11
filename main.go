@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"math/rand"
 	"time"
 
 	"github.com/hackathon-21winter-05/HiQidas/config"
@@ -18,6 +19,8 @@ func init() {
 	}
 
 	time.Local = loc
+
+	rand.Seed(time.Now().UnixNano())
 }
 
 func main() {

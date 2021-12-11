@@ -142,6 +142,9 @@ func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *
 	if hiqidashi.Description.Valid {
 		hiqidashiMap["description"] = hiqidashi.Description
 	}
+	if hiqidashi.ColorCode.Valid {
+		hiqidashiMap["color_code"] = hiqidashi.ColorCode
+	}
 	hiqidashiMap["updated_at"] = hiqidashi.UpdatedAt
 
 	result := db.
