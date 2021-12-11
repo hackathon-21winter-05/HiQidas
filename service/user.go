@@ -31,7 +31,15 @@ func (s *Service) GetUsersID(c context.Context) (model.UserIDs, error) {
 }
 
 func (s *Service) GetUserByID(c context.Context, myUserID uuid.UUID) (*model.User, error) {
-	panic("implement me")
+	ctx,cancel := utils.CreateTxContext(c)
+	defer cancel()
+
+	user,err := s.repo.GetUserByID(ctx,myUserID)
+	if err != nil {
+		return nil, err
+	}
+
+	return user,nil
 }
 
 func (s *Service) GetHeyaByUserMe(c context.Context, myUserID uuid.UUID) ([]*model.Heya, error) {
