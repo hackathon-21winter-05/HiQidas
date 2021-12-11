@@ -3,8 +3,10 @@ package service
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
+	"github.com/hackathon-21winter-05/HiQidas/repository"
 
 	"github.com/hackathon-21winter-05/HiQidas/service/utils"
 	"time"
@@ -77,6 +79,13 @@ func (s *Service) DeleteHeya(c context.Context, heyaID uuid.UUID) error {
 			return err
 		}
 		if err := s.repo.DeleteHiqidashisByHeyaID(ctx, heyaID); err != nil {
+			return err
+		}
+		if err := s.repo.DeleteFavoriteByHeyaID(ctx, heyaID); err != nil {
+			//そもそもFavorite似ない可能性があるため無かったらerrではなくnilを返す
+			if errors.Is(err,repository.ErrNoRecordDeleted) {
+				return nil
+			}
 			return err
 		}
 		return nil
