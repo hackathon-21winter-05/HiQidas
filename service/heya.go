@@ -7,7 +7,6 @@ import (
 	"github.com/gofrs/uuid"
 	"github.com/hackathon-21winter-05/HiQidas/model"
 	"github.com/hackathon-21winter-05/HiQidas/repository"
-
 	"github.com/hackathon-21winter-05/HiQidas/service/utils"
 	"time"
 )
@@ -165,9 +164,19 @@ func (s *Service) PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, userI
 				UserID: userID,
 				HeyaID: heyaID,
 			}
-			_,err := s.repo.GetFavoritesByUserID(ctx,userID)
-			//存在していたらnilを返す
+			favos,err := s.repo.GetFavoritesByUserID(ctx,userID)
 			if err == repository.ErrNotFound {
+				return nil
+			}
+			//存在していたらtrueを返す
+			exists := false
+			for _, favorite := range favos {
+				if favorite.HeyaID != heyaID {
+					continue
+				}
+				exists = true
+			}
+			if exists {
 				return nil
 			}
 			if err = s.repo.CreateFavorite(ctx, &favo); err != nil {

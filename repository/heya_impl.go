@@ -91,6 +91,7 @@ func (repo *GormRepository) UpdateHeyaByID(ctx context.Context, heya *model.Null
 
 	result := db.
 		Model(&model.Heya{}).
+		Where("id = ?",heya.ID).
 		Updates(&heyaMap)
 	err = result.Error
 	if err != nil {
