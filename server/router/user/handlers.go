@@ -45,13 +45,14 @@ func (uh *UserHandlerGroup) GetUsersMeHandler(c echo.Context) error {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
-	res := rest.User{
-		Id:         userID.String(),
-		Name:       user.Name,
-		IconFileId: user.IconFileID.UUID.String(),
-	}
+	res := &rest.GetUsersMeResponse{
+		Me: &rest.User{
+			Id:         userID.String(),
+			Name:       user.Name,
+			IconFileId: user.IconFileID.UUID.String(),
+		}}
 
-	return utils.SendProtobuf(c, http.StatusOK, &res)
+	return utils.SendProtobuf(c, http.StatusOK, res)
 }
 
 // GetHeyasByMeHandler GET /users/me/heyas
@@ -112,13 +113,14 @@ func (uh *UserHandlerGroup) GetUsersByIDHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
-	res := rest.User{
-		Id:         userID,
-		Name:       user.Name,
-		IconFileId: user.IconFileID.UUID.String(),
-	}
+	res := &rest.GetUsersUserIdResponse{
+		User: &rest.User{
+			Id:         userID,
+			Name:       user.Name,
+			IconFileId: user.IconFileID.UUID.String(),
+		}}
 
-	return utils.SendProtobuf(c, http.StatusOK, &res)
+	return utils.SendProtobuf(c, http.StatusOK, res)
 }
 
 // PostUsersHandler POST /users
