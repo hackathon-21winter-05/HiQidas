@@ -147,7 +147,6 @@ func (repo *GormRepository) UpdateHiqidashiByID(ctx context.Context, hiqidashi *
 	result := db.
 		Model(&model.Hiqidashi{}).
 		Where("id = ?", hiqidashi.ID).
-		
 		Updates(&hiqidashiMap)
 	err = result.Error
 	if err != nil {
