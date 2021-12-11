@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/antihax/optional"
+	"github.com/gofrs/uuid"
 	"github.com/gorilla/sessions"
 	"github.com/hackathon-21winter-05/HiQidas/server/protobuf/rest"
 	"github.com/hackathon-21winter-05/HiQidas/server/router/utils"
@@ -58,10 +59,10 @@ func (oh *OauthHandlerGroup) GetOauthCallbackHandler(c echo.Context) error {
 }
 
 // PostOauthCodeHandler POST /oauth/code ハンドラ
-func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
+func (oh *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 	sess, err := session.Get("session", c)
 	if err != nil {
-		return c.String(http.StatusInternalServerError, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
 	oauthCodeData := &rest.PostOauthCodeRequest{}
@@ -72,9 +73,9 @@ func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 
 	var clientID string
 	if strings.Contains(c.Request().Header.Get("referer"), "localhost") {
-		clientID = r.c.DevClientID
+		clientID = oh.c.DevClientID
 	} else {
-		clientID = r.c.ClientID
+		clientID = oh.c.ClientID
 	}
 
 	verifier := sess.Values["verifier"].(string)
@@ -83,12 +84,35 @@ func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 		ClientId:     optional.NewString(clientID),
 		CodeVerifier: optional.NewString(verifier),
 	}
-	token, res, err := r.cli.Oauth2Api.PostOAuth2Token(context.Background(), "authorization_code", opts)
+	token, res, err := oh.cli.Oauth2Api.PostOAuth2Token(context.Background(), "authorization_code", opts)
 	if err != nil || token.AccessToken == "" || res.StatusCode >= 400 {
-		return c.String(res.StatusCode, err.Error())
+		return echo.NewHTTPError(res.StatusCode, err)
 	}
 
-	sess.Values["accessToken"] = token.AccessToken
+	auth := context.WithValue(context.Background(), traq.ContextAccessToken, token.AccessToken)
+	v, res, err := oh.cli.MeApi.GetMe(auth)
+	if err != nil || res.StatusCode != http.StatusOK {
+		return echo.NewHTTPError(res.StatusCode, err)
+	}
+
+	userUUID, err := uuid.FromString(v.Id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	user, _ := oh.ser.GetUserByID(c.Request().Context(), userUUID)
+
+	if user == nil {
+		iconFileUUID, err := uuid.FromString(v.IconFileId)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err)
+		}
+		_, err = oh.ser.CreateTraPUser(c.Request().Context(), userUUID, iconFileUUID, v.Name)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err)
+		}
+	}
+
+	sess.Values["userid"] = userUUID
 	sess.Options = &sessions.Options{
 		Path:     "/",
 		MaxAge:   int(token.ExpiresIn),
@@ -96,7 +120,7 @@ func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 	}
 	err = sess.Save(c.Request(), c.Response())
 	if err != nil {
-		return c.String(http.StatusInternalServerError, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
 	return c.NoContent(http.StatusNoContent)

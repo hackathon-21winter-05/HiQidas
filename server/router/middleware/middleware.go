@@ -2,7 +2,9 @@ package middleware
 
 import (
 	"errors"
+	"net/http"
 
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
 
@@ -14,15 +16,16 @@ func NewMiddleware() *Middleware {
 
 const userIDKey = "userID"
 
-func (m *Middleware) SettraPUserIDMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+func (m *Middleware) CheckLogin(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		//traP部員のUserIDの取得
-		userID := c.Request().Header.Get("X-Showcase-User")
-		if userID == "" {
-			return nil
+		sess, err := session.Get("session", c)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err)
 		}
-
-		c.Set(userIDKey, userID)
+		userID := sess.Values["userid"]
+		if userID == nil {
+			return echo.NewHTTPError(http.StatusUnauthorized, "Please Login")
+		}
 
 		return next(c)
 	}

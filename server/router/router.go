@@ -25,18 +25,21 @@ func NewRouter(api *APIHandler) *Router {
 			return c.String(http.StatusOK, "pong")
 		})
 
-		userApi := echoApi.Group("/users")
+		userApi := echoApi.Group("/users", api.CheckLogin)
 		{
 			userApi.GET("", api.GetUsersHandler)
-			userApi.GET("/:userID",api.GetUsersByIDHandler)
-			userApi.GET("/me",api.GetUsersMeHandler)
-			userApi.GET("/me/favorites",api.GetFavoriteUsersMeHandler)
-			userApi.GET("/me/heyas",api.GetHeyasByMeHandler)
-			userApi.POST("",api.PostUsersHandler)
-
+			userApi.GET("/:userID", api.GetUsersByIDHandler)
+			userApi.GET("/me", api.GetUsersMeHandler)
+			userApi.GET("/me/favorites", api.GetFavoriteUsersMeHandler)
+			userApi.GET("/me/heyas", api.GetHeyasByMeHandler)
 		}
 
-		heyaApi := echoApi.Group("/heyas")
+		unAuthUserApi := echoApi.Group("/users")
+		{
+			unAuthUserApi.POST("", api.PostUsersHandler)
+		}
+
+		heyaApi := echoApi.Group("/heyas", api.CheckLogin)
 		{
 			heyaApi.GET("", api.GetHeyasHandler)
 			heyaApi.GET("/:heyaID", api.GetHeyaHandler)
@@ -52,7 +55,7 @@ func NewRouter(api *APIHandler) *Router {
 			oauthApi.POST("/code", api.PostOauthCodeHandler)
 		}
 
-		wsApi := echoApi.Group("/ws")
+		wsApi := echoApi.Group("/ws", api.CheckLogin)
 		{
 			wsApi.GET("/heya/:heyaid", api.ConnectHeyaWS)
 			wsApi.GET("/yjs/:hiqidashiid", api.ConnectYjsWS)

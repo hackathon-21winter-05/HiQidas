@@ -34,7 +34,7 @@ func InjectServer(c *config.Config) (*Server, error) {
 	userHandlerGroup := user.NewUserHandlerGroup(serviceService)
 	configuration := traq.NewConfiguration()
 	apiClient := traq.NewAPIClient(configuration)
-	oauthHandlerGroup := oauth.NewOauthHandlerGroup(c, apiClient)
+	oauthHandlerGroup := oauth.NewOauthHandlerGroup(c, serviceService, apiClient)
 	streamerStreamer := streamer.NewStreamer(serviceService)
 	wsHandlerGroup := ws.NewWSHandlerGroup(streamerStreamer)
 	apiHandler := router.NewAPIHandler(middlewareMiddleware, heyaHandlerGroup, userHandlerGroup, oauthHandlerGroup, wsHandlerGroup)
