@@ -11,7 +11,7 @@ var ErrNotFound = errors.New("client not found")
 
 type ClientService interface {
 	GetHeyaClientsIDByHeyaID(heyaID uuid.UUID) model.HeyaClients
-	AddHeyaClient(heyaID uuid.UUID, client model.HeyaClient)
+	AddHeyaClient(heyaID uuid.UUID, client *model.HeyaClient)
 	DeleteHeyaClient(heyaID uuid.UUID, clientID uuid.UUID) error
 
 	GetEditorClientsIDByHiqidashiID(hiqidashiID uuid.UUID) []uuid.UUID

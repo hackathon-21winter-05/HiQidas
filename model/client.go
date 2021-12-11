@@ -11,7 +11,7 @@ type HeyaClientsMap struct {
 	sync.RWMutex
 }
 
-type HeyaClients map[uuid.UUID]HeyaClient
+type HeyaClients map[uuid.UUID]*HeyaClient
 
 type HeyaClient struct {
 	ID                 uuid.UUID

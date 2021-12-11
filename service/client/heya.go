@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	heyaClientsMap = model.HeyaClientsMap{
+	heyaClientsMap = &model.HeyaClientsMap{
 		Clients: make(map[uuid.UUID]model.HeyaClients),
 	}
 )
@@ -18,7 +18,7 @@ func (cs *ClientServiceImpl) GetHeyaClientsIDByHeyaID(heyaID uuid.UUID) model.He
 	return heyaClientsMap.Clients[heyaID]
 }
 
-func (cs *ClientServiceImpl) AddHeyaClient(heyaID uuid.UUID, client model.HeyaClient) {
+func (cs *ClientServiceImpl) AddHeyaClient(heyaID uuid.UUID, client *model.HeyaClient) {
 	heyaClientsMap.Lock()
 	defer heyaClientsMap.Unlock()
 
