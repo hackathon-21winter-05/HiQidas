@@ -47,6 +47,7 @@ func NewRouter(api *APIHandler) *Router {
 			heyaApi.POST("", api.PostHeyasHandler)
 			heyaApi.DELETE("/:heyaID", api.DeleteHeyasByIDHandler)
 			heyaApi.PUT("/:heyaID", api.PutHeyasByIDHandler)
+			heyaApi.PUT("/:heyaID/favorite",api.PutFavoriteByHeyaIDHandler)
 		}
 
 		oauthApi := echoApi.Group("/oauth")
