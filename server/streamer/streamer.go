@@ -21,6 +21,7 @@ func NewStreamer(ser *service.Service) *Streamer {
 
 func (s *Streamer) Run() {
 	go s.hs.Listen()
+	go s.ys.Listen()
 }
 
 func (s *Streamer) ConnectHeyaWS(c echo.Context) error {
