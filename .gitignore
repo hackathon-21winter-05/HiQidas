@@ -23,3 +23,6 @@ server/protobuf
 
 # Config file
 config.json
+
+# Frontend
+dev/frontend/HiQidas_UI

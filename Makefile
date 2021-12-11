@@ -20,6 +20,7 @@ down:
 
 .PHONY: reset-frontend
 reset-frontend: stop-front rm-front delete-front-image
+	@cd dev/frontend && git clone https://github.com/hackathon-21winter-05/HiQidas_UI.git
 
 .PHONY: stop-front
 stop-front:
