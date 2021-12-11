@@ -59,7 +59,7 @@ func (oh *OauthHandlerGroup) GetOauthCallbackHandler(c echo.Context) error {
 }
 
 // PostOauthCodeHandler POST /oauth/code ハンドラ
-func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
+func (oh *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 	sess, err := session.Get("session", c)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
@@ -73,9 +73,9 @@ func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 
 	var clientID string
 	if strings.Contains(c.Request().Header.Get("referer"), "localhost") {
-		clientID = r.c.DevClientID
+		clientID = oh.c.DevClientID
 	} else {
-		clientID = r.c.ClientID
+		clientID = oh.c.ClientID
 	}
 
 	verifier := sess.Values["verifier"].(string)
@@ -84,13 +84,13 @@ func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 		ClientId:     optional.NewString(clientID),
 		CodeVerifier: optional.NewString(verifier),
 	}
-	token, res, err := r.cli.Oauth2Api.PostOAuth2Token(context.Background(), "authorization_code", opts)
+	token, res, err := oh.cli.Oauth2Api.PostOAuth2Token(context.Background(), "authorization_code", opts)
 	if err != nil || token.AccessToken == "" || res.StatusCode >= 400 {
 		return echo.NewHTTPError(res.StatusCode, err)
 	}
 
 	auth := context.WithValue(context.Background(), traq.ContextAccessToken, token.AccessToken)
-	v, res, err := r.cli.MeApi.GetMe(auth)
+	v, res, err := oh.cli.MeApi.GetMe(auth)
 	if err != nil || res.StatusCode != http.StatusOK {
 		return echo.NewHTTPError(res.StatusCode, err)
 	}
@@ -99,14 +99,14 @@ func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
-	user, _ := r.ser.GetUserByID(c.Request().Context(), userUUID)
+	user, _ := oh.ser.GetUserByID(c.Request().Context(), userUUID)
 
 	if user == nil {
 		iconFileUUID, err := uuid.FromString(v.IconFileId)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, err)
 		}
-		_, err = r.ser.CreateTraPUser(c.Request().Context(), userUUID, iconFileUUID, v.Name)
+		_, err = oh.ser.CreateTraPUser(c.Request().Context(), userUUID, iconFileUUID, v.Name)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, err)
 		}
