@@ -2,6 +2,7 @@ package hiqidashi
 
 import (
 	"context"
+	"math/rand"
 	"time"
 
 	"github.com/gofrs/uuid"
@@ -28,6 +29,9 @@ func (hs *HiqidashiServiceImpl) CreateHiqidashi(c context.Context, createrID, he
 	}
 	now := time.Now()
 
+	randIndex := rand.Intn(len(defaultColors))
+	colorCode := "#" + defaultColors[randIndex]
+
 	hiqidashi := &model.Hiqidashi{
 		ID:           id,
 		HeyaID:       heyaID,
@@ -37,7 +41,7 @@ func (hs *HiqidashiServiceImpl) CreateHiqidashi(c context.Context, createrID, he
 		Title:        "",
 		Description:  "",
 		Drawing:      utils.NullString(),
-		ColorCode:    "#9E7A7A",
+		ColorCode:    colorCode,
 		CreatedAt:    now,
 		UpdatedAt:    now,
 	}

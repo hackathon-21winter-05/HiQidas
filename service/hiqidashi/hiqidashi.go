@@ -8,6 +8,8 @@ import (
 	"github.com/hackathon-21winter-05/HiQidas/repository"
 )
 
+var defaultColors = []string{"0F2540", "00AA90", "E03C8A", "9E7A7A", "2EA9DF", "42602D", "77428D", "FFB11B"}
+
 type HiqidashiService interface {
 	GetHiqidashisByHeyaID(c context.Context, heyaID uuid.UUID) ([]*model.Hiqidashi, error)
 	CreateHiqidashi(c context.Context, createrID, heyaID, parentID uuid.UUID) (*model.Hiqidashi, error)
