@@ -22,6 +22,9 @@ func (cs *ClientServiceImpl) AddHeyaClient(heyaID uuid.UUID, client *model.HeyaC
 	heyaClientsMap.Lock()
 	defer heyaClientsMap.Unlock()
 
+	if heyaClientsMap.Clients[heyaID] == nil {
+		heyaClientsMap.Clients[heyaID] = make(map[uuid.UUID]*model.HeyaClient)
+	}
 	heyaClientsMap.Clients[heyaID][client.ID] = client
 }
 
