@@ -10,6 +10,7 @@ import (
 type Config struct {
 	ClientID        string `mapstructure:"client_id" json:"client_id,omitempty"`               // 本番環境向けのクライアントID (default: "")
 	DevClientID     string `mapstructure:"dev_client_id" json:"dev_client_id,omitempty"`       // ローカル開発環境向けのクライアントID (default: "")
+	ParserToken     string `mapstructure:"parser_token" json:"parser_token,omitempty"`         // Yjsパーサーの認証トークン (default: "")
 	MariaDBHostname string `mapstructure:"mariadb_hostname" json:"mariadb_hostname,omitempty"` // DB のホスト (default: "mariadb")
 	MariaDBDatabase string `mapstructure:"mariadb_database" json:"mariadb_database,omitempty"` // DB の DB 名 (default: "HiQidas")
 	MariaDBUsername string `mapstructure:"mariadb_username" json:"mariadb_username,omitempty"` // DB のユーザー名 (default: "root")
@@ -19,6 +20,7 @@ type Config struct {
 func GetConfig() (*Config, error) {
 	viper.SetDefault("Client_ID", "")
 	viper.SetDefault("Dev_Client_ID", "")
+	viper.SetDefault("Parser_Token", "")
 	viper.SetDefault("MariaDB_Hostname", "mariadb")
 	viper.SetDefault("MariaDB_Database", "HiQidas")
 	viper.SetDefault("MariaDB_Username", "root")

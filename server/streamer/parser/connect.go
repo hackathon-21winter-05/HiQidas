@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/hackathon-21winter-05/HiQidas/server/protobuf/parser"
+	"google.golang.org/protobuf/proto"
 
 	"github.com/labstack/echo/v4"
 )
@@ -21,6 +22,20 @@ func (ps *ParserStreamer) ConnectParserWS(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 	defer conn.Close()
+
+	_, mes, err := conn.ReadMessage()
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	token := &parser.ParserToken{}
+	err = proto.Unmarshal(mes, token)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+
+	if token.GetToken() != ps.c.ParserToken {
+		return echo.NewHTTPError(http.StatusForbidden, "Invalid token")
+	}
 
 	cli := &client{
 		conn:     conn,
