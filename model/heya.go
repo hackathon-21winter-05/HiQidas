@@ -16,7 +16,7 @@ type Heya struct {
 	CreatedAt    time.Time `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
 	UpdatedAt    time.Time `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
 
-	Creator User           `gorm:"foreignKey:ID;references:CreatorID"`
+	Creator User           `gorm:"foreignKey:ID"`
 }
 
 type NullHeya struct {
