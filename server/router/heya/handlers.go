@@ -29,6 +29,7 @@ func (h *HeyaHandlerGroup) GetHeyasHandler(c echo.Context) error {
 			Title:        heya.Title,
 			Description:  heya.Description,
 			CreatorId:    heya.CreatorID.String(),
+			CreatorName:  heya.Creator.Name,
 			LastEditorId: heya.LastEditorID.String(),
 			CreatedAt:    utils.TimeStampToTIme(heya.CreatedAt),
 			UpdatedAt:    utils.TimeStampToTIme(heya.UpdatedAt),
