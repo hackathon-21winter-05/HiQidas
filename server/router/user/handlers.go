@@ -1,11 +1,13 @@
 package user
 
 import (
-	"github.com/gofrs/uuid"
 	"net/http"
 
+	"github.com/gofrs/uuid"
+	"github.com/gorilla/sessions"
 	"github.com/hackathon-21winter-05/HiQidas/server/protobuf/rest"
 	"github.com/hackathon-21winter-05/HiQidas/server/router/utils"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
 
@@ -30,7 +32,7 @@ func (uh *UserHandlerGroup) GetUsersHandler(c echo.Context) error {
 func (uh *UserHandlerGroup) GetUsersMeHandler(c echo.Context) error {
 
 	//TODO:一時的にNilと置いた
-	UserID :=uuid.Nil
+	UserID := uuid.Nil
 
 	user, err := uh.s.GetUserByID(c.Request().Context(), UserID)
 	if err != nil {
@@ -56,10 +58,10 @@ func (uh *UserHandlerGroup) GetHeyasByMeHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
-	var rheyas []*rest.Heya
+	var resHeyas []*rest.Heya
 
 	for _, heya := range heyas {
-		rheyas = append(rheyas, &rest.Heya{
+		resHeyas = append(resHeyas, &rest.Heya{
 			Id:           heya.ID.String(),
 			Title:        heya.Title,
 			Description:  heya.Description,
@@ -70,7 +72,7 @@ func (uh *UserHandlerGroup) GetHeyasByMeHandler(c echo.Context) error {
 		})
 	}
 	res := rest.GetHeyasResponse{
-		Heyas: &rest.Heyas{Heyas: rheyas},
+		Heyas: &rest.Heyas{Heyas: resHeyas},
 	}
 
 	return utils.SendProtobuf(c, http.StatusOK, &res)
@@ -110,12 +112,28 @@ func (uh *UserHandlerGroup) PostUsersHandler(c echo.Context) error {
 
 	if err := utils.BindProtobuf(c, &req); err != nil {
 		c.Logger().Info(err)
-		return echo.NewHTTPError(http.StatusBadRequest,err)
+		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
-	res,err := uh.s.CreateUser(c.Request().Context(),req.User.Name)
+	res, err := uh.s.CreateUser(c.Request().Context(), req.User.Name)
 	if err != nil {
 		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+
+	sess, err := session.Get("session", c)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+
+	sess.Values["userID"] = res.ID
+	sess.Options = &sessions.Options{
+		Path:     "/",
+		MaxAge:   60 * 60 * 24 * 14,
+		HttpOnly: true,
+	}
+	err = sess.Save(c.Request(), c.Response())
+	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
@@ -124,5 +142,5 @@ func (uh *UserHandlerGroup) PostUsersHandler(c echo.Context) error {
 		Name: res.Name,
 	}}
 
-	return utils.SendProtobuf(c,http.StatusCreated,&protoRes)
+	return utils.SendProtobuf(c, http.StatusCreated, &protoRes)
 }
