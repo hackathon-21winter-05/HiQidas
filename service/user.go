@@ -14,6 +14,7 @@ type UserService interface {
 	GetUserByID(c context.Context, myUserID uuid.UUID) (*model.User, error)
 	GetHeyaByUserMe(c context.Context, myUserID uuid.UUID) ([]*model.Heya, error)
 	CreateUser(c context.Context, name string) (*model.User, error)
+	CreateTraPUser(c context.Context, id, iconFileID uuid.UUID, name string) (*model.User, error)
 
 	/* 未実装
 	GetUserMeFavorites(c context.Context)

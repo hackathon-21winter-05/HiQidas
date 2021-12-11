@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/antihax/optional"
+	"github.com/gofrs/uuid"
 	"github.com/gorilla/sessions"
 	"github.com/hackathon-21winter-05/HiQidas/server/protobuf/rest"
 	"github.com/hackathon-21winter-05/HiQidas/server/router/utils"
@@ -88,7 +89,20 @@ func (r *OauthHandlerGroup) PostOauthCodeHandler(c echo.Context) error {
 		return c.String(res.StatusCode, err.Error())
 	}
 
-	sess.Values["accessToken"] = token.AccessToken
+	auth := context.WithValue(context.Background(), traq.ContextAccessToken, token.AccessToken)
+	v, res, err := r.cli.MeApi.GetMe(auth)
+	if err != nil || res.StatusCode != http.StatusOK {
+		return c.String(res.StatusCode, err.Error())
+	}
+
+	userUUID, _ := uuid.FromString(v.Id)
+	iconFileUUID, _ := uuid.FromString(v.IconFileId)
+	_, err = r.ser.CreateTraPUser(c.Request().Context(), userUUID, iconFileUUID, v.Name)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	sess.Values["userID"] = userUUID
 	sess.Options = &sessions.Options{
 		Path:     "/",
 		MaxAge:   int(token.ExpiresIn),
