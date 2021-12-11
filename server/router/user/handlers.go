@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GetUsersHandler GET /users
 func (uh *UserHandlerGroup) GetUsersHandler(c echo.Context) error {
 	userIDs, err := uh.s.GetUsersID(c.Request().Context())
 	if err != nil {
@@ -23,22 +24,27 @@ func (uh *UserHandlerGroup) GetUsersHandler(c echo.Context) error {
 	return utils.SendProtobuf(c, http.StatusOK, res)
 }
 
+// GetUsersMeHandler GET /users/me
 func (uh *UserHandlerGroup) GetUsersMeHandler(c echo.Context) error {
 	panic("implement me")
 }
 
+// GetHeyasByMeHandler GET /users/me/heyas
 func (uh *UserHandlerGroup) GetHeyasByMeHandler(c echo.Context) error {
 	panic("implement me")
 }
 
+// GetFavoriteUsersMeHandler GET /users/me/favorite
 func (uh *UserHandlerGroup) GetFavoriteUsersMeHandler(c echo.Context) error {
 	panic("implement me")
 }
 
+// GetUsersByIDHandler GET /users/{userID}
 func (uh *UserHandlerGroup) GetUsersByIDHandler(c echo.Context) error {
 	panic("implement me")
 }
 
+// PostUsersHandler POST /users
 func (uh *UserHandlerGroup) PostUsersHandler(c echo.Context) error {
 	panic("implement me")
 }
