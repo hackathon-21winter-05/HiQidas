@@ -56,7 +56,43 @@ func (uh *UserHandlerGroup) GetUsersMeHandler(c echo.Context) error {
 
 // GetHeyasByMeHandler GET /users/me/heyas
 func (uh *UserHandlerGroup) GetHeyasByMeHandler(c echo.Context) error {
+	sess, err := session.Get("session", c)
+	if err != nil {
+		c.Logger().Info(err)
+		return echo.NewHTTPError(http.StatusBadRequest, "failed to get session", err)
+	}
 
+	accessToken := sess.Values["accessToken"]
+	if accessToken == nil {
+		//こんな感じ？
+	}
+
+	UserID := sess.Values["userID"].(uuid.UUID)
+
+	heyas, err := uh.s.GetHeyaByUserMe(c.Request().Context(), UserID)
+	if err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+
+	var rheyas []*rest.Heya
+
+	for _, heya := range heyas {
+		rheyas = append(rheyas, &rest.Heya{
+			Id:           heya.ID.String(),
+			Title:        heya.Title,
+			Description:  heya.Description,
+			CreatorId:    heya.CreatorID.String(),
+			LastEditorId: heya.LastEditorID.String(),
+			CreatedAt:    utils.TimeStampToTIme(heya.CreatedAt),
+			UpdatedAt:    utils.TimeStampToTIme(heya.UpdatedAt),
+		})
+	}
+	res := rest.GetHeyasResponse{
+		Heyas: &rest.Heyas{Heyas: rheyas},
+	}
+
+	return utils.SendProtobuf(c, http.StatusOK, &res)
 }
 
 // GetFavoriteUsersMeHandler GET /users/me/favorites
