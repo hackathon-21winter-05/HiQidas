@@ -15,9 +15,12 @@ type Streamer struct {
 }
 
 func NewStreamer(ser *service.Service) *Streamer {
+	ps := parser.NewParserStreamer(ser)
+
 	return &Streamer{
 		hs: heya.NewHeyaStreamer(ser),
-		ys: yjs.NewYjsStreamer(ser),
+		ys: yjs.NewYjsStreamer(ser, ps),
+		ps: ps,
 	}
 }
 

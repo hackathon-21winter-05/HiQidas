@@ -71,3 +71,14 @@ func (hs *ParserStreamer) sendParserMes(msg *parser.ParserSendData) error {
 
 	return nil
 }
+
+func (hs *ParserStreamer) SendDiff(hiqidashiId uuid.UUID, diff []byte) error {
+	msg := &parser.ParserSendData{
+		Payload: &parser.ParserSendData_ParserDiff{
+			ParserDiff: &parser.ParserDiff{
+				Diff: diff,
+			},
+		}}
+
+	return hs.sendParserMes(msg)
+}
