@@ -74,17 +74,13 @@ func (s *Service) DeleteHeya(c context.Context, heyaID uuid.UUID) error {
 		if err := s.repo.DeleteHeyaByID(ctx, heyaID); err != nil {
 			return err
 		}
-		if err := s.repo.DeleteHistoryByHeyaID(ctx, heyaID); err != nil {
+		if err := s.repo.DeleteHistoryByHeyaID(ctx, heyaID); err != nil && !errors.Is(err, repository.ErrNoRecordDeleted) {
 			return err
 		}
 		if err := s.repo.DeleteHiqidashisByHeyaID(ctx, heyaID); err != nil {
 			return err
 		}
-		if err := s.repo.DeleteFavoriteByHeyaID(ctx, heyaID); err != nil {
-			//そもそもFavoriteにない可能性があるため無かったらerrではなくnilを返す
-			if errors.Is(err, repository.ErrNoRecordDeleted) {
-				return nil
-			}
+		if err := s.repo.DeleteFavoriteByHeyaID(ctx, heyaID); err != nil && !errors.Is(err, repository.ErrNoRecordDeleted) {
 			return err
 		}
 		return nil
