@@ -47,9 +47,10 @@ message Heya {
   string title = 2;
   string description = 3;
   string creator_id = 4;
-  string last_editor_id = 5;
-  google.protobuf.Timestamp created_at = 6;
-  google.protobuf.Timestamp updated_at = 7;
+  string creator_name = 5;
+  string last_editor_id = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
 }
 
 message Heyas { repeated Heya heyas = 1; }
