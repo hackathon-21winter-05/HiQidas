@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package yjs;
+
+option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/yjs";
+
+message YjsDiff {
+  string hiqidashi_id = 1;
+  bytes diff = 2;
+}
+
+message YjsEditDescription { Description description = 1; }
+
+message YjsEditDescriptions { repeated Description descriptions = 1; }
+
+message Description {
+  string hiqidashi_id = 1;
+  string description = 2;
+}
