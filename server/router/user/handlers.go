@@ -22,3 +22,23 @@ func (uh *UserHandlerGroup) GetUsersHandler(c echo.Context) error {
 
 	return utils.SendProtobuf(c, http.StatusOK, res)
 }
+
+func (uh *UserHandlerGroup) GetUsersMeHandler(c echo.Context) error {
+	panic("implement me")
+}
+
+func (uh *UserHandlerGroup) GetHeyasByMeHandler(c echo.Context) error {
+	panic("implement me")
+}
+
+func (uh *UserHandlerGroup) GetFavoriteUsersMeHandler(c echo.Context) error {
+	panic("implement me")
+}
+
+func (uh *UserHandlerGroup) GetUsersByIDHandler(c echo.Context) error {
+	panic("implement me")
+}
+
+func (uh *UserHandlerGroup) PostUsersHandler(c echo.Context) error {
+	panic("implement me")
+}
