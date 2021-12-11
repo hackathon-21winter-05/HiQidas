@@ -126,3 +126,25 @@ func (repo *GormRepository) DeleteHeyaByID(ctx context.Context, id uuid.UUID) er
 
 	return nil
 }
+
+func (repo *GormRepository) GetHeyasByCreatorID(ctx context.Context, creatorID uuid.UUID) ([]*model.Heya, error) {
+	if creatorID == uuid.Nil {
+		return nil, ErrNillUUID
+	}
+
+	db, err := repo.getDB(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get db: %w", err)
+	}
+
+	heyas := make([]*model.Heya, 0)
+
+	err = db.
+		Where("creator_id = ?", creatorID).
+		Find(&heyas).Error
+	if err != nil {
+		return nil, fmt.Errorf("failed to get heyas by creatorID :%w", err)
+	}
+
+	return heyas, nil
+}
