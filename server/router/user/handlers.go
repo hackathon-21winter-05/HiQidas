@@ -34,7 +34,11 @@ func (uh *UserHandlerGroup) GetUsersMeHandler(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
-	userID := sess.Values["userid"].(uuid.UUID)
+	userIDstr := sess.Values["userid"].(string)
+	userID, err := uuid.FromString(userIDstr)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
 
 	user, err := uh.s.GetUserByID(c.Request().Context(), userID)
 	if err != nil {
@@ -56,7 +60,11 @@ func (uh *UserHandlerGroup) GetHeyasByMeHandler(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
-	userID := sess.Values["userid"].(uuid.UUID)
+	userIDstr := sess.Values["userid"].(string)
+	userID, err := uuid.FromString(userIDstr)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
 
 	heyas, err := uh.s.GetHeyaByUserMe(c.Request().Context(), userID)
 	if err != nil {
