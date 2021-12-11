@@ -4,6 +4,8 @@ package parser;
 
 option go_package = "github.com/hackathon-21winter-05/HiQidas/server/pb/parser";
 
+message ParserToken { string token = 1; }
+
 message ParserSendData {
   oneof payload {
     ParserDiff parser_diff = 1;
