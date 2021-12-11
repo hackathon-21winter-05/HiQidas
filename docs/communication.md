@@ -133,3 +133,17 @@ Request
 | Field   | type     |
 | ------- | -------- |
 | statusCode | int |
+
+### oauth
+
+#### `GET /aouth/callback` OauthのCallbackのステータス 
+
+| Field   | type     |
+| ------- | -------- |
+| uri | string |
+
+#### `POST /aouth/code` OAuthのCodeをリクエストする
+
+Field   | type     |
+| ------- | -------- |
+| Code | string |
