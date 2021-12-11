@@ -153,17 +153,17 @@ func (s *Service) PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, userI
 
 	err := s.repo.Do(ctx, nil, func(ctx context.Context) error {
 		if isFavorite {
-			favo := model.Favorite{
+			favorites := model.Favorite{
 				UserID: userID,
 				HeyaID: heyaID,
 			}
-			favos, err := s.repo.GetFavoritesByUserID(ctx, userID)
+			tempFavorites, err := s.repo.GetFavoritesByUserID(ctx, userID)
 			if err == repository.ErrNotFound {
 				return nil
 			}
 			//存在していたらtrueを返す
 			exists := false
-			for _, favorite := range favos {
+			for _, favorite := range tempFavorites {
 				if favorite.HeyaID != heyaID {
 					continue
 				}
@@ -172,7 +172,7 @@ func (s *Service) PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, userI
 			if exists {
 				return nil
 			}
-			if err = s.repo.CreateFavorite(ctx, &favo); err != nil {
+			if err = s.repo.CreateFavorite(ctx, &favorites); err != nil {
 				return err
 			}
 		} else {
