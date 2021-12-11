@@ -86,3 +86,50 @@ Response
 | Field   | type     |
 | ------- | -------- |
 | user | model.user |
+
+### heyas
+#### `GET /heyas` 全ヘヤの情報を取得
+
+| Field   | type     |
+| ------- | -------- |
+| heyas | []model.heya |
+
+#### `GET /heyas/{heyaID}` ヘヤの情報を取得
+
+| Field   | type     |
+| ------- | -------- |
+| heya | model.heya |
+
+#### `GET /heyas/{heyaID}/users`　ヘヤにいるuserを取得
+
+| Field   | type     |
+| ------- | -------- |
+| user_id | string |
+
+#### `POST /heyas`　ヘヤを作成する
+Request
+
+| Field   | type     |
+| ------- | -------- |
+| title | string |
+| description | string |
+
+Response
+
+| Field   | type     |
+| ------- | -------- |
+| heya | model.heya |
+
+#### `PUT /heyas/{heyaID}` ヘヤの情報を変更
+Request
+
+| Field   | type     |
+| ------- | -------- |
+| title | string |
+| description | string |
+
+#### `DELETE /heyas/{heyaID}` ヘヤの削除
+
+| Field   | type     |
+| ------- | -------- |
+| statusCode | int |
