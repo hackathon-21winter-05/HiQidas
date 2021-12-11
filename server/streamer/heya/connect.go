@@ -54,6 +54,7 @@ func (hs *HeyaStreamer) ConnectHeyaWS(c echo.Context) error {
 	hs.clients[clientID] = cli
 
 	if err := hs.sendHiqidashis(clientID, heyaID); err != nil {
+		delete(hs.clients, clientID)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
