@@ -141,7 +141,7 @@ func (uh *UserHandlerGroup) PostUsersHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
-	sess.Values["userid"] = res.ID
+	sess.Values["userid"] = res.ID.String()
 	sess.Options = &sessions.Options{
 		Path:     "/",
 		MaxAge:   60 * 60 * 24 * 14,
