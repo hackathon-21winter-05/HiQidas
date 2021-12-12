@@ -31,7 +31,7 @@ func (hs *YjsStreamer) Listen() {
 		msg := <-hs.receiveBuffer
 
 		hs.sendToHiqidashi(msg.clientID, msg.hiqidashiID, msg.body)
-		err := hs.ps.SendDiff(msg.hiqidashiID, msg.body)
+		err := hs.ps.SendDiff(msg.hiqidashiID, msg.userID, msg.body)
 		if err != nil {
 			log.Println(err)
 			continue
