@@ -11,7 +11,7 @@ run: protobuf-go
 	@go run ./*.go
 
 .PHONY: up
-up: protobuf-go
+up: reset-frontend protobuf-go
 	@cd dev && COMPOSE_PROJECT_NAME=hiqidas_hot_reload docker-compose up  --build
 
 .PHONY: down
@@ -20,19 +20,19 @@ down:
 
 .PHONY: reset-frontend
 reset-frontend: stop-front rm-front delete-front-image
-	@cd dev/frontend && rm -rf HiQidas_UI && git clone https://github.com/hackathon-21winter-05/HiQidas_UI.git
+	@cd dev/frontend && rm -rf HiQidas_UI && git clone https://github.com/hackathon-21winter-05/HiQidas_UI.git && sudo rm -rf HiQidas_UI/.git
 
 .PHONY: stop-front
 stop-front:
-	@docker ps -a | grep HiQidas_frontend | awk '{print $$1}' | xargs docker stop
+	-@docker ps -a | grep HiQidas_frontend | awk '{print $$1}' | xargs docker stop
 
 .PHONY: rm-front
 rm-front:
-	@docker ps -a | grep HiQidas_frontend | awk '{print $$1}' | xargs docker rm
+	-@docker ps -a | grep HiQidas_frontend | awk '{print $$1}' | xargs docker rm
 
 .PHONY: delete-front-image
 delete-front-image:
-	@docker images -a | grep hiqidas | grep frontend | awk '{print $$3}' | xargs docker rmi
+	-@docker images -a | grep hiqidas | grep frontend | awk '{print $$3}' | xargs docker rmi
 
 .PHONY: prune
 prune:
