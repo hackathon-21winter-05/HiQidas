@@ -47,9 +47,15 @@ func (ps *ParserStreamer) Listen() {
 			log.Println(err)
 			continue
 		}
+		editorID, err := uuid.FromString(editDescription.EditorId)
+		if err != nil {
+			log.Println(err)
+			return
+		}
 
 		err = ps.ser.UpdateHiqidashiByID(context.Background(), &model.NullHiqidashi{
-			ID: hiqidashiID,
+			ID:           hiqidashiID,
+			LastEditorID: editorID,
 			Description: sql.NullString{
 				String: editDescription.Description.Content,
 				Valid:  true,
@@ -75,11 +81,13 @@ func (hs *ParserStreamer) sendParserMes(msg *parser.ParserSendData) error {
 	return nil
 }
 
-func (hs *ParserStreamer) SendDiff(hiqidashiId uuid.UUID, diff []byte) error {
+func (hs *ParserStreamer) SendDiff(hiqidashiId uuid.UUID, editorId uuid.UUID, diff []byte) error {
 	msg := &parser.ParserSendData{
 		Payload: &parser.ParserSendData_ParserDiff{
 			ParserDiff: &parser.ParserDiff{
-				Diff: diff,
+				Diff:        diff,
+				HiqidashiId: hiqidashiId.String(),
+				EditorId:    editorId.String(),
 			},
 		}}
 

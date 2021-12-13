@@ -5,10 +5,21 @@ import (
 
 	"github.com/gofrs/uuid"
 	"github.com/gorilla/websocket"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
 
 func (hs *YjsStreamer) ConnectYjsWS(c echo.Context) error {
+	sess, err := session.Get("session", c)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+	userIDstr := sess.Values["userid"].(string)
+	userID, err := uuid.FromString(userIDstr)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
 	hiqidashiIDString := c.Param("hiqidashiid")
 	hiqidashiID, err := uuid.FromString(hiqidashiIDString)
 	if err != nil {
@@ -30,6 +41,7 @@ func (hs *YjsStreamer) ConnectYjsWS(c echo.Context) error {
 	cli := &client{
 		id:          clientID,
 		hiqidashiID: hiqidashiID,
+		userID:      userID,
 		conn:        conn,
 		receiver:    &hs.receiveBuffer,
 		sender:      make(chan []byte),

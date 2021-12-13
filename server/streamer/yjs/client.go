@@ -8,6 +8,7 @@ import (
 type client struct {
 	id          uuid.UUID
 	hiqidashiID uuid.UUID
+	userID      uuid.UUID
 	conn        *websocket.Conn
 	receiver    *chan *cliMessage
 	sender      chan []byte
@@ -17,6 +18,7 @@ type client struct {
 type cliMessage struct {
 	clientID    uuid.UUID
 	hiqidashiID uuid.UUID
+	userID    uuid.UUID
 	body        []byte
 }
 
@@ -31,6 +33,7 @@ func (c *client) listen() {
 		*c.receiver <- &cliMessage{
 			clientID:    c.id,
 			hiqidashiID: c.hiqidashiID,
+			userID:    c.userID,
 			body:        message,
 		}
 	}
