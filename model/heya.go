@@ -15,6 +15,8 @@ type Heya struct {
 	LastEditorID uuid.UUID `gorm:"type:char(36);not null"`
 	CreatedAt    time.Time `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
 	UpdatedAt    time.Time `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
+
+	Creator User           `gorm:"foreignKey:ID"`
 }
 
 type NullHeya struct {

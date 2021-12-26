@@ -17,6 +17,7 @@ func (repo *GormRepository) GetHeyas(ctx context.Context) ([]*model.Heya, error)
 	heyas := make([]*model.Heya, 0)
 
 	err = db.
+		Joins("Creator").
 		Find(&heyas).Error
 	if err != nil {
 		return nil, fmt.Errorf("failed to get heyaIDs :%w", err)
@@ -57,7 +58,8 @@ func (repo *GormRepository) CreateHeya(ctx context.Context, heya *model.Heya) er
 		return fmt.Errorf("failed to get db: %w", err)
 	}
 
-	err = db.Create(&heya).Error
+	err = db.
+		Create(&heya).Error
 	if err != nil {
 		return fmt.Errorf("failed to create : %w", err)
 	}
@@ -91,7 +93,7 @@ func (repo *GormRepository) UpdateHeyaByID(ctx context.Context, heya *model.Null
 
 	result := db.
 		Model(&model.Heya{}).
-		Where("id = ?",heya.ID).
+		Where("id = ?", heya.ID).
 		Updates(&heyaMap)
 	err = result.Error
 	if err != nil {
