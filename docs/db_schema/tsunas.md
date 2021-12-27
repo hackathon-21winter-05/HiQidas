@@ -15,9 +15,9 @@ CREATE TABLE `tsunas` (
   KEY `fk_tsunas_heya` (`heya_id`),
   KEY `fk_tsunas_hiqidashi_one` (`hiqidashi_one_id`),
   KEY `fk_tsunas_hiqidashi_two` (`hiqidashi_two_id`),
-  CONSTRAINT `fk_tsunas_heya` FOREIGN KEY (`heya_id`) REFERENCES `heyas` (`id`),
-  CONSTRAINT `fk_tsunas_hiqidashi_one` FOREIGN KEY (`hiqidashi_one_id`) REFERENCES `hiqidashis` (`id`),
-  CONSTRAINT `fk_tsunas_hiqidashi_two` FOREIGN KEY (`hiqidashi_two_id`) REFERENCES `hiqidashis` (`id`)
+  CONSTRAINT `fk_tsunas_heya` FOREIGN KEY (`heya_id`) REFERENCES `heyas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_tsunas_hiqidashi_one` FOREIGN KEY (`hiqidashi_one_id`) REFERENCES `hiqidashis` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_tsunas_hiqidashi_two` FOREIGN KEY (`hiqidashi_two_id`) REFERENCES `hiqidashis` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 ```
 

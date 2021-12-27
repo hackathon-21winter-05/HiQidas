@@ -23,10 +23,10 @@ CREATE TABLE `hiqidashis` (
   KEY `idx_hiqidashi_creator_id` (`creator_id`),
   KEY `fk_hiqidashis_last_editor` (`last_editor_id`),
   KEY `fk_hiqidashis_parent` (`parent_id`),
-  CONSTRAINT `fk_hiqidashis_creator` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `fk_hiqidashis_heya` FOREIGN KEY (`heya_id`) REFERENCES `heyas` (`id`),
-  CONSTRAINT `fk_hiqidashis_last_editor` FOREIGN KEY (`last_editor_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `fk_hiqidashis_parent` FOREIGN KEY (`parent_id`) REFERENCES `hiqidashis` (`id`)
+  CONSTRAINT `fk_hiqidashis_creator` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_hiqidashis_heya` FOREIGN KEY (`heya_id`) REFERENCES `heyas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_hiqidashis_last_editor` FOREIGN KEY (`last_editor_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_hiqidashis_parent` FOREIGN KEY (`parent_id`) REFERENCES `hiqidashis` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 ```
 

@@ -12,8 +12,8 @@ CREATE TABLE `histories` (
   PRIMARY KEY (`user_id`,`heya_id`),
   KEY `idx_history_user_id` (`user_id`,`heya_id`),
   KEY `fk_histories_heya` (`heya_id`),
-  CONSTRAINT `fk_histories_heya` FOREIGN KEY (`heya_id`) REFERENCES `heyas` (`id`),
-  CONSTRAINT `fk_histories_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  CONSTRAINT `fk_histories_heya` FOREIGN KEY (`heya_id`) REFERENCES `heyas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_histories_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 ```
 

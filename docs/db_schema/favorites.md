@@ -12,8 +12,8 @@ CREATE TABLE `favorites` (
   PRIMARY KEY (`user_id`,`heya_id`),
   KEY `idx_favorite_user_id` (`user_id`,`heya_id`),
   KEY `fk_favorites_heya` (`heya_id`),
-  CONSTRAINT `fk_favorites_heya` FOREIGN KEY (`heya_id`) REFERENCES `heyas` (`id`),
-  CONSTRAINT `fk_favorites_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  CONSTRAINT `fk_favorites_heya` FOREIGN KEY (`heya_id`) REFERENCES `heyas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_favorites_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 ```
 
