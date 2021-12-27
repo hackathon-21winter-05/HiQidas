@@ -13,12 +13,12 @@ import (
 )
 
 var allTables = []interface{}{
+	model.Tsuna{},
+	model.Hiqidashi{},
+	model.History{},
+	model.Favorite{},
 	model.Heya{},
 	model.User{},
-	model.History{},
-	model.Hiqidashi{},
-	model.Tsuna{},
-	model.Favorite{},
 }
 
 type GormRepository struct {
