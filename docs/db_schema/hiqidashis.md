@@ -15,7 +15,7 @@ CREATE TABLE `hiqidashis` (
   `title` char(50) NOT NULL,
   `description` text NOT NULL,
   `drawing` text DEFAULT NULL,
-  `color_id` tinyint(3) unsigned NOT NULL,
+  `color_code` char(7) NOT NULL DEFAULT '#9E7A7A',
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
@@ -38,7 +38,7 @@ CREATE TABLE `hiqidashis` (
 | title | char(50) |  | false |  |  |  |
 | description | text |  | false |  |  |  |
 | drawing | text | NULL | true |  |  |  |
-| color_id | tinyint(3) unsigned |  | false |  |  |  |
+| color_code | char(7) | '#9E7A7A' | false |  |  |  |
 | created_at | datetime | current_timestamp() | false |  |  |  |
 | updated_at | datetime | current_timestamp() | false |  |  |  |
 

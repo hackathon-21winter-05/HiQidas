@@ -14,8 +14,9 @@ CREATE TABLE `heyas` (
   `last_editor_id` char(36) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_heyas_creator` (`creator_id`),
+  CONSTRAINT `fk_heyas_creator` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 ```
 
@@ -28,22 +29,23 @@ CREATE TABLE `heyas` (
 | id | char(36) |  | false |  |  |  |
 | title | char(50) |  | false |  |  |  |
 | description | text |  | false |  |  |  |
-| creator_id | char(36) |  | false |  |  |  |
+| creator_id | char(36) |  | false |  | [users](users.md) |  |
 | last_editor_id | char(36) |  | false |  |  |  |
 | created_at | datetime | current_timestamp() | false |  |  |  |
 | updated_at | datetime | current_timestamp() | false |  |  |  |
-| deleted | tinyint(1) | 0 | false |  |  |  |
 
 ## Constraints
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
+| fk_heyas_creator | FOREIGN KEY | FOREIGN KEY (creator_id) REFERENCES users (id) |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
+| fk_heyas_creator | KEY fk_heyas_creator (creator_id) USING BTREE |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
 
 ## Relations

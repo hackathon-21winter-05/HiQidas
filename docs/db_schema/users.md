@@ -9,7 +9,7 @@
 CREATE TABLE `users` (
   `id` char(36) NOT NULL,
   `name` varchar(32) NOT NULL,
-  `icon_file_id` char(36) NOT NULL,
+  `icon_file_id` char(36) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
@@ -21,9 +21,9 @@ CREATE TABLE `users` (
 
 | Name | Type | Default | Nullable | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | -------- | ------- | ------- |
-| id | char(36) |  | false |  |  |  |
+| id | char(36) |  | false | [heyas](heyas.md) |  |  |
 | name | varchar(32) |  | false |  |  |  |
-| icon_file_id | char(36) |  | false |  |  |  |
+| icon_file_id | char(36) | NULL | true |  |  |  |
 
 ## Constraints
 
