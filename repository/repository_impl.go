@@ -13,8 +13,8 @@ import (
 )
 
 var allTables = []interface{}{
-	model.User{},
 	model.Heya{},
+	model.User{},
 	model.History{},
 	model.Hiqidashi{},
 	model.Tsuna{},
