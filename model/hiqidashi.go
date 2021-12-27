@@ -10,13 +10,13 @@ import (
 type Hiqidashi struct {
 	ID           uuid.UUID      `gorm:"type:char(36);not null;primaryKey"`
 	HeyaID       uuid.UUID      `gorm:"type:char(36);not null;index:idx_hiqidashi_heya_id,priority:1"`
-	Heya         Heya           `gorm:"foreignKey:HeyaID;references:ID"`
+	Heya         Heya           `gorm:"foreignKey:HeyaID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	CreatorID    uuid.UUID      `gorm:"type:char(36);not null;index:idx_hiqidashi_creator_id,priority:1"`
-	Creator      User           `gorm:"foreignKey:CreatorID;references:ID"`
+	Creator      User           `gorm:"foreignKey:CreatorID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
 	LastEditorID uuid.UUID      `gorm:"type:char(36);not null"`
-	LastEditor   User           `gorm:"foreignKey:LastEditorID;references:ID"`
+	LastEditor   User           `gorm:"foreignKey:LastEditorID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
 	ParentID     uuid.NullUUID  `gorm:"type:char(36)"`
-	Parent       *Hiqidashi     `gorm:"foreignKey:ParentID;references:ID"`
+	Parent       *Hiqidashi     `gorm:"foreignKey:ParentID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	Title        string         `gorm:"type:char(50);not null"`
 	Description  string         `gorm:"type:text;not null"`
 	Drawing      sql.NullString `gorm:"type:text"`

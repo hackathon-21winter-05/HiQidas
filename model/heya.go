@@ -12,9 +12,9 @@ type Heya struct {
 	Title        string    `gorm:"type:char(50);not null"`
 	Description  string    `gorm:"type:text;not null"`
 	CreatorID    uuid.UUID `gorm:"type:char(36);not null"`
-	Creator      User      `gorm:"foreignKey:CreatorID;references:ID"`
+	Creator      User      `gorm:"foreignKey:CreatorID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
 	LastEditorID uuid.UUID `gorm:"type:char(36);not null"`
-	LastEditor   User      `gorm:"foreignKey:LastEditorID;references:ID"`
+	LastEditor   User      `gorm:"foreignKey:LastEditorID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
 	CreatedAt    time.Time `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
 	UpdatedAt    time.Time `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
 }
