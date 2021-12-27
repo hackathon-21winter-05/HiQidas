@@ -12,11 +12,10 @@ type Heya struct {
 	Title        string    `gorm:"type:char(50);not null"`
 	Description  string    `gorm:"type:text;not null"`
 	CreatorID    uuid.UUID `gorm:"type:char(36);not null"`
+	Creator      User      `gorm:"foreignKey:CreatorID;references:ID"`
 	LastEditorID uuid.UUID `gorm:"type:char(36);not null"`
 	CreatedAt    time.Time `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
 	UpdatedAt    time.Time `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
-
-	Creator User           `gorm:"foreignKey:ID"`
 }
 
 type NullHeya struct {
