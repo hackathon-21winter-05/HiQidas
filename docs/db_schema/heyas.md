@@ -15,8 +15,8 @@ CREATE TABLE `heyas` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
-  KEY `fk_heyas_last_editor` (`last_editor_id`),
   KEY `fk_heyas_creator` (`creator_id`),
+  KEY `fk_heyas_last_editor` (`last_editor_id`),
   CONSTRAINT `fk_heyas_creator` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_heyas_last_editor` FOREIGN KEY (`last_editor_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4

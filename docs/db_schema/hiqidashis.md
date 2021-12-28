@@ -19,12 +19,12 @@ CREATE TABLE `hiqidashis` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
-  KEY `idx_hiqidashi_heya_id` (`heya_id`,`created_at`),
   KEY `idx_hiqidashi_creator_id` (`creator_id`),
+  KEY `idx_hiqidashi_heya_id` (`heya_id`,`created_at`),
   KEY `fk_hiqidashis_last_editor` (`last_editor_id`),
   KEY `fk_hiqidashis_parent` (`parent_id`),
+  CONSTRAINT `fk_heyas_hiqidashis` FOREIGN KEY (`heya_id`) REFERENCES `heyas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_hiqidashis_creator` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_hiqidashis_heya` FOREIGN KEY (`heya_id`) REFERENCES `heyas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_hiqidashis_last_editor` FOREIGN KEY (`last_editor_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_hiqidashis_parent` FOREIGN KEY (`parent_id`) REFERENCES `hiqidashis` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
@@ -52,8 +52,8 @@ CREATE TABLE `hiqidashis` (
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
+| fk_heyas_hiqidashis | FOREIGN KEY | FOREIGN KEY (heya_id) REFERENCES heyas (id) |
 | fk_hiqidashis_creator | FOREIGN KEY | FOREIGN KEY (creator_id) REFERENCES users (id) |
-| fk_hiqidashis_heya | FOREIGN KEY | FOREIGN KEY (heya_id) REFERENCES heyas (id) |
 | fk_hiqidashis_last_editor | FOREIGN KEY | FOREIGN KEY (last_editor_id) REFERENCES users (id) |
 | fk_hiqidashis_parent | FOREIGN KEY | FOREIGN KEY (parent_id) REFERENCES hiqidashis (id) |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
