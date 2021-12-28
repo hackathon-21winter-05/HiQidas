@@ -22,8 +22,6 @@ type Hiqidashi struct {
 	ColorCode    string         `gorm:"type:char(7);default:#9E7A7A;not null"`
 	CreatedAt    time.Time      `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP;index:idx_hiqidashi_heya_id,priority:2,index:idx_hiqidashi_creator_id,priority:2"`
 	UpdatedAt    time.Time      `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
-
-	ChildrenID []uuid.UUID `gorm:"-"`
 }
 
 type NullHiqidashi struct {
