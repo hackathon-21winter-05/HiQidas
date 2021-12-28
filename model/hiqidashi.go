@@ -10,7 +10,6 @@ import (
 type Hiqidashi struct {
 	ID           uuid.UUID      `gorm:"type:char(36);not null;primaryKey"`
 	HeyaID       uuid.UUID      `gorm:"type:char(36);not null;index:idx_hiqidashi_heya_id,priority:1"`
-	Heya         Heya           `gorm:"foreignKey:HeyaID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	CreatorID    uuid.UUID      `gorm:"type:char(36);not null;index:idx_hiqidashi_creator_id,priority:1"`
 	Creator      User           `gorm:"foreignKey:CreatorID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
 	LastEditorID uuid.UUID      `gorm:"type:char(36);not null"`
