@@ -20,7 +20,9 @@ type Hiqidashi struct {
 	CreatedAt    time.Time      `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP;index:idx_hiqidashi_heya_id,priority:2,index:idx_hiqidashi_creator_id,priority:2"`
 	UpdatedAt    time.Time      `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP"`
 
-	ChildrenID []uuid.UUID `gorm:"-"`
+	Creator    User       `gorm:"foreignKey:CreatorID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
+	LastEditor User       `gorm:"foreignKey:LastEditorID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
+	Parent     *Hiqidashi `gorm:"foreignKey:ParentID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
 type NullHiqidashi struct {

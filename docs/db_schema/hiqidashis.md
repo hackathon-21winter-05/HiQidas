@@ -15,12 +15,18 @@ CREATE TABLE `hiqidashis` (
   `title` char(50) NOT NULL,
   `description` text NOT NULL,
   `drawing` text DEFAULT NULL,
-  `color_id` tinyint(3) unsigned NOT NULL,
+  `color_code` char(7) NOT NULL DEFAULT '#9E7A7A',
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
+  KEY `idx_hiqidashi_creator_id` (`creator_id`),
   KEY `idx_hiqidashi_heya_id` (`heya_id`,`created_at`),
-  KEY `idx_hiqidashi_creator_id` (`creator_id`)
+  KEY `fk_hiqidashis_last_editor` (`last_editor_id`),
+  KEY `fk_hiqidashis_parent` (`parent_id`),
+  CONSTRAINT `fk_heyas_hiqidashis` FOREIGN KEY (`heya_id`) REFERENCES `heyas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_hiqidashis_creator` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_hiqidashis_last_editor` FOREIGN KEY (`last_editor_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_hiqidashis_parent` FOREIGN KEY (`parent_id`) REFERENCES `hiqidashis` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 ```
 
@@ -30,15 +36,15 @@ CREATE TABLE `hiqidashis` (
 
 | Name | Type | Default | Nullable | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | -------- | ------- | ------- |
-| id | char(36) |  | false |  |  |  |
-| heya_id | char(36) |  | false |  |  |  |
-| creator_id | char(36) |  | false |  |  |  |
-| last_editor_id | char(36) |  | false |  |  |  |
-| parent_id | char(36) | NULL | true |  |  |  |
+| id | char(36) |  | false | [hiqidashis](hiqidashis.md) [tsunas](tsunas.md) |  |  |
+| heya_id | char(36) |  | false |  | [heyas](heyas.md) |  |
+| creator_id | char(36) |  | false |  | [users](users.md) |  |
+| last_editor_id | char(36) |  | false |  | [users](users.md) |  |
+| parent_id | char(36) | NULL | true |  | [hiqidashis](hiqidashis.md) |  |
 | title | char(50) |  | false |  |  |  |
 | description | text |  | false |  |  |  |
 | drawing | text | NULL | true |  |  |  |
-| color_id | tinyint(3) unsigned |  | false |  |  |  |
+| color_code | char(7) | '#9E7A7A' | false |  |  |  |
 | created_at | datetime | current_timestamp() | false |  |  |  |
 | updated_at | datetime | current_timestamp() | false |  |  |  |
 
@@ -46,12 +52,18 @@ CREATE TABLE `hiqidashis` (
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
+| fk_heyas_hiqidashis | FOREIGN KEY | FOREIGN KEY (heya_id) REFERENCES heyas (id) |
+| fk_hiqidashis_creator | FOREIGN KEY | FOREIGN KEY (creator_id) REFERENCES users (id) |
+| fk_hiqidashis_last_editor | FOREIGN KEY | FOREIGN KEY (last_editor_id) REFERENCES users (id) |
+| fk_hiqidashis_parent | FOREIGN KEY | FOREIGN KEY (parent_id) REFERENCES hiqidashis (id) |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
+| fk_hiqidashis_last_editor | KEY fk_hiqidashis_last_editor (last_editor_id) USING BTREE |
+| fk_hiqidashis_parent | KEY fk_hiqidashis_parent (parent_id) USING BTREE |
 | idx_hiqidashi_creator_id | KEY idx_hiqidashi_creator_id (creator_id) USING BTREE |
 | idx_hiqidashi_heya_id | KEY idx_hiqidashi_heya_id (heya_id, created_at) USING BTREE |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |

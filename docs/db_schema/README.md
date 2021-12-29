@@ -4,7 +4,8 @@
 
 | Name | Columns | Comment | Type |
 | ---- | ------- | ------- | ---- |
-| [heyas](heyas.md) | 8 |  | BASE TABLE |
+| [favorites](favorites.md) | 2 |  | BASE TABLE |
+| [heyas](heyas.md) | 7 |  | BASE TABLE |
 | [hiqidashis](hiqidashis.md) | 11 |  | BASE TABLE |
 | [histories](histories.md) | 2 |  | BASE TABLE |
 | [tsunas](tsunas.md) | 4 |  | BASE TABLE |

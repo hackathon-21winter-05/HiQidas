@@ -1,4 +1,4 @@
-# histories
+# favorites
 
 ## Description
 
@@ -6,14 +6,14 @@
 <summary><strong>Table Definition</strong></summary>
 
 ```sql
-CREATE TABLE `histories` (
+CREATE TABLE `favorites` (
   `user_id` char(36) NOT NULL,
   `heya_id` char(36) NOT NULL,
   PRIMARY KEY (`user_id`,`heya_id`),
-  KEY `idx_history_user_id` (`user_id`,`heya_id`),
-  KEY `fk_histories_heya` (`heya_id`),
-  CONSTRAINT `fk_histories_heya` FOREIGN KEY (`heya_id`) REFERENCES `heyas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_histories_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `idx_favorite_user_id` (`user_id`,`heya_id`),
+  KEY `fk_favorites_heya` (`heya_id`),
+  CONSTRAINT `fk_favorites_heya` FOREIGN KEY (`heya_id`) REFERENCES `heyas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_favorites_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 ```
 
@@ -30,21 +30,21 @@ CREATE TABLE `histories` (
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
-| fk_histories_heya | FOREIGN KEY | FOREIGN KEY (heya_id) REFERENCES heyas (id) |
-| fk_histories_user | FOREIGN KEY | FOREIGN KEY (user_id) REFERENCES users (id) |
+| fk_favorites_heya | FOREIGN KEY | FOREIGN KEY (heya_id) REFERENCES heyas (id) |
+| fk_favorites_user | FOREIGN KEY | FOREIGN KEY (user_id) REFERENCES users (id) |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (user_id, heya_id) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
-| fk_histories_heya | KEY fk_histories_heya (heya_id) USING BTREE |
-| idx_history_user_id | KEY idx_history_user_id (user_id, heya_id) USING BTREE |
+| fk_favorites_heya | KEY fk_favorites_heya (heya_id) USING BTREE |
+| idx_favorite_user_id | KEY idx_favorite_user_id (user_id, heya_id) USING BTREE |
 | PRIMARY | PRIMARY KEY (user_id, heya_id) USING BTREE |
 
 ## Relations
 
-![er](histories.svg)
+![er](favorites.svg)
 
 ---
 
