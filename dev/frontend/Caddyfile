@@ -4,7 +4,7 @@ log
 root * /usr/share/caddy
 
 handle /api/* {
-	reverse_proxy dev-env:7070
+	reverse_proxy backend:7070
 }
 
 handle {

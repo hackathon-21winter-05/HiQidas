@@ -1,8 +1,8 @@
 version: "3"
 
 services:
-  dev-env:
-    container_name: HiQidas_dev-env
+  backend:
+    container_name: HiQidas_backend
     build:
       context: .
       dockerfile: Dockerfile
@@ -25,7 +25,7 @@ services:
     ports:
       - "7071:80"
     depends_on:
-      - dev-env
+      - backend
 
   mariadb:
     container_name: HiQidas_mariadb
