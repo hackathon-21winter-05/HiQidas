@@ -21,7 +21,7 @@ CREATE TABLE `users` (
 
 | Name | Type | Default | Nullable | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | -------- | ------- | ------- |
-| id | char(36) |  | false | [favorites](favorites.md) [heyas](heyas.md) [hiqidashis](hiqidashis.md) [histories](histories.md) |  |  |
+| id | char(36) |  | false | [credentials](credentials.md) [favorites](favorites.md) [heyas](heyas.md) [hiqidashis](hiqidashis.md) [histories](histories.md) |  |  |
 | name | varchar(32) |  | false |  |  |  |
 | icon_file_id | char(36) | NULL | true |  |  |  |
 

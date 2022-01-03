@@ -4,6 +4,7 @@
 
 | Name | Columns | Comment | Type |
 | ---- | ------- | ------- | ---- |
+| [credentials](credentials.md) | 3 |  | BASE TABLE |
 | [favorites](favorites.md) | 2 |  | BASE TABLE |
 | [heyas](heyas.md) | 7 |  | BASE TABLE |
 | [hiqidashis](hiqidashis.md) | 11 |  | BASE TABLE |
