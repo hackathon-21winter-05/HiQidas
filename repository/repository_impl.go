@@ -21,6 +21,16 @@ var allTables = []interface{}{
 	model.User{},
 }
 
+var allTablesEx = []interface{}{
+	model.Tsuna{},
+	model.Hiqidashi{},
+	model.History{},
+	model.Favorite{},
+	model.Heya{},
+	model.Credential{},
+	model.User{},
+}
+
 type GormRepository struct {
 	db *gorm.DB
 }
@@ -45,7 +55,11 @@ func newDBConnection(c *config.Config) (*gorm.DB, error) {
 
 	db = db.Set("gorm:table_options", "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci")
 
-	err = db.AutoMigrate(allTables...)
+	if c.Ex {
+		err = db.AutoMigrate(allTablesEx...)
+	} else {
+		err = db.AutoMigrate(allTables...)
+	}
 	if err != nil {
 		return nil, fmt.Errorf("failed to migrate: %w", err)
 	}
