@@ -3,7 +3,7 @@
 FROM logica0419/protoc-go:1.17.5 AS builder
 
 RUN go install github.com/cosmtrek/air@latest
-RUN go install github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@latest
+RUN go install github.com/google/wire/cmd/wire@latest
 RUN go get github.com/k1LoW/tbls
 
 FROM logica0419/protoc-go:1.17.5 AS devContainer
@@ -16,5 +16,5 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install curl sudo git vim mariadb-client clang-format -y --no-install-recommends
 
 COPY --from=builder /go/bin/air /usr/local/bin/
-COPY --from=builder /go/bin/protoc-gen-doc /usr/local/bin/
+COPY --from=builder /go/bin/wire /usr/local/bin/
 COPY --from=builder /go/bin/tbls /usr/local/bin/
