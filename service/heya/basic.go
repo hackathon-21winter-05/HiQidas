@@ -1,4 +1,4 @@
-package service
+package heya
 
 import (
 	"context"
@@ -12,16 +12,7 @@ import (
 	"github.com/hackathon-21winter-05/HiQidas/service/utils"
 )
 
-type HeyaService interface {
-	CreateHeya(c context.Context, userID uuid.UUID, title, description string) (*model.Heya, error)
-	DeleteHeya(c context.Context, heyaID uuid.UUID) error
-	GetHeyas(c context.Context) ([]*model.Heya, error)
-	GetHeyaByID(c context.Context, heyaID uuid.UUID) (*model.Heya, error)
-	PutHeyaByID(c context.Context, heya *model.NullHeya, heyaID, userID uuid.UUID) error
-	PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, isFavorite bool) error
-}
-
-func (s *Service) CreateHeya(c context.Context, userID uuid.UUID, title, description string) (*model.Heya, error) {
+func (s *HeyaServiceImpl) CreateHeya(c context.Context, userID uuid.UUID, title, description string) (*model.Heya, error) {
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
 
@@ -66,7 +57,7 @@ func (s *Service) CreateHeya(c context.Context, userID uuid.UUID, title, descrip
 	return heya, nil
 }
 
-func (s *Service) DeleteHeya(c context.Context, heyaID uuid.UUID) error {
+func (s *HeyaServiceImpl) DeleteHeya(c context.Context, heyaID uuid.UUID) error {
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
 
@@ -92,7 +83,7 @@ func (s *Service) DeleteHeya(c context.Context, heyaID uuid.UUID) error {
 	return nil
 }
 
-func (s *Service) GetHeyas(c context.Context) ([]*model.Heya, error) {
+func (s *HeyaServiceImpl) GetHeyas(c context.Context) ([]*model.Heya, error) {
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
 	heyas, err := s.repo.GetHeyas(ctx)
@@ -103,7 +94,7 @@ func (s *Service) GetHeyas(c context.Context) ([]*model.Heya, error) {
 	return heyas, nil
 }
 
-func (s *Service) GetHeyaByID(c context.Context, heyaID uuid.UUID) (*model.Heya, error) {
+func (s *HeyaServiceImpl) GetHeyaByID(c context.Context, heyaID uuid.UUID) (*model.Heya, error) {
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
 
@@ -115,7 +106,7 @@ func (s *Service) GetHeyaByID(c context.Context, heyaID uuid.UUID) (*model.Heya,
 	return heya, nil
 }
 
-func (s *Service) PutHeyaByID(c context.Context, heya *model.NullHeya, heyaID, userID uuid.UUID) error {
+func (s *HeyaServiceImpl) PutHeyaByID(c context.Context, heya *model.NullHeya, heyaID, userID uuid.UUID) error {
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
 
@@ -143,7 +134,7 @@ func (s *Service) PutHeyaByID(c context.Context, heya *model.NullHeya, heyaID, u
 	return nil
 }
 
-func (s *Service) PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, userID uuid.UUID, isFavorite bool) error {
+func (s *HeyaServiceImpl) PutFavoriteByHeyaID(c context.Context, heyaID uuid.UUID, userID uuid.UUID, isFavorite bool) error {
 	ctx, cancel := utils.CreateTxContext(c)
 	defer cancel()
 
