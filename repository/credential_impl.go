@@ -8,8 +8,8 @@ import (
 	"github.com/hackathon-21winter-05/HiQidas/model"
 )
 
-// GetCredentialByUserID UserIDからCredentialを取得する
-func (repo *GormRepository) GetCredentialByUserID(ctx context.Context, userID uuid.UUID) (*model.Credential, error) {
+// GetCredentialByMailAddress MailAddressからCredentialを取得する
+func (repo *GormRepository) GetCredentialByMailAddress(ctx context.Context, mailAddress string) (*model.Credential, error) {
 	db, err := repo.getDB(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get db: %w", err)
@@ -17,11 +17,11 @@ func (repo *GormRepository) GetCredentialByUserID(ctx context.Context, userID uu
 
 	var credential *model.Credential
 	err = db.
-		Where("user_id = ?", userID).
+		Where("mail_address = ?", mailAddress).
 		Joins("User").
 		First(credential).Error
 	if err != nil {
-		return nil, fmt.Errorf("failed to get credential by userID : %w", err)
+		return nil, fmt.Errorf("failed to get credential by MailAddress : %w", err)
 	}
 
 	return credential, nil
