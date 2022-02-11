@@ -1,9 +1,9 @@
-FROM golang:1.17.6-alpine AS builder
+FROM golang:1.17.7-alpine AS builder
 
 RUN go install github.com/jwilder/dockerize@latest
 RUN go install github.com/cosmtrek/air@latest
 
-FROM golang:1.17.6-alpine AS hotReload
+FROM golang:1.17.7-alpine AS hotReload
 WORKDIR /HiQidas
 
 COPY --from=builder /go/bin/dockerize /usr/local/bin/
