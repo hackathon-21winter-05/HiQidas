@@ -1,12 +1,12 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.194.3/containers/ubuntu/.devcontainer/base.Dockerfile
 
-FROM logica0419/protoc-go:1.17.6 AS builder
+FROM logica0419/protoc-go:1.17.7 AS builder
 
 RUN go install github.com/cosmtrek/air@latest
 RUN go install github.com/google/wire/cmd/wire@latest
 RUN go get github.com/k1LoW/tbls
 
-FROM logica0419/protoc-go:1.17.6 AS devContainer
+FROM logica0419/protoc-go:1.17.7 AS devContainer
 
 ENV TZ=Asia/Tokyo
 
