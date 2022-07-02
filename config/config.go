@@ -8,6 +8,7 @@ import (
 )
 
 type Config struct {
+	Ex              bool   `mapstructure:"ex" json:"ex,omitempty"`                             // 外部公開モード (default: false)
 	ClientID        string `mapstructure:"client_id" json:"client_id,omitempty"`               // 本番環境向けのクライアントID (default: "")
 	DevClientID     string `mapstructure:"dev_client_id" json:"dev_client_id,omitempty"`       // ローカル開発環境向けのクライアントID (default: "")
 	ParserToken     string `mapstructure:"parser_token" json:"parser_token,omitempty"`         // Yjsパーサーの認証トークン (default: "")
@@ -18,6 +19,7 @@ type Config struct {
 }
 
 func GetConfig() (*Config, error) {
+	viper.SetDefault("Ex", false)
 	viper.SetDefault("Client_ID", "")
 	viper.SetDefault("Dev_Client_ID", "")
 	viper.SetDefault("Parser_Token", "")

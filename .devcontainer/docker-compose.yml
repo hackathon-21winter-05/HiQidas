@@ -20,8 +20,6 @@ services:
     build:
       context: ../dev/frontend
       dockerfile: Dockerfile
-    volumes:
-      - ../dev/frontend/Caddyfile:/etc/caddy/Caddyfile:ro
     ports:
       - "7071:80"
     depends_on:

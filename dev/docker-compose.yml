@@ -25,8 +25,6 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     restart: always
-    volumes:
-      - ./frontend/Caddyfile:/etc/caddy/Caddyfile:ro
     ports:
       - "7071:80"
     depends_on:

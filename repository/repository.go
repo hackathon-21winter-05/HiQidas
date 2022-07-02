@@ -9,3 +9,8 @@ type Repository interface {
 	TsunaRepository
 	FavoriteRepository
 }
+
+type RepositoryEx interface {
+	Repository
+	CredentialRepository
+}
